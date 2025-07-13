@@ -1,13 +1,10 @@
-
+import React from 'react'
+import AppRoutes from './router/router.jsx'
 function App() {
   return (
-    <>
-    <div>
-      hello world
-    </div>
-    </>
+      <>
+      <AppRoutes />
+      </>
   )
 }
-
 export default App
-
