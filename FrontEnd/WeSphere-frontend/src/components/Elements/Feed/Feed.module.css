@@ -1,0 +1,36 @@
+.btn_icon:active {
+    background-color: rgba(186, 186, 186, 0.586) !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.btn_icon {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    cursor: pointer;
+}
+
+.btn_icon:hover {
+    background-color: rgba(186, 186, 186, 0.586) !important;
+}
+
+.feed_container {
+    width: 777px;
+    max-width: 777px;
+    min-width: 777px;
+    flex-direction: row !important;
+}
+.text_content_custom{
+    /* text-align: justify; */
+}
+
+.btn_icon_container{
+    position: relative;
+    left: -9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 35%;
+}

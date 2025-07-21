@@ -1,5 +1,6 @@
 const express = require("express");
 const authRouter = require("./app/routers/auth.route");
+const postRouter = require("./app/routers/post.router");
 const cors = require("cors");
 
 const app = express();
@@ -11,7 +12,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-
+app.use("/api/post", postRouter);
 app.use((error, req, res, next) => {
     return res.status(error.statusCode || 500).json({
         message: error.message || "Internal Server Error",

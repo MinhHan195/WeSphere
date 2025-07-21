@@ -1,11 +1,14 @@
 import React from 'react'
 import { useEffect } from 'react'
+import DefaultLayout from '../../layouts/DefaultLayout/DefaultLayout';
 const Find = () => {
   useEffect(() => {
-      document.title = "Tìm kiếm • WeSphere"
-    }, []);
+    document.title = "Tìm kiếm • WeSphere"
+  }, []);
   return (
-    <div>FindPage</div>
+    <DefaultLayout>
+      <div>FindPage</div>
+    </DefaultLayout>
   )
 }
 

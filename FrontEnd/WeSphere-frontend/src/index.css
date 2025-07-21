@@ -1,10 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+VN+Guides&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
 :root {
   --primary-color: rgb(24, 24, 24);
 }
 
 body {
-  font-family:'Playwrite VN Guides', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family:'TikTok Sans', system-ui, Helvetica, Arial, sans-serif !important;
 }

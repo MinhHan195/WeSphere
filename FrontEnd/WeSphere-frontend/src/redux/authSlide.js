@@ -8,7 +8,12 @@ const authSlice = createSlice({
         alert: {
             message: '',
         },
-        user: {},
+        user: {
+            username: 'mh.minh_han',
+            fullname: 'Minh Hân',
+            email: 'mh.minh_han@example.com',
+            avatar: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+        },
         error: '',
     },
     reducers: {

@@ -1,0 +1,24 @@
+.img-preview-container{
+    position: relative;
+    width: 200px;
+    min-width: 200px;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 0;
+    overflow: hidden;
+}
+.img-preview-container img{
+    object-fit: cover;
+    width: 100%;
+    margin-right: 8;
+    border-radius: 8
+}
+
+button.btn-custom-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}

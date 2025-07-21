@@ -1,0 +1,14 @@
+.video-preview-container {
+    width: 200px;
+    min-width: 200px;
+    border-radius: 10px;
+    margin: 5px;
+    overflow: hidden;
+}
+
+.video-preview-container video {
+    object-fit: cover;
+    width: 100%;
+    margin-right: 8;
+    border-radius: 8
+}

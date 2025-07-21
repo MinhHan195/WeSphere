@@ -1,0 +1,18 @@
+.preview-container{
+    width: 540px !important;
+    /* height: 210px; */
+    overflow-x: hidden !important;
+}
+.preview {
+    width: 100%;
+    display: flex;
+    max-width: 523.8px;
+    height: auto;
+    cursor: grab;
+    transform: translateX(0px);
+    transition: 0.2 ease-in-out;
+}
+
+.preview:active {
+    cursor: grabbing;
+}

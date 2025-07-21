@@ -10,11 +10,11 @@ function Auth() {
   const navigate = useNavigate();
   useEffect(() => {
     if (token) {
-      navigate('/');
+      navigate("/");
     }
   });
   useEffect(() => {
-    document.title = "WeSphere • Đăng nhập ";
+    document.title = "WeSphere • Đăng nhập";
   }, []);
 
   return (
