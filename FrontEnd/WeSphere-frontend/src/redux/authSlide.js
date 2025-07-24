@@ -9,6 +9,7 @@ const authSlice = createSlice({
             message: '',
         },
         user: {
+            id: 'jaksdaknfkajlndfkajdsnf',
             username: 'mh.minh_han',
             fullname: 'Minh Hân',
             email: 'mh.minh_han@example.com',

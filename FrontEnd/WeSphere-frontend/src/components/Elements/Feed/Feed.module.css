@@ -17,13 +17,8 @@
 }
 
 .feed_container {
-    width: 777px;
-    max-width: 777px;
-    min-width: 777px;
-    flex-direction: row !important;
-}
-.text_content_custom{
-    /* text-align: justify; */
+    width: 100%;
+    display: flex;
 }
 
 .btn_icon_container{
@@ -33,4 +28,13 @@
     justify-content: space-between;
     align-items: center;
     width: 35%;
+}
+
+.comment_container {
+    border-bottom: 1px solid #ccc;
+    max-width: 727.4px;
+}
+
+.comment_container .btn_icon_container {
+    width: 27% !important;
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WeSphereService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+193b7dea7d0b944d48de8fbb78822cc463e39d66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df303a77d1297816b460ba3c61a8000ab423ffbc")]
 [assembly: System.Reflection.AssemblyProductAttribute("WeSphereService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WeSphereService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

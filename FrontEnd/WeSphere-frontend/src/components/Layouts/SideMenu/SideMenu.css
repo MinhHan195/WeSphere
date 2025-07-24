@@ -4,6 +4,10 @@
     left: 0;
     width: 80px;
     height: 100vh;
+    /* bottom: 0;
+    width: 100vw;
+    height: 80px; */
+
     background: white;
     border-right: 1px solid #ddd;
     display: flex;
@@ -11,6 +15,7 @@
     align-items: center;
     padding-top: 1rem;
     justify-content: space-between;
+    /* z-index: 5000; */
 }
 
 .sidebar-main {

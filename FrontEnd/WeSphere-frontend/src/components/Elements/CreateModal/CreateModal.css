@@ -3,15 +3,18 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(44, 44, 44, 0.861);
-    z-index: 1000;;
+    z-index: 1000;
+    display: flex !important;
+    justify-content: center;
 }
 
 .modal-dialog-custom{
-    width: 100%;
+    width: 620px;
     height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    min-width: 620px;
+    max-width: 620px;
 }
 
 .modal-dialog-custom .modal-content {
@@ -21,6 +24,7 @@
     height: auto;
     background-color: white;
     z-index: 500;
+    transition: height 0.5s ease-in-out;
 }
 
 .modal-dialog-custom .modal-content .modal-header {
@@ -30,6 +34,25 @@
     height: 56px;
     padding: 0.5rem;
     border-bottom: 1px solid #00000023;
+}
+
+.modal-content-saves{
+    height: 597px;
+    overflow-x: hidden;
+}
+
+.modal-content-saves .modal-body {
+    height: 540px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 15px;
+    
+}
+
+.carousel,
+.carousel-inner {
+    overflow: visible !important;
 }
 
 .modal-footer-custom {

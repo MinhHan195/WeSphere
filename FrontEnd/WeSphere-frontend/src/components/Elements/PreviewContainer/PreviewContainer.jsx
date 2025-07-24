@@ -1,106 +1,87 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import ImagePreview from "./ImagePreview/ImagePreview";
 import VideoPreview from "./VideoPreview/VideoPreview";
+import ScrollContainer from "react-indiana-drag-scroll";
+import "react-indiana-drag-scroll/dist/style.css";
 import "./PreviewContainer.css";
 const PreviewContainer = (props) => {
-  const listImage = props.listImage;
-  const previewRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragMoved, setDragMoved] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [translateX, setTranslateX] = useState(0);
-
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    setDragMoved(false);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX;
-    const walk = (x - startX) / 7;
-    if (Math.abs(walk) > 5) setDragMoved(true);
-    setTranslateX((prev) => {
-      const previewWidth = previewRef.current
-        ? previewRef.current.offsetWidth
-        : 0;
-      if (listImage.length * 210 < previewWidth) return 0;
-      const maxTranslate = 0;
-      const minTranslate = -(listImage.length * 210 - previewWidth);
-      let next = prev + walk;
-      if (next > maxTranslate) next = maxTranslate;
-      if (next < minTranslate) next = minTranslate;
-      return next;
-    });
-    document.querySelector(
-      ".preview"
-    ).style.transform = `translateX(${translateX}px)`;
-    setStartX(x);
-  };
-
-  useEffect(() => {
-    const handleWindowMouseUp = () => {
-      setIsDragging(false);
-      setDragMoved(false);
-    };
-    window.addEventListener("mouseup", handleWindowMouseUp);
-    return () => {
-      window.removeEventListener("mouseup", handleWindowMouseUp);
-    };
-  }, []);
-
-  const handleClick = (e) => {
-    if (dragMoved) {
-      console.log("click");
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-  };
-
-  return (
-    <div>
-      <div className="preview-container">
+    const { listImage, preview } = props;
+    return (
         <div
-          className="preview"
-          ref={previewRef}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          onClick={handleClick}
+            style={{
+                minWidth: "100%",
+                maxWidth: "679.4px",
+                overflowX: "hidden",
+                scrollbarWidth: "none",
+            }}
         >
-          {listImage.map((file, idx) => {
-            if (file.type.startsWith("image/")) {
-              return (
-                <ImagePreview
-                  onRemove={props.onRemove}
-                  file={file}
-                  idx={idx}
-                  key={file.name}
-                />
-              );
-            }
-            if (file.type.startsWith("video/")) {
-              return (
-                <VideoPreview
-                  onRemove={props.onRemove}
-                  file={file}
-                  idx={idx}
-                  key={file.name}
-                />
-              );
-            }
-            return null;
-          })}
+            <ScrollContainer
+                style={{
+                    display: "flex",
+                    width: "100%",
+                }}
+            >
+                {listImage.map((file, idx) => {
+                    if (file instanceof File) {
+                        if (file.type.startsWith("image/")) {
+                            return (
+                                <ImagePreview
+                                    preview={preview}
+                                    onRemove={props.onRemove}
+                                    zoom={props.zoom}
+                                    isFile={true}
+                                    file={file}
+                                    idx={idx}
+                                    key={file.name}
+                                />
+                            );
+                        }
+                        if (file.type.startsWith("video/")) {
+                            return (
+                                <VideoPreview
+                                    preview={preview}
+                                    onRemove={props.onRemove}
+                                    zoom={props.zoom}
+                                    isFile={true}
+                                    file={file}
+                                    idx={idx}
+                                    key={file.name}
+                                />
+                            );
+                        }
+                    } else {
+                        if (file.type === "image") {
+                            return (
+                                <ImagePreview
+                                    preview={preview}
+                                    onRemove={props.onRemove}
+                                    zoom={props.zoom}
+                                    isFile={false}
+                                    data={file}
+                                    idx={idx}
+                                    key={idx}
+                                />
+                            );
+                        }
+                        if (file.type === "video") {
+                            return (
+                                <VideoPreview
+                                    preview={preview}
+                                    onRemove={props.onRemove}
+                                    zoom={props.zoom}
+                                    isFile={false}
+                                    data={file}
+                                    idx={idx}
+                                    key={idx}
+                                />
+                            );
+                        }
+                    }
+
+                    return null;
+                })}
+            </ScrollContainer>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 export default PreviewContainer;

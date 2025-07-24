@@ -1,0 +1,37 @@
+.comment_input_container{
+    width: 100%;
+}
+
+.comment_input_dialog{
+    width: 100%;
+}
+
+.comment_input_body{
+    max-width: 616px;
+}
+
+.textarea_container{
+    /* height: 50px; */
+}
+
+.comment_input_data{
+    position: relative;
+}
+
+.form_control_textarea_custom{
+    width: 100%;
+    max-height: 370px;
+    scrollbar-width: none;
+    resize: none;
+    outline: none;
+}
+
+.icon_custom{
+    padding-top: 0 !important;
+    border: none !important;
+}
+
+.modal_footer_custom{
+    display: flex;
+    flex-direction: row-reverse;
+}

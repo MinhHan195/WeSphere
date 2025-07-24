@@ -1,6 +1,6 @@
 import "./VideoPreview.css";
 const VideoPreview = (props) => {
-  const url = URL.createObjectURL(props.file);
+  const url = props.preview ? URL.createObjectURL(props.file) : props.data.url;
   return (
     <div className="video-preview-container" key={props.file.name}>
       <video

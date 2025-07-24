@@ -1,5 +1,5 @@
 .preview-container{
-    width: 540px !important;
+    width: 100% !important;
     /* height: 210px; */
     overflow-x: hidden !important;
 }
