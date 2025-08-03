@@ -1,0 +1,20 @@
+.update_profile_btn_container {
+    cursor: pointer;
+    padding: 1.5rem 2rem 1.5rem 2rem !important;
+    border-bottom: 0.5px solid #dadada;
+}
+
+.update_profile_btn {
+    border-color: #dadada !important;
+}
+
+.update_profile_btn:hover {
+    background-color: white !important;
+}
+
+.feed_dialog {
+    width: 100%;
+    max-width: 100%;
+    padding: 2rem;
+    border-bottom: 0.5px solid #dadada;
+}

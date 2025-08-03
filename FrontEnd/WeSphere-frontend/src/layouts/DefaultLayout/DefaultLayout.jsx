@@ -1,9 +1,9 @@
 import React from "react";
 import SideMenu from "../../components/Layouts/SideMenu/SideMenu";
-import "./DefaultLayout.css";
-import CreateModal from "../../components/Elements/CreateModal/CreateModal";
+import CreateModal from "../../components/Elements/Modal/CreateModal/CreateModal";
 import Alert from "../../components/Elements/Alert/Alert";
 import { useSelector } from "react-redux";
+import style from "./DefaultLayout.module.css";
 
 const DefaultLayout = (props) => {
     const alert = useSelector((state) => state.auth.alert);
@@ -13,7 +13,7 @@ const DefaultLayout = (props) => {
         <div className="m-0 p-0">
             <SideMenu />
             {show ? <CreateModal /> : null}
-            <div className="main-container">{props.children}</div>
+            <div className={style.main_container}>{props.children}</div>
             {alert.message.length > 0 ? (
                 <Alert
                     show={alert.message.length > 0}

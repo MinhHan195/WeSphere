@@ -15,6 +15,14 @@ const authService = {
     register: async (userData) => {
         return await axiosClient.post(_url + '/register', userData);
     },
+
+    updateUser: async (userData) => {
+        return await axiosClient.put(_url + '/update', userData);
+    },
+
+    getUser: async (userName) => {
+        return await axiosClient.get(_url + `/GetProfileData/${userName}`);
+    }
 };
 
 export default authService;

@@ -7,54 +7,32 @@ import { $api } from "../../../services/service";
 import PreviewContainer from "../PreviewContainer/PreviewContainer";
 import EmojiPicker from "emoji-picker-react";
 import Giphy from "react-awesome-giphy";
+import Editor from "../TextEditor/Editor";
 import style from "./CommentInput.module.css";
-const ConmentInput = (props) => {
+const CommentInput = (props) => {
     const dispatch = useDispatch();
-    const { data } = props;
-
+    const { data, close } = props;
     const [content, setContent] = useState("");
     const [listImage, setListImage] = useState([]);
     const [tag, setTag] = useState("");
-
     const [showEmoji, setShowEmoji] = useState(false);
     const [showGif, setShowGif] = useState(false);
     const user = useSelector((state) => state.auth.user);
+    const [emoji, setEmoji] = useState(null);
 
-    const closePicker = (event) => {
-        const element = event.target;
-        const emojiPickerPopup = document.querySelector(".emoji-picker-popup");
-        const gifPickerPopup = document.querySelector(".gif-picker-popup");
-        if (
-            !element.classList.contains("bi-emoji-smile") &&
-            !element.classList.contains("bi-filetype-gif") &&
-            !element.classList.contains("btn-icon-emoji") &&
-            !element.classList.contains("btn-icon-gif") &&
-            !emojiPickerPopup.contains(element) &&
-            !gifPickerPopup.contains(element)
-        ) {
+    useEffect(() => {
+        if (close) {
             setShowEmoji(false);
             setShowGif(false);
         }
-    };
-
-    const handleInput = (e) => {
-        if (e) {
-            const textarea = document.querySelector(
-                `.${style.form_control_textarea_custom}`
-            );
-            textarea.style.height = "auto";
-            textarea.style.height = Math.min(textarea.scrollHeight, 370) + "px";
-            setContent(e.target.value);
-        }
-    };
+    }, [close]);
 
     const updateBefore = () => {
-        const textareaContainer = document.querySelector(
-            `.${style.textarea_container}`
+        const textarea = document.querySelector(`.${style.textarea_container}`);
+        const beforeContent = document.querySelector(
+            `.${style.before_content}`
         );
-        const textareaContainerHeight = textareaContainer.offsetHeight;
-        const beforeContent = document.querySelector(".before-content");
-        beforeContent.style.height = textareaContainerHeight + 15 + "px";
+        beforeContent.style.height = textarea.offsetHeight + 15 + "px";
     };
 
     const showImagePicker = async () => {
@@ -70,8 +48,12 @@ const ConmentInput = (props) => {
             const file = new File([blob], filename, { type: blob.type });
             setListImage((prev) => [...prev, file]);
         } catch (error) {
-            console.log("error: ", error);
-            dispatch(setAlert({ message: error.errors.exceptionMessage }));
+            if (error.message === "User cancelled photos app") return;
+            dispatch(
+                setAlert({
+                    message: error.errors.exceptionMessage || error.message,
+                })
+            );
         }
     };
 
@@ -87,8 +69,7 @@ const ConmentInput = (props) => {
     };
 
     const handleEmojiClick = (emoji) => {
-        setContent((prev) => prev + emoji.emoji);
-        handleInput();
+        setEmoji(emoji);
     };
 
     const showGifPicker = () => {
@@ -112,8 +93,14 @@ const ConmentInput = (props) => {
     };
 
     const validate = () => {
-        if (!content.trim() && listImage.length === 0) {
-            return false;
+        if (!content) return false;
+        if (
+            content.root.children.length === 0 ||
+            content.root.children[0]?.children.length === 0
+        ) {
+            if (listImage.length === 0 && !tag) {
+                return false;
+            }
         }
         return true;
     };
@@ -162,19 +149,19 @@ const ConmentInput = (props) => {
 
     return (
         <div className={style.comment_input_container}>
-            <div
-                className={`${style.comment_input_dialog}`}
-                onClick={closePicker}
-            >
+            <div className={`${style.comment_input_dialog}`}>
                 <div className="d-flex w-100">
-                    <div className="me-2">
-                        <div className="rounded-circle bg-secondary avatar">
+                    <div className="me-2 d-flex flex-column align-items-center">
+                        <div
+                            className={`rounded-circle bg-secondary mb-2 ${style.avatar}`}
+                        >
                             <img
                                 className="object-fit-cover w-100 h-100"
                                 src={user.avatar}
                                 alt=""
                             />
                         </div>
+                        <div className={style.before_content}></div>
                     </div>
                     <div
                         className={`flex-grow-1 position-relative ${style.comment_input_body}`}
@@ -184,7 +171,7 @@ const ConmentInput = (props) => {
                             <span className="fs-5 mx-2">›</span>
                             <input
                                 type="text"
-                                className="form-control-custom d-inline-block"
+                                className={`d-inline-block ${style.form_control_custom}`}
                                 style={{
                                     width: "auto",
                                 }}
@@ -194,14 +181,16 @@ const ConmentInput = (props) => {
                             />
                         </div>
                         <div className={style.comment_input_data}>
-                            <div className="before-content"></div>
                             <div className={style.textarea_container}>
-                                <textarea
+                                <Editor
+                                    emoji={emoji}
+                                    json={content}
+                                    editable={true}
                                     placeholder={`Trả lời ${data.feedOwner.username} ...`}
-                                    className={`p-0 ms-2 border-0 shadow-none ${style.form_control_textarea_custom}`}
-                                    value={content}
-                                    onInput={handleInput}
-                                ></textarea>
+                                    onExport={(json) => {
+                                        setContent(json);
+                                    }}
+                                />
                                 <PreviewContainer
                                     preview={true}
                                     listImage={listImage}
@@ -211,7 +200,7 @@ const ConmentInput = (props) => {
                             </div>
                         </div>
 
-                        <div>
+                        <div className={`icon ${style.icon_container}`}>
                             <button
                                 className={`btn ${style.icon_custom}`}
                                 onClick={showImagePicker}
@@ -224,7 +213,7 @@ const ConmentInput = (props) => {
                             >
                                 <i className="bi bi-emoji-smile"></i>
                             </button>
-                            <div className="emoji-picker-popup">
+                            <div className={style.emoji_picker_popup}>
                                 {showEmoji && (
                                     <EmojiPicker
                                         width={300}
@@ -240,7 +229,7 @@ const ConmentInput = (props) => {
                             >
                                 <i className="bi bi-filetype-gif"></i>
                             </button>
-                            <div className="gif-picker-popup">
+                            <div className={style.gif_picker_popup}>
                                 {showGif && (
                                     <Giphy
                                         apiKey={Environment.GIPHY_API_KEY}
@@ -274,7 +263,7 @@ const ConmentInput = (props) => {
                     </div>
                 </div>
             </div>
-            <div className={`p-3 ${style.modal_footer_custom}`}>
+            <div className={`px-3 pb-1 ${style.modal_footer_custom}`}>
                 <div>
                     <button
                         type="button"
@@ -289,4 +278,4 @@ const ConmentInput = (props) => {
         </div>
     );
 };
-export default ConmentInput;
+export default CommentInput;

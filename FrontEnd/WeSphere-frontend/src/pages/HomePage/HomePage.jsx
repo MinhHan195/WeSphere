@@ -8,7 +8,6 @@ import { _AUTH } from "../../constants/_auth";
 import Feed from "../../components/Elements/Feed/Feed";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import style from "./HomePage.module.css";
-import ViewImage from "../../components/Elements/ViewImage/ViewImage";
 
 const HomePage = () => {
     const token = localStorage.getItem(_AUTH.TOKEN_NAME);
@@ -41,40 +40,60 @@ const HomePage = () => {
             navigate("/auth ");
         }
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <DefaultLayout>
-            <div className={`d-flex flex-column align-items-center pt-5`}>
-                <div
-                    className={`card mb-4 shadow-sm rounded-4 ${style.card}`}
-                    onClick={() => dispatch(setModal(true))}
-                >
-                    <div className="card-body">
-                        <div className="d-flex align-items-center">
-                            <div className="me-3">
-                                <div className="rounded-circle bg-secondary avatar">
-                                    <img
-                                        className="object-fit-cover w-100 h-100"
-                                        src={user.avatar}
-                                        alt=""
-                                    />
+            <div
+                className={`d-flex justify-content-center pt-5 ${style.home_main_container}`}
+            >
+                <div className={`${style.home_main_dialog}`}>
+                    <div
+                        className={`card w-100 mb-4 shadow-sm rounded-4 ${style.card}`}
+                        onClick={() => dispatch(setModal(true))}
+                    >
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="me-3">
+                                    <div
+                                        className={`rounded-circle bg-secondary ${style.avatar}`}
+                                    >
+                                        <img
+                                            className="object-fit-cover w-100 h-100"
+                                            src={user.avatar}
+                                            alt=""
+                                        />
+                                    </div>
                                 </div>
+                                <span className="text-secondary">
+                                    Có gì mới
+                                </span>
                             </div>
-                            <span className="text-secondary">Có gì mới</span>
-                        </div>
-                        <div className="text-end mt-2">
-                            <div className="btn btn-outline-dark btn-sm fw-bold rounded-3">
-                                Đăng
+                            <div className="text-end mt-2">
+                                <div className="btn btn-outline-dark btn-sm fw-bold rounded-3">
+                                    Đăng
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className={`list-post`}>
-                    {listFeeds.length > 0
-                        ? listFeeds.map((feed, idx) => {
-                              return <Feed data={feed} key={idx} idx={idx} />;
-                          })
-                        : null}
+                    <div className={`list-post w-100`}>
+                        {listFeeds.length > 0
+                            ? listFeeds.map((feed, idx) => {
+                                  return (
+                                      <div
+                                          className={`card mb-4 shadow-sm rounded-4 py-4 w-100 ${style.feed_card_item}`}
+                                          key={feed.feed.id}
+                                      >
+                                          <Feed
+                                              data={feed}
+                                              key={idx}
+                                              idx={idx}
+                                          />
+                                      </div>
+                                  );
+                              })
+                            : null}
+                    </div>
                 </div>
             </div>
         </DefaultLayout>

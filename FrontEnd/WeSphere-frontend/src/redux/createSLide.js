@@ -4,15 +4,25 @@ const createSlide = createSlice({
     name: 'create',
     initialState: {
         show: false,
-        dragMoved: false
+        userMention: {
+            name: '',
+            id: ''
+        }
+
     },
     reducers: {
-        setModal: (state, { payload }) => {
-            state.show = payload;
+        setModal: (state, action) => {
+            const [show, name, id] = action.payload || [];
+            state.show = show;
+            state.userMention.name = name;
+            state.userMention.id = id;
         },
     },
 });
 
-export const { setModal } = createSlide.actions;
+export const setModal = (show, name, id) => ({
+    type: createSlide.actions.setModal.type,
+    payload: [show, name, id],
+});
 
 export default createSlide.reducer;

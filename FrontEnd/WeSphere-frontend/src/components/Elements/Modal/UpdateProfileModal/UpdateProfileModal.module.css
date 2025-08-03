@@ -1,0 +1,354 @@
+.update_profile_modal_background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(44, 44, 44, 0.861);
+    /* z-index: 1000; */
+    display: flex !important;
+    justify-content: center !important;
+}
+.update_profile_modal_container{
+    width: 600px;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.update_profile_modal_layer_1{
+    position: relative;
+    height: 643px;
+    max-height: 90vh;
+    width: 100%;
+    
+}
+
+.update_profile_modal_layer_2{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 100%;
+    transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal_dialog_custom{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100% !important;
+    max-width: 100% !important;
+    min-height: 150px;
+    height: auto;
+    overflow: hidden;
+    background-color: white;
+    padding: 10px 0 0px 0;
+    transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal_header_custom {
+    width: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 25px;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.modal_body_custom {
+    width: 100%;
+    padding: 0 25px 25px;
+}
+
+.modal_footer_custom{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.profile_section {
+    border-bottom: 1px solid #e9ecef;
+    padding: 15px 0 3px 0;
+}
+
+.profile-section:last-child {
+    border-bottom: none;
+}
+
+.profile_label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile_input {
+    width: 100%;
+    color: #666;
+    font-size: 16px;
+}
+
+.profile_input:focus {
+    background-color: white !important;
+    outline: none !important;
+}
+
+.form_control_custom{
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    background: transparent;
+}
+
+.form_control_custom:focus {
+    background: #f8f9fa;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #007bff;
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+
+button.btn_done {
+    background-color: #000 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    width: 100% !important;
+    height: 48px !important;
+    font-weight: 500 !important;
+    margin-top: 20px !important;
+    cursor: pointer !important;
+}
+
+button.btn_done:hover {
+    background-color: #333 !important;
+}
+
+.profile_description {
+    font-size: 13px;
+    color: #999;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.chevron_icon {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.btn_add_link {
+    padding: 0 10px;
+    font-weight: 700 !important;
+    height: 50px !important;
+}
+
+.add_link_body_container{
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #fafafa;
+    padding: 10px 0 0px 0;
+}
+
+.add_link_form_container{
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: white;
+}
+
+.add_link_form_container input {
+    margin: 10px 15px;
+    width: 95% !important;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.add_link_form_container input:focus {
+    background-color: #ffffff;
+}
+
+.background_layer {
+    background-color: #fafafa;
+}
+
+.btn_custom{
+    cursor: pointer;
+}
+
+.form_check_input_custom{
+    background-color: #ccc !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.form_check_input_custom:checked {
+    background-color: black !important;
+}
+
+.list_link_container{
+    max-height: 308px;
+    overflow: hidden;
+}
+
+.list_link_wrapper{
+    height: auto;
+    max-height: 299px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.avatar_container{
+    height: 72px;
+    width: 72px;
+}
+
+.dropdown_item_custom{
+    color: black !important;
+    cursor: pointer !important;
+}
+
+.dropdown_item_custom:active,
+.dropdown_item_custom:hover {
+    background-color: white !important;
+}
+
+.hide_modal {
+    display: none;
+}
+
+.show_modal {
+    .update_profile_modal_layer_1 {
+        animation: modalIn 0.5s ease forwards;
+    }
+}
+
+.show_children_slide {
+    display: block;
+    animation: slideChildrenIn 0.4s ease forwards;
+}
+
+.hide_children_slide {
+    display: block;
+    animation: slideChildrenOut 0.4s ease forwards;
+}
+
+.show_main_slide {
+    display: block;
+    animation: slideMainIn 0.4s ease forwards;
+}
+
+.hide_main_slide {
+    display: block;
+    animation: slideMainOut 0.4s ease forwards;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideChildrenIn {
+    0% {
+        opacity: 0;
+        transform: translate(200%, -50%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    
+}
+
+@keyframes slideChildrenOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    99% {
+        opacity: 0;
+        transform: translate(200%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(200%, -50%);
+        display: none;
+    }
+}
+
+@keyframes slideMainIn {
+    from {
+        opacity: 0;
+        transform: translate(-100%, -50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes slideMainOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    99% {
+        opacity: 0;
+        transform: translate(-100%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-100%, -50%);
+        display: none;
+    }
+}

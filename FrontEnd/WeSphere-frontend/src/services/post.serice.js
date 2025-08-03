@@ -26,6 +26,18 @@ const postService = {
     getListFeeds: async () => {
         return await axiosClient.get(_url + '/ListFeeds');
     },
+
+    getListFeedsByUserId: async () => {
+        return await axiosClient.get(_url + '/ListFeeds/User');
+    },
+
+    getListMediasByUserId: async () => {
+        return await axiosClient.get(_url + '/ListMedias/User');
+    },
+
+    getListRePostsByUserId: async () => {
+        return await axiosClient.get(_url + '/ListRePosts/User');
+    },
 }
 
 export default postService;

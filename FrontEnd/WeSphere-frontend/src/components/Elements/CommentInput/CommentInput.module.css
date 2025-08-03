@@ -18,12 +18,38 @@
     position: relative;
 }
 
-.form_control_textarea_custom{
-    width: 100%;
-    max-height: 370px;
-    scrollbar-width: none;
-    resize: none;
-    outline: none;
+.form_control_custom{
+    border: none !important;
+    font-weight: 600;
+}
+
+.before_content{
+    border: 2px solid #00000023;
+    width: 1px;
+}
+
+.icon_container {
+    position: relative;
+    display: flex;
+}
+
+.comment_input_dialog button {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: rgba(76, 76, 76, 0.736) !important;
+}
+
+.emoji_picker_popup{
+    position: absolute;
+    transform: translate(60px, -400px);
+    z-index: 1500;
+}
+
+.gif_picker_popup {
+    position: absolute;
+    transform: translate(100px, -400px);
+    z-index: 1000;
 }
 
 .icon_custom{
@@ -34,4 +60,10 @@
 .modal_footer_custom{
     display: flex;
     flex-direction: row-reverse;
+}
+
+.avatar{
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
 }

@@ -2,12 +2,18 @@
     width: 100%;
     max-width: 620px;
     margin: 0;
-    padding: 10px 10px 10px 0px;
+    padding: 20px 0px 20px 20px;
     display: flex;
-    border-bottom: 1px solid rgb(160, 159, 159);
 }
 
 .feed_save_body{
-    width: auto;
-    max-width: 95%;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+.avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
 }

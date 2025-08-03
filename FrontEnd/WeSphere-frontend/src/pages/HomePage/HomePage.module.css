@@ -1,5 +1,22 @@
-.card{
+.home_main_container{
+    width: 100%;
+    height: auto;
+}
+
+.home_main_dialog{
     width: 777px;
     max-width: 777px;
     height: auto;
+    overflow-x: hidden;
+}
+
+.avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.feed_card_item{
+    padding: 1rem;
 }

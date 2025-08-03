@@ -5,14 +5,14 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading, setAlert } from "../../../redux/authSlide";
 import { $api } from "../../../services/service";
-import PreviewContainer from "../PreviewContainer/PreviewContainer";
+import Editor from "../TextEditor/Editor";
 import ShowMedia from "../ShowMedia/ShowMedia";
 import style from "./Feed.module.css";
-const Post = (props) => {
+const Feed = (props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { data, idx } = props;
+    const { data } = props;
     const [heartClicked, setHeartClicked] = useState(false);
     const [totalLike, setTotalLike] = useState(data.feed.totalLike);
     // feed( id, content, tag, listImages, totalLike, privacy, totalComment, totalReposts, totalShare, timeCreate, commentOfPost), feedOwner (username, id),
@@ -75,18 +75,13 @@ const Post = (props) => {
     };
 
     return (
-        <div
-            className={
-                !data.feed.commentOfPost
-                    ? `card mb-4 shadow-sm rounded-4 p-4`
-                    : `rounded-0 p-4 ps-5 ${style.comment_container}`
-            }
-            style={{ width: "777px" }}
-        >
-            <div className={style.feed_container}>
+        <>
+            <div className={`${style.feed_container} d-flex`}>
                 <div>
                     <div className="me-2">
-                        <div className="rounded-circle bg-secondary avatar">
+                        <div
+                            className={`rounded-circle bg-secondary ${style.avatar}`}
+                        >
                             <img
                                 className="object-fit-cover w-100 h-100"
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s"
@@ -95,7 +90,7 @@ const Post = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="w-100">
+                <div className={style.feed_body}>
                     <div className="mb-2">
                         <div>
                             <span className="me-2 fw-bold">
@@ -110,9 +105,7 @@ const Post = (props) => {
                             <span className="text-muted">{createAt()}</span>
                         </div>
                     </div>
-                    <p className={style.text_content_custom}>
-                        {data.feed.content}
-                    </p>
+                    <Editor json={data.feed.content} editable={false} />
                     <ShowMedia
                         listImage={data.feed.listImages}
                         preview={false}
@@ -141,21 +134,20 @@ const Post = (props) => {
                             <i className="bi bi-chat"></i>{" "}
                             <span>{data.feed.totalComment}</span>
                         </button>
-                        {!data.feed.commentOfPost ? (
-                            <button
-                                className={`btn rounded-pill m-0 px-2 py-1 ${style.btn_icon}`}
-                                onClick={rePost}
-                            >
-                                <i className="bi bi-arrow-repeat"></i>{" "}
-                                <span>{data.feed.totalReposts}</span>
-                            </button>
-                        ) : null}
+
+                        <button
+                            className={`btn rounded-pill m-0 px-2 py-1 ${style.btn_icon}`}
+                            onClick={rePost}
+                        >
+                            <i className="bi bi-arrow-repeat"></i>{" "}
+                            <span>{data.feed.totalReposts}</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
             {props.children}
-        </div>
+        </>
     );
 };
-export default Post;
+export default Feed;

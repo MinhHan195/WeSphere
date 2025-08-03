@@ -16,9 +16,19 @@
     background-color: rgba(186, 186, 186, 0.586) !important;
 }
 
+.avatar {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
 .feed_container {
     width: 100%;
-    display: flex;
+}
+
+.feed_body{
+    flex: 1 1 0%;
+    min-width: 0;
 }
 
 .btn_icon_container{
@@ -32,7 +42,8 @@
 
 .comment_container {
     border-bottom: 1px solid #ccc;
-    max-width: 727.4px;
+    /* max-width: 727.4px; */
+    width: 100%;
 }
 
 .comment_container .btn_icon_container {

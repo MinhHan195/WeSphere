@@ -11,8 +11,9 @@ import style from "./FeedDetail.module.css";
 const FeedDetail = () => {
     // data{feed, listComments[feed1, feed1,...], feedOwner}
     const dispatch = useDispatch();
-    const { feedId, username } = useParams();
+    const { feedId } = useParams();
     const [data, setData] = useState(null);
+    const [close, setClose] = useState(0);
 
     useEffect(() => {
         document.title = "WeSphere • Bình luận";
@@ -37,33 +38,67 @@ const FeedDetail = () => {
         }
     };
 
+    const handleClose = (e) => {
+        e.stopPropagation();
+        if (
+            !e.target.classList.contains("bi-emoji-smile") &&
+            !e.target.classList.contains("bi-filetype-gif") &&
+            !e.target.classList.contains("btn-icon-emoji") &&
+            !e.target.classList.contains("btn-icon-gif")
+        ) {
+            setClose((pre) => pre + 1);
+        } else {
+            return;
+        }
+    };
+
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <>
             <DefaultLayout>
-                <div className="d-flex flex-column align-items-center pt-5">
-                    {data && (
-                        <Feed data={data} idx={-1} key={data.feed.id}>
-                            <div className={style.comment_container}>
-                                <div className={style.comment_input}>
-                                    <CommentInput data={data} />
-                                </div>
-                                <div className={style.list_comments}>
-                                    {data.listComments.map((feed, idx) => {
-                                        return (
-                                            <Feed
-                                                data={feed}
-                                                key={idx}
-                                                idx={idx}
+                <div
+                    className={`d-flex justify-content-center pt-5 ${style.feed_detail_main_container}`}
+                    onClick={handleClose}
+                >
+                    <div className={`${style.feed_detail_main_dialog}`}>
+                        {data && (
+                            <div
+                                className={`card mb-4 shadow-sm rounded-4 p-4 w-100`}
+                            >
+                                <Feed data={data} idx={-1} key={data.feed.id}>
+                                    <div className={style.comment_container}>
+                                        <div className={style.comment_input}>
+                                            <CommentInput
+                                                data={data}
+                                                close={close}
                                             />
-                                        );
-                                    })}
-                                </div>
+                                        </div>
+                                        <div className={style.list_comments}>
+                                            {data.listComments.map(
+                                                (feed, idx) => {
+                                                    return (
+                                                        <div
+                                                            className={`rounded-0 p-4 ps-5 ${style.comment_container}`}
+                                                            key={feed.feed.id}
+                                                        >
+                                                            <Feed
+                                                                data={feed}
+                                                                key={idx}
+                                                                idx={idx}
+                                                            />
+                                                        </div>
+                                                    );
+                                                }
+                                            )}
+                                        </div>
+                                    </div>
+                                </Feed>
                             </div>
-                        </Feed>
-                    )}
+                        )}
+                    </div>
                 </div>
             </DefaultLayout>
         </>

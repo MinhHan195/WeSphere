@@ -1,3 +1,15 @@
+.feed_detail_main_container {
+    width: 100%;
+    height: auto;
+}
+
+.feed_detail_main_dialog{
+    width: 777px;
+    max-width: 777px;
+    height: auto;
+    overflow-x: hidden;
+}
+
 .comment_container{
     width: 100%;
     display: flex;
@@ -18,3 +30,9 @@
 .list_comments{
     width: 100%;
 }
+
+.comment_container {
+    border-bottom: 1px solid #ccc;
+    /* max-width: 727.4px; */
+}
+

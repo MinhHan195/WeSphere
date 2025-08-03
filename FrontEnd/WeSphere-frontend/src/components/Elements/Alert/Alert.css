@@ -6,6 +6,7 @@
     flex-direction: column;
     align-items: end;
     animation: slideIn 0.7s ease;
+    z-index: 20;
 }
 .btn-custom{
     min-width: 100px;

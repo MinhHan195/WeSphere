@@ -1,0 +1,31 @@
+.profile_container{
+    width: 640px;
+    max-width: 640px;
+    overflow-x: hidden;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
+}
+
+.profile_header{
+    padding: 2rem;
+}
+
+.avatar{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
+
+.update_profile_btn:hover{
+    background-color: white !important;
+}
+
+.follow_btn:hover{
+    background-color: black !important;
+}
+
+.list_link_button a {
+    all: unset;
+    cursor: pointer;
+}

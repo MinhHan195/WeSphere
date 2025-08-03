@@ -1,0 +1,28 @@
+.profile_bar_header{
+    border-bottom: 0.5px solid #dadada;
+}
+.nav_profile_bar{
+    width: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    /* padding-left: 2rem !important;
+    padding-right: 2rem !important; */
+}
+
+.profile_bar_bordy{
+    width: 100%;
+}
+
+.nav_profile_item{
+    text-align: center;
+}
+
+.nav_link_custom{
+    color: #000 !important;
+    font-weight: 600;
+    padding: 0.5rem !important;
+}
+
+.active{
+    border-bottom: 2px solid black !important;
+}

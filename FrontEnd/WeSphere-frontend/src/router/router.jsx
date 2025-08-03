@@ -5,6 +5,10 @@ import FindPage from "../pages/Find/Find.jsx";
 import AuthPage from "../pages/Auth/Auth.jsx";
 import Notification from "../pages/Notification/Notification.jsx";
 import FeedDetail from "../pages/FeedDetail/FeedDetail.jsx";
+import Profile from "../pages/Profile/Profile.jsx";
+import MyFeeds from "../pages/Profile/MyFeeds/MyFeeds.jsx";
+import MyMedia from "../pages/Profile/MyMedia/MyMedia.jsx";
+import Reposts from "../pages/Profile/Reposts/Reposts.jsx";
 
 function AppRouter() {
     return (
@@ -18,6 +22,11 @@ function AppRouter() {
                     path="/:username/post/:feedId"
                     element={<FeedDetail />}
                 />
+                <Route path="/:username" element={<Profile />}>
+                    <Route path="media" element={<MyMedia />} />
+                    <Route path="reposts" element={<Reposts />} />
+                    <Route index element={<MyFeeds />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     );
