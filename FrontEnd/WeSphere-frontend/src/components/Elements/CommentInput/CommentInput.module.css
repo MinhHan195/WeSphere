@@ -1,5 +1,6 @@
 .comment_input_container{
     width: 100%;
+    color: var(--primary-text-color);
 }
 
 .comment_input_dialog{
@@ -21,10 +22,18 @@
 .form_control_custom{
     border: none !important;
     font-weight: 600;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+}
+
+.form_control_custom:focus{
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
 }
 
 .before_content{
-    border: 2px solid #00000023;
+    border: 2px solid var(--primary-border-color);
     width: 1px;
 }
 
@@ -55,6 +64,10 @@
 .icon_custom{
     padding-top: 0 !important;
     border: none !important;
+}
+
+.icon_custom i {
+    color: var(--secondary-icon-color) !important;
 }
 
 .modal_footer_custom{

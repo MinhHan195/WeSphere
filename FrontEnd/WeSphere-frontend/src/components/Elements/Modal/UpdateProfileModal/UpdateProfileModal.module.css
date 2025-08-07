@@ -5,7 +5,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(44, 44, 44, 0.861);
-    /* z-index: 1000; */
+    z-index: 1000;
     display: flex !important;
     justify-content: center !important;
 }
@@ -19,7 +19,7 @@
 
 .update_profile_modal_layer_1{
     position: relative;
-    height: 643px;
+    height: 633px;
     max-height: 90vh;
     width: 100%;
     
@@ -31,7 +31,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100%;
-    width: 100%;
+    background-color: var(--primary-color);
     transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -43,10 +43,11 @@
     min-width: 100% !important;
     max-width: 100% !important;
     min-height: 150px;
+    border: 1px solid var(--primary-border-color) !important;
     height: auto;
     overflow: hidden;
-    background-color: white;
-    padding: 10px 0 0px 0;
+    background-color: var(--primary-color) !important;
+    padding-top: 10px;
     transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -56,12 +57,21 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 25px;
-    border-bottom: 1px solid #c0c0c0;
+    border-bottom: 1px solid var(--primary-border-color);
+    color: var(--primary-text-color);
+}
+
+.modal_header_custom .btn {
+    color: var(--secondary-icon-color) !important;
 }
 
 .modal_body_custom {
     width: 100%;
     padding: 0 25px 25px;
+}
+
+.modal_body_custom_2{
+background-color: var(--background-color) !important;
 }
 
 .modal_footer_custom{
@@ -82,18 +92,21 @@
 
 .profile_label {
     font-weight: 600;
-    color: #333;
+    color: var(--primary-text-color);
     margin-bottom: 5px;
 }
 
 .profile_input {
     width: 100%;
-    color: #666;
     font-size: 16px;
+    color: var(--primary-text-color) !important ;
+}
+
+.profile_input::placeholder {
+    color: var(--secondary-text-color) !important;
 }
 
 .profile_input:focus {
-    background-color: white !important;
     outline: none !important;
 }
 
@@ -102,11 +115,37 @@
     outline: none !important;
     box-shadow: none !important;
     padding-left: 0 !important;
-    background: transparent;
+    background: transparent !important;
 }
 
 .form_control_custom:focus {
-    background: #f8f9fa;
+    background: transparent !important;
+}
+
+.dropdown_button_custom{
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding: 0 !important;
+    color: var(--primary-text-color) !important;
+}
+
+.dropdown_menu_custom{
+    top: 10px !important;
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-border-color) !important;
+}
+
+.dropdown_menu_custom li{
+    color: var(--primary-text-color) !important;
+    padding: 0px 15px !important;
+    cursor: pointer !important;
+}
+
+.dropdown_menu_custom li hr{
+    border-color: var(--primary-border-color) !important;
 }
 
 .slider {
@@ -175,22 +214,31 @@ button.btn_done:hover {
     padding: 0 10px;
     font-weight: 700 !important;
     height: 50px !important;
+    color: var(--primary-text-color);
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-border-color);
 }
 
 .add_link_body_container{
     width: 100% !important;
     height: 100% !important;
     background-color: #fafafa;
-    padding: 10px 0 0px 0;
+    /* padding: 10px 0 0px 0; */
+}
+
+.add_link_modal_body{
+    padding-top: 10px;
 }
 
 .add_link_form_container{
-    border: 1px solid #ccc;
+    border: 1px solid var(--primary-border-color);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background-color: white;
+    background-color: var(--primary-color);
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .add_link_form_container input {
@@ -200,14 +248,11 @@ button.btn_done:hover {
     outline: none;
     background-color: transparent;
     font-size: 16px;
+    color: var(--primary-text-color)
 }
 
 .add_link_form_container input:focus {
     background-color: #ffffff;
-}
-
-.background_layer {
-    background-color: #fafafa;
 }
 
 .btn_custom{
@@ -227,6 +272,9 @@ button.btn_done:hover {
 .list_link_container{
     max-height: 308px;
     overflow: hidden;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-border-color) !important;
+    color: var(--secondary-text-color) !important;
 }
 
 .list_link_wrapper{
@@ -238,18 +286,19 @@ button.btn_done:hover {
 }
 
 .avatar_container{
+    border: 1px solid var(--primary-border-color);
     height: 72px;
     width: 72px;
 }
 
-.dropdown_item_custom{
-    color: black !important;
-    cursor: pointer !important;
+.avatar_dropdown_menu_custom{
+    background-color: var(--primary-color) !important;
+    border: 1px solid var(--primary-border-color) !important;
 }
 
-.dropdown_item_custom:active,
-.dropdown_item_custom:hover {
-    background-color: white !important;
+.dropdown_item_custom{
+    cursor: pointer !important;
+    color: var(--primary-text-color) !important;
 }
 
 .hide_modal {

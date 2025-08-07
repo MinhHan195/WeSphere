@@ -23,7 +23,7 @@ const UpdateProfileModal = (props) => {
     // Biến trạng thái để lưu thông tin người dùng
     const [bio, setBio] = useState(user.bio || "Tiểu sử");
     const [phone, setPhone] = useState(user.phone || "");
-    const [gender, setGender] = useState(user.gender || "");
+    const [gender, setGender] = useState(user.gender || "Chọn giới tính");
     const [privateMode, setPrivateMode] = useState(
         user.privateMode === "true" || false
     );
@@ -111,11 +111,12 @@ const UpdateProfileModal = (props) => {
     useEffect(() => {
         const el = document.querySelector(`.${style.show_children_slide}`);
         if (el) {
-            updateHeightOverlay2(el.scrollHeight);
+            updateHeightOverlay2(el.offsetHeight);
         } else {
             const el2 = document.querySelector(`.${style.show_main_slide}`);
             if (el2) {
-                updateHeightOverlay2(el2.scrollHeight);
+                console.log(el2.offsetHeight);
+                updateHeightOverlay2(el2.offsetHeight);
             }
         }
     }, [showAddLink, showEditLink, showBio]);
@@ -147,8 +148,8 @@ const UpdateProfileModal = (props) => {
         setPhone(e.target.value);
     };
 
-    const updateGender = (e) => {
-        setGender(e.target.value);
+    const updateGender = (data) => {
+        setGender(data);
     };
 
     const updatePrivateMode = (e) => {
@@ -256,7 +257,7 @@ const UpdateProfileModal = (props) => {
                         className={`${style.update_profile_modal_layer_1} ${style.show_modal}`}
                     >
                         <div
-                            className={`w-100 rounded-4 bg-white overflow-hidden ${style.update_profile_modal_layer_2}`}
+                            className={`w-100 rounded-4 overflow-hidden ${style.update_profile_modal_layer_2}`}
                         >
                             <div
                                 className={`rounded-4 ${
@@ -284,7 +285,7 @@ const UpdateProfileModal = (props) => {
                                         <div className="col-2">
                                             <div className="dropdown">
                                                 <button
-                                                    className={`btn p-0 border border-secondary-subtle rounded-circle d-flex justify-content-center align-items-center overflow-hidden ${style.avatar_container}`}
+                                                    className={`btn p-0 rounded-circle d-flex justify-content-center align-items-center overflow-hidden ${style.avatar_container}`}
                                                     type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false"
@@ -309,7 +310,9 @@ const UpdateProfileModal = (props) => {
                                                         />
                                                     )}
                                                 </button>
-                                                <ul className="dropdown-menu">
+                                                <ul
+                                                    className={`dropdown-menu ${style.avatar_dropdown_menu_custom}`}
+                                                >
                                                     <li
                                                         // className={`${style.dropdown_item_custom}`}
                                                         onClick={
@@ -372,7 +375,7 @@ const UpdateProfileModal = (props) => {
                                         >
                                             Giới tính
                                         </div>
-                                        <select
+                                        {/* <select
                                             name="gender"
                                             className={`form-control ${style.form_control_custom} ${style.profile_input}`}
                                             defaultValue={gender}
@@ -382,7 +385,48 @@ const UpdateProfileModal = (props) => {
                                             <option value="Nam">Nam</option>
                                             <option value="Nữ">Nữ</option>
                                             <option value="Khác">Khác</option>
-                                        </select>
+                                        </select> */}
+                                        <div className="dropdown">
+                                            <button
+                                                className={`btn ${style.dropdown_button_custom}`}
+                                                type="button"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
+                                                {gender}
+                                            </button>
+                                            <ul
+                                                className={`dropdown-menu ${style.dropdown_menu_custom}`}
+                                            >
+                                                <li
+                                                    onClick={() =>
+                                                        updateGender("Nam")
+                                                    }
+                                                >
+                                                    Nam
+                                                </li>
+                                                <li>
+                                                    <hr className="dropdown-divider" />
+                                                </li>
+                                                <li
+                                                    onClick={() =>
+                                                        updateGender("Nữ")
+                                                    }
+                                                >
+                                                    Nữ
+                                                </li>
+                                                <li>
+                                                    <hr className="dropdown-divider" />
+                                                </li>
+                                                <li
+                                                    onClick={() =>
+                                                        updateGender("Khác")
+                                                    }
+                                                >
+                                                    Khác
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
 
                                     <div className={`${style.profile_section}`}>
@@ -425,7 +469,7 @@ const UpdateProfileModal = (props) => {
                                                 {listLinks.length != 0
                                                     ? listLinks.length
                                                     : null}
-                                                <i class="bi bi-chevron-right ms-2"></i>
+                                                <i className="bi bi-chevron-right ms-2"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -499,7 +543,7 @@ const UpdateProfileModal = (props) => {
                             >
                                 <div className={`${style.modal_header_custom}`}>
                                     <button
-                                        className="btn"
+                                        className={`btn ${style.btn}`}
                                         type="button"
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -514,7 +558,7 @@ const UpdateProfileModal = (props) => {
                                         <b>Chỉnh sửa tiểu sử</b>
                                     </h6>
                                     <div
-                                        className={`${style.btn_custom}`}
+                                        className={`${style.btn_custom} ${style.btn}`}
                                         style={{ width: "40px" }}
                                         onClick={updateBio}
                                     >
@@ -576,10 +620,10 @@ const UpdateProfileModal = (props) => {
                                     <div style={{ width: "40px" }}></div>
                                 </div>
                                 <div
-                                    className={`${style.modal_body_custom} ${style.background_layer} pt-4`}
+                                    className={`${style.modal_body_custom} ${style.modal_body_custom_2} pt-4`}
                                 >
                                     <div
-                                        className={`rounded-4 border border-secondary-subtle bg-white py-2 px-3 w-100 ${style.list_link_container}`}
+                                        className={`rounded-4 py-2 px-3 w-100 ${style.list_link_container}`}
                                     >
                                         <div
                                             className={style.list_link_wrapper}
@@ -602,7 +646,7 @@ const UpdateProfileModal = (props) => {
                                                     }
                                                 )
                                             ) : (
-                                                <div className="text-center text-secondary py-4">
+                                                <div className="text-center py-4">
                                                     Chưa có liên kết nào
                                                 </div>
                                             )}
@@ -610,7 +654,7 @@ const UpdateProfileModal = (props) => {
                                     </div>
 
                                     <div
-                                        className={`border border-secondary-subtle w-100 bg-white mt-5 py-1 rounded-4 ${style.btn_add_link}`}
+                                        className={`w-100 mt-5 py-1 rounded-4 ${style.btn_add_link}`}
                                         type="button"
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -677,7 +721,7 @@ const UpdateProfileModal = (props) => {
                                     className={`${style.add_link_body_container}`}
                                 >
                                     <div
-                                        className={`${style.modal_body_custom} `}
+                                        className={`${style.modal_body_custom} ${style.modal_body_custom_2} ${style.add_link_modal_body} `}
                                     >
                                         <div
                                             className={`${style.add_link_form_container} box_shadow`}
@@ -717,7 +761,7 @@ const UpdateProfileModal = (props) => {
                                         </div>
                                         {isEditLink ? (
                                             <div
-                                                className={`border border-secondary-subtle w-100 bg-white mt-4 py-1 rounded-4 ${style.btn_add_link}`}
+                                                className={` w-100 mt-4 py-1 rounded-4 ${style.btn_add_link}`}
                                                 type="button"
                                                 onClick={(e) => {
                                                     e.stopPropagation();

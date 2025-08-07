@@ -1,5 +1,5 @@
 .profile_bar_header{
-    border-bottom: 0.5px solid #dadada;
+    border-bottom: 0.5px solid var(--primary-border-color) !important;
 }
 .nav_profile_bar{
     width: 100%;
@@ -18,11 +18,11 @@
 }
 
 .nav_link_custom{
-    color: #000 !important;
+    color: var(--primary-text-color) !important;
     font-weight: 600;
     padding: 0.5rem !important;
 }
 
 .active{
-    border-bottom: 2px solid black !important;
+    border-bottom: 2px solid var(--primary-text-color) !important;
 }

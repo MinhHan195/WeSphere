@@ -16,4 +16,9 @@
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+    overflow: hidden;
+}
+
+.text_secondary{
+    color: var(--secondary-text-color);
 }

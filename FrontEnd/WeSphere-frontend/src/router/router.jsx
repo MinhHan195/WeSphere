@@ -9,6 +9,12 @@ import Profile from "../pages/Profile/Profile.jsx";
 import MyFeeds from "../pages/Profile/MyFeeds/MyFeeds.jsx";
 import MyMedia from "../pages/Profile/MyMedia/MyMedia.jsx";
 import Reposts from "../pages/Profile/Reposts/Reposts.jsx";
+import Setting from "../pages/Setting/Setting.jsx";
+import PrivacySettings from "../pages/Setting/PrivacySettings/PrivacySettings.jsx";
+import OnlineStatusSetting from "../pages/Setting/OnlineStatusSetting/OnlineStatusSetting.jsx";
+import Account from "../pages/Setting/Account/Account.jsx";
+import Deactivate from "../pages/Setting/Deactivate/Deactivate.jsx";
+import Theme from "../pages/Setting/Theme/Theme.jsx";
 
 function AppRouter() {
     return (
@@ -26,6 +32,19 @@ function AppRouter() {
                     <Route path="media" element={<MyMedia />} />
                     <Route path="reposts" element={<Reposts />} />
                     <Route index element={<MyFeeds />} />
+                </Route>
+                <Route path="/setting" element={<Setting />}>
+                    <Route path="privacy" element={<PrivacySettings />} />
+                    <Route
+                        path="online_status"
+                        element={<OnlineStatusSetting />}
+                    />
+                    <Route path="account" element={<Account />} />
+                    <Route path="deactivate" element={<Deactivate />} />
+                    <Route path="theme" element={<Theme />} />
+                    {/* Add other settings routes here */}
+                    {/* <Route path="account" element={<AccountSettings />} />
+                    <Route path="help" element={<HelpSettings />} /> */}
                 </Route>
             </Routes>
         </BrowserRouter>

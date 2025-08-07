@@ -1,6 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
 :root {
-  --primary-color: rgb(24, 24, 24);
+  /* --background-color: #0A0A0A;
+  --primary-color: #181818;
+  --primary-text-color: rgb(243, 245, 247);
+  --primary-border-color: rgb(51, 54, 56);
+  --primary-icon-color: rgb(243, 245, 247);
+  --primary-icon-hover-color: #181818;
+  --primary-button-color: #FFFFFF;
+
+  --secondary-text-color: rgb(119, 119, 119);
+  --secondary-icon-color: rgb(204, 204, 204);
+  --secondary-icon-hover-color: #212121;
+
+  --third-icon-color: #6e6d6d; */
+
+    --background-color: #fafafa;
+    --primary-color: #FFFFFF;
+    --primary-text-color: #1E1E1E;
+    --primary-border-color: rgba(0, 0, 0, 0.15);
+    --primary-icon-color: rgb(83, 83, 83);
+    --primary-icon-hover-color: #dcdcdc;
+    --primary-button-color: #000000;
+
+    --secondary-text-color: rgb(119, 119, 119);
+    --secondary-icon-color: rgb(204, 204, 204);
+    --secondary-icon-hover-color: #d3d3d3;
+
+    --third-icon-color: #6e6d6d;
+    
+  /* rgb(243, 245, 247) */
+  /* --primary-icon-hover-color: #cdcccc; */
+  /* --background -modal: #fafafa */
 }
 
 body {

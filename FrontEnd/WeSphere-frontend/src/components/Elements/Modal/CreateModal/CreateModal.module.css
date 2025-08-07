@@ -22,7 +22,6 @@
 .modal_dialog_custom{
     position: absolute;
     /* overflow: hidden; */
-    background-color: white;
     transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1500;
 }
@@ -31,7 +30,8 @@
     width: 620px;
     max-height: 80%;
     height: auto;
-    background-color: white;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
     z-index: 500;
     transition: height 0.5s ease-in-out;
 }
@@ -42,17 +42,18 @@
     align-items: center;
     height: 56px;
     padding: 0.5rem;
-    border-bottom: 1px solid #00000023;
+    border-bottom: 1px solid var(--primary-border-color);
 }
 
 .modal_content_saves{
     height: 597px;
     overflow-x: hidden;
+    scrollbar-width: none;
 }
 
 .modal_content_saves .modal_body {
     height: 540px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
     padding: 15px;
@@ -86,6 +87,8 @@
 .form_control_custom{
     border: none !important;
     font-weight: 600;
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text-color);
 }
 
 .form_control_custom:focus {
@@ -93,17 +96,19 @@
     outline: none;
 }
 /* Button styles */
-.submit_btn{
-    font-weight: 600 !important;
-    color: #000 !important;
-    
-}
 
-.modal_dialog_custom button{
+
+.modal_body button, .modal_header button{
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
-    color: rgba(76, 76, 76, 0.736) !important;
+    color: var(--secondary-icon-color) !important;
+}
+
+.submit_btn {
+    font-weight: 600 !important;
+    color: #000 !important;
+
 }
 
 .modal_dialog_custom button.btn:active {
@@ -111,7 +116,7 @@
 }
 
 .before_content {
-    border: 2px solid #00000023;
+    border: 2px solid var(--primary-border-color);
     width: 1px;
 }
 
@@ -136,7 +141,8 @@
     box-shadow: none !important;
     outline: none !important;
     border-radius: 10px !important;
-    color: rgba(76, 76, 76, 0.736) !important;
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .icon_container {
@@ -147,7 +153,6 @@
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
-    background-color: white !important;
 }
 
 /* Show-hide modal styles */

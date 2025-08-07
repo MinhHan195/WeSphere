@@ -47,7 +47,9 @@ const FeedSave = (props) => {
                                 {data.feed.tag}
                             </span>
                         )}
-                        <span className="text-muted">{createAt()}</span>
+                        <span className={style.text_secondary}>
+                            {createAt()}
+                        </span>
                     </div>
                 </div>
                 <Editor editable={false} json={data.feed.content} />

@@ -1,0 +1,37 @@
+.switch_input{
+    background-color: rgb(255, 255, 255) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.switch_input:focus, .switch_input:active {
+    background-color: rgb(255, 255, 255) !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.switch_input::before:focus, .switch_input::before:active {
+    background-color: rgb(196, 196, 196) !important;
+    box-shadow: none !important;
+}
+
+.switch_input:checked, .switch_input:checked:active {
+    background-color: rgb(0, 0, 0) !important;
+    border-color: black !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.nav_setting_item{
+    all: unset;
+    cursor: pointer;
+}
+
+.icon{
+    font-size: 1.5rem;
+}
+
+.text_secondary{
+    color: var(--secondary-text-color);
+}

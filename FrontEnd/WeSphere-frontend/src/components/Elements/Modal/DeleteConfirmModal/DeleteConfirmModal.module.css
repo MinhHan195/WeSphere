@@ -22,7 +22,8 @@
 .modal_background .modal_confirm_container {
     width: 100%;
     height: auto;
-    background-color: white;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
 }
 
 .modal_confirm_header{
@@ -30,7 +31,7 @@
     justify-content: center;
     align-items: center;
     height: 60px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--primary-border-color);
 }
 
 .modal_confirm_body{
@@ -43,7 +44,7 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    border-right: 0.5px solid #ccc;
+    border-right: 0.5px solid var(--primary-border-color);
     cursor: pointer;
 }
 
@@ -60,7 +61,7 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    border-left: 0.5px solid #ccc;
+    border-left: 0.5px solid var(--primary-border-color);
     color: #d30000;
     cursor: pointer;
 }

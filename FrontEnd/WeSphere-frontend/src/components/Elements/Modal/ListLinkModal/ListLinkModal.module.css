@@ -4,7 +4,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(44, 44, 44, 0.861);
+    background-color: rgba(44, 44, 44, 0.861) !important;
     z-index: 1000;
     display: flex !important;
     justify-content: center;
@@ -18,9 +18,11 @@
     align-items: center;
 }
 
-.list_link_modal_container{
+.list_link_modal{
     min-height: 100px;
     overflow: hidden;
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .list_link_modal_header{
@@ -30,6 +32,14 @@
     align-items: center;
     height: 60px;
     border-bottom: 1px solid #ccc;
+}
+
+.list_link_modal_header button {
+    background-color: transparent !important;
+}
+
+.list_link_modal_header button i {
+    color: var(--primary-text-color);
 }
 
 .list_link_modal_body{

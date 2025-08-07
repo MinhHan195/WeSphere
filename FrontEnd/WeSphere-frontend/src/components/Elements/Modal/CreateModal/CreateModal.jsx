@@ -296,7 +296,7 @@ const CreateModal = () => {
                         >
                             <div className={`${style.modal_header}`}>
                                 <button
-                                    className="btn"
+                                    className={`btn ${style.btn}`}
                                     onClick={showHideModalConfirm}
                                 >
                                     Hủy
@@ -371,15 +371,22 @@ const CreateModal = () => {
                                                     style.textarea_container
                                                 }
                                             >
-                                                <Editor
-                                                    key={editorKey}
-                                                    emoji={emoji}
-                                                    json={content}
-                                                    editable={true}
-                                                    onExport={(json) => {
-                                                        setContent(json);
+                                                <div
+                                                    style={{
+                                                        paddingLeft: "8px",
                                                     }}
-                                                />
+                                                >
+                                                    <Editor
+                                                        key={editorKey}
+                                                        emoji={emoji}
+                                                        json={content}
+                                                        editable={true}
+                                                        onExport={(json) => {
+                                                            setContent(json);
+                                                        }}
+                                                    />
+                                                </div>
+
                                                 <PreviewContainer
                                                     preview={true}
                                                     listImage={listImage}

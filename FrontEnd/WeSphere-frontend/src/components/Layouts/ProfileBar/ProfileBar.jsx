@@ -7,6 +7,7 @@ const ProfileBar = (props) => {
             <div className={style.profile_bar_header}>
                 <div className={`${style.nav_profile_bar} row`}>
                     <NavLink
+                        end
                         className={({ isActive }) =>
                             `nav-link ${style.nav_profile_item} col-4 ${
                                 style.nav_link_custom
@@ -22,7 +23,7 @@ const ProfileBar = (props) => {
                                 style.nav_link_custom
                             } ${isActive ? style.active : ""}`
                         }
-                        to="/profile/media"
+                        to={`/${username}/media`}
                     >
                         File phương tiện
                     </NavLink>
@@ -32,7 +33,7 @@ const ProfileBar = (props) => {
                                 style.nav_link_custom
                             } ${isActive ? style.active : ""}`
                         }
-                        to="/profile/reposts"
+                        to={`/${username}/reposts`}
                     >
                         Bài đăng lại
                     </NavLink>

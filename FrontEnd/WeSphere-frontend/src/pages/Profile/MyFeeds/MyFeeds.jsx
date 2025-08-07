@@ -47,7 +47,7 @@ const MyFeeds = () => {
                     <i className="bi bi-person-circle me-2 fs-4"></i>
                     <div className="form-control text-secondary">Có gì mới</div>
                     <div
-                        className={`btn btn-outline-secondary fw-medium text-black ms-2 ${style.update_profile_btn}`}
+                        className={`btn btn-outline-secondary fw-medium ms-2 ${style.update_profile_btn}`}
                     >
                         Đăng
                     </div>

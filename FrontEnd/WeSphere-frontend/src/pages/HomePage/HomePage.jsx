@@ -3,15 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setModal } from "../../redux/createSLide";
 import { $api } from "../../services/service";
 import { setLoading, setAlert } from "../../redux/authSlide";
-import { useNavigate } from "react-router-dom";
-import { _AUTH } from "../../constants/_auth";
 import Feed from "../../components/Elements/Feed/Feed";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import style from "./HomePage.module.css";
 
 const HomePage = () => {
-    const token = localStorage.getItem(_AUTH.TOKEN_NAME);
-    const navigate = useNavigate();
     const [listFeeds, setListFeeds] = useState([]);
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
@@ -36,9 +32,6 @@ const HomePage = () => {
     };
     useEffect(() => {
         document.title = "WeSphere • Trang chủ";
-        if (!token) {
-            navigate("/auth ");
-        }
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -70,7 +63,9 @@ const HomePage = () => {
                                 </span>
                             </div>
                             <div className="text-end mt-2">
-                                <div className="btn btn-outline-dark btn-sm fw-bold rounded-3">
+                                <div
+                                    className={`btn btn-outline-dark btn-sm fw-bold rounded-3 ${style.post_button}`}
+                                >
                                     Đăng
                                 </div>
                             </div>

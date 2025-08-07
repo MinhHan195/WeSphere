@@ -1,4 +1,4 @@
-.loading-page {
+.loading_page {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -16,4 +16,8 @@
         height: 80px;
     }
 
+}
+
+.loading_page div span{
+    color: var(--primary-text-color);
 }

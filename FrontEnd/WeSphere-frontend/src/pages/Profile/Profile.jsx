@@ -7,7 +7,7 @@ import { setModal } from "../../redux/createSLide.js";
 import { $api } from "../../services/service.js";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import UpdateProfileModal from "../../components/Elements/Modal/UpdateProfileModal/UpdateProfileModal.jsx";
-import ProfileBar from "../../components/Elements/ProfileBar/ProfileBar.jsx";
+import ProfileBar from "../../components/Layouts/ProfileBar/ProfileBar.jsx";
 import ListLinkModal from "../../components/Elements/Modal/ListLinkModal/ListLinkModal.jsx";
 import style from "./Profile.module.css";
 const Profile = () => {
@@ -47,6 +47,10 @@ const Profile = () => {
         fetchData(param.username);
     }, []);
 
+    // useEffect(() => {
+    //     console.log(user);
+    // }, [user]);
+
     useEffect(() => {
         document.title = `${user.fullname} (${user.username}) • WeSphere`;
     }, [user]);
@@ -75,13 +79,15 @@ const Profile = () => {
                                 <h5 className="mb-1 fw-bold">
                                     {user.fullname}
                                 </h5>
-                                <small className="text-muted">
+                                <small className={`${style.text_secondary}`}>
                                     {user.username}
                                 </small>
-                                <p className="mt-1 mb-1 text-muted">
+                                <p
+                                    className={`mt-1 mb-1 ${style.text_secondary}`}
+                                >
                                     {user.bio}
                                 </p>
-                                <small className="text-muted">
+                                <small className={`${style.text_secondary}`}>
                                     {user.followers} người theo dõi{" "}
                                     <span className={style.list_link_button}>
                                         {user.listLinks &&
@@ -136,7 +142,7 @@ const Profile = () => {
                         {user.id === auth.id ? (
                             <div className="mt-3 w-100">
                                 <button
-                                    className={`btn btn-outline-secondary text-black fw-bold w-100 ${style.update_profile_btn}`}
+                                    className={`btn fw-bold w-100 ${style.update_profile_btn}`}
                                     onClick={handleShowHideUpdateModal}
                                 >
                                     Chỉnh sửa trang cá nhân
@@ -144,35 +150,49 @@ const Profile = () => {
                             </div>
                         ) : (
                             <div className="mt-3 w-100 d-flex gap-2">
-                                <button
-                                    className={`btn btn-outline-secondary text-white bg-black fw-bold w-100 ${style.follow_btn}`}
-                                    // onClick={handleShowHideUpdateModal}
-                                >
-                                    Theo dõi
-                                </button>
-                                <button
-                                    className={`btn btn-outline-secondary text-black fw-bold w-100 ${style.update_profile_btn}`}
-                                    onClick={() => {
-                                        dispatch(
-                                            setModal(
-                                                true,
-                                                user.username,
-                                                user.id
-                                            )
-                                        );
-                                    }}
-                                >
-                                    Nhắc đến
-                                </button>
+                                {user.isFollowing ? (
+                                    <button
+                                        className={`btn fw-bold w-100 ${style.update_profile_btn}`}
+                                        // onClick={handleShowHideUpdateModal}
+                                    >
+                                        Đang theo dõi
+                                    </button>
+                                ) : (
+                                    <button
+                                        className={`btn fw-bold w-100 ${style.follow_btn}`}
+                                        // onClick={handleShowHideUpdateModal}
+                                    >
+                                        Theo dõi
+                                    </button>
+                                )}
+
+                                {!user.privateMode || user.isFollowing ? (
+                                    <button
+                                        className={`btn fw-bold w-100 ${style.update_profile_btn}`}
+                                        onClick={() => {
+                                            dispatch(
+                                                setModal(
+                                                    true,
+                                                    user.username,
+                                                    user.id
+                                                )
+                                            );
+                                        }}
+                                    >
+                                        Nhắc đến
+                                    </button>
+                                ) : null}
                             </div>
                         )}
                     </div>
-                    <div className="w-100">
-                        <ProfileBar
-                            username={user.username}
-                            isUser={user.id === auth.id}
-                        />
-                    </div>
+                    {!user.isFollowing && user.privateMode ? null : (
+                        <div className="w-100">
+                            <ProfileBar
+                                username={user.username}
+                                isUser={user.id === auth.id}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
             {showUpdateModal ? (

@@ -14,9 +14,7 @@ const ListLinkModal = (props) => {
             }`}
         >
             <div className={style.list_link_modal_dialog}>
-                <div
-                    className={`${style.list_link_modal_container} card rounded-4 bg-white`}
-                >
+                <div className={`${style.list_link_modal} card rounded-4`}>
                     <div className={style.list_link_modal_header}>
                         <p className="fw-bold p-3 m-0">Liên kết</p>
                         <button onClick={handleHide}>

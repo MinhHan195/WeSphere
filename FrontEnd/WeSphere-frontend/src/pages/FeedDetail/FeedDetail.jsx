@@ -66,7 +66,7 @@ const FeedDetail = () => {
                     <div className={`${style.feed_detail_main_dialog}`}>
                         {data && (
                             <div
-                                className={`card mb-4 shadow-sm rounded-4 p-4 w-100`}
+                                className={`card mb-4 shadow-sm rounded-4 p-4 w-100 ${style.feed_detail_main}`}
                             >
                                 <Feed data={data} idx={-1} key={data.feed.id}>
                                     <div className={style.comment_container}>

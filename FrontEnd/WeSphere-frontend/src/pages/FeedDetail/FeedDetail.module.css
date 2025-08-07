@@ -10,6 +10,11 @@
     overflow-x: hidden;
 }
 
+.feed_detail_main{
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-border-color) !important;
+}
+
 .comment_container{
     width: 100%;
     display: flex;

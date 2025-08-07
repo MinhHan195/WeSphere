@@ -4,8 +4,8 @@
     left: 0;
     width: 80px;
     height: 100vh;
-    background: white;
-    border-right: 1px solid #ddd;
+    background: var(--background-color);
+    border-right: 1px solid var(--primary-border-color) !important;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,7 +27,7 @@
 .menu_icon i {
     font-size: 1.7rem;
     margin: 0.5rem 0;
-    color: #6e6d6d;
+    color: var(--third-icon-color);
     cursor: pointer;
     transition: color 0.3s ease, transform 0.3s ease;
     padding: 0.5rem 1rem;
@@ -35,37 +35,110 @@
 }
 
 .menu_icon i:hover {
-    background-color: #f7f3f3;
-    transform: scale(1.1);
+    background-color: var(--primary-icon-hover-color);
 }
 
 .menu_icon i.bi_plus:hover{
     color: #000000;
 }
 
-.menu_icon i.active {
-    color: var(--primary-color);
+.menu_icon .active {
+    color: var(--primary-icon-color);
 }
 
 .menu_icon i.bi_plus {
     font-size: 2.5rem;
-    color: #6e6d6d;
-    background-color: #cdcccc;
+    color: var(--third-icon-color);
+    background-color: var(--primary-icon-hover-color);
     padding: 0.1rem 0.9rem !important;
+}
+
+.open_modal_menu_icon{
+    color: var(--third-icon-color);
+    /* color: var(--primary-text-color); */
+    padding: 0.5rem 1rem !important;
+    border-radius: 20%;
+}
+
+.open_modal_menu_icon:hover {
+    background-color: var(--primary-icon-hover-color);
+}
+
+.border {
+    border-color: var(--primary-border-color) !important;
 }
 
 .dropdown_menu_custom{
     position: absolute;
+    left: 15px !important;
+    /* top: -420px; */
     z-index: 2000;
     width: 200px;
+    border: 1px solid var(--primary-border-color) !important;
+    background-color: var(--primary-color) !important;
+    padding: 0.4rem 0.2rem 0.4rem 0.2rem !important;
 }
 
 .dropdown_menu_custom li {
-    padding: 0.2rem 1rem;
+    width: 100%;
+    padding: 0.3rem 0.8rem;
     font-size: 1rem;
     list-style-type: none;
 }
 
-.dropdown_menu_custom li a {
+.dropdown_menu_custom li a, .dropdown_menu_custom li span {
+    display: block;
+    border-radius: 5px !important;
     font-weight: 650 !important;
+    color: var(--primary-text-color) !important;
+    padding: 10px 15px;
+}
+
+
+.dropdown_menu_custom li a#logOut {
+    color: red !important;
+}
+
+.dropdown_menu_custom li a:hover, .dropdown_menu_custom li span:hover {
+    background-color: var(--secondary-icon-hover-color) !important;
+}
+
+.dropdown_menu_custom li a.active{
+    background-color: var(--secondary-icon-hover-color) !important;
+}
+
+.theme_modal{
+    width: 400px;
+    height: auto;
+    position: absolute;
+    top: -130px;
+    left: 27px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-border-color);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.theme_modal_header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary-text-color);
+    font-size: 1rem;
+    height: 50px;
+    padding-bottom: 1rem;
+}
+
+.theme_modal_header span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.theme_modal_header button {
+    font-size: 18px;
+    position: absolute;
+    left: 10px;
+    color: var(--secondary-icon-color);
+    border: none;
+    background: none;
 }

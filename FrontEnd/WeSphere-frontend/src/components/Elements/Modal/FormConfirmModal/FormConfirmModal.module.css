@@ -1,0 +1,79 @@
+.modal_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(44, 44, 44, 0.861);
+    z-index: 1000;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal_dialog {
+    width: 548px;
+    height: auto;   
+    padding: 0 16px 16px 16px;
+    background-color: var(--primary-color);
+    overflow-x: hidden;
+}
+
+.modal_header {
+    height: auto;
+    padding: 16px 0px 16px 0px;
+    color: var(--primary-text-color);
+}
+
+.modal_body {
+    width: 100%;
+    padding: 16px;
+    margin-top: 16px;
+    height: auto;
+    color: var(--primary-text-color);
+    border: 1px solid var(--primary-border-color);
+}
+
+.form_custom{
+    border: none !important;
+    width: 100%;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    color: var(--primary-text-color) !important;
+    padding-left: 0 !important;
+}
+
+.form_custom::placeholder{
+    color: var(--secondary-text-color) !important;
+}
+
+.form_custom:focus{
+    border: none !important;
+}
+
+.form_element{
+    border-bottom: 1px solid var(--primary-border-color);
+}
+
+.btn_custom{
+    width: 100%;
+    margin-top: 16px;
+    height: 52px;
+    background-color: #DC3545;
+    color: white;
+    border: 1px solid var(--primary-border-color);
+    
+}
+
+.btn_custom:active{
+    background-color: #c52334;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}

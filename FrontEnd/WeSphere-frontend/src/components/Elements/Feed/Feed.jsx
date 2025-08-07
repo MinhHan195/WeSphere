@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading, setAlert } from "../../../redux/authSlide";
 import { $api } from "../../../services/service";
+import { NavLink } from "react-router-dom";
 import Editor from "../TextEditor/Editor";
 import ShowMedia from "../ShowMedia/ShowMedia";
 import style from "./Feed.module.css";
@@ -15,7 +16,7 @@ const Feed = (props) => {
     const { data } = props;
     const [heartClicked, setHeartClicked] = useState(false);
     const [totalLike, setTotalLike] = useState(data.feed.totalLike);
-    // feed( id, content, tag, listImages, totalLike, privacy, totalComment, totalReposts, totalShare, timeCreate, commentOfPost), feedOwner (username, id),
+    // feed( id, content, tag, listImages, totalLike, privacy, totalComment, totalReposts, totalShare, timeCreate, commentOfPost), feedOwner (username, id, isOnline),
 
     const handleHeartClick = async (e) => {
         e.stopPropagation();
@@ -78,31 +79,47 @@ const Feed = (props) => {
         <>
             <div className={`${style.feed_container} d-flex`}>
                 <div>
-                    <div className="me-2">
-                        <div
-                            className={`rounded-circle bg-secondary ${style.avatar}`}
+                    <div
+                        className={`me-2 ${
+                            data.feedOwner.isOnline ? style.online : null
+                        }`}
+                    >
+                        <NavLink
+                            to={`/${data.feedOwner.username}`}
+                            className={style.link}
                         >
-                            <img
-                                className="object-fit-cover w-100 h-100"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s"
-                                alt=""
-                            />
-                        </div>
+                            <div
+                                className={`rounded-circle bg-secondary ${style.avatar}`}
+                            >
+                                <img
+                                    className="object-fit-cover w-100 h-100"
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s"
+                                    alt=""
+                                />
+                            </div>
+                        </NavLink>
                     </div>
                 </div>
                 <div className={style.feed_body}>
-                    <div className="mb-2">
+                    <div className={`mb-2 `}>
                         <div>
-                            <span className="me-2 fw-bold">
-                                {data.feedOwner.username}
-                            </span>
+                            <NavLink
+                                to={`/${data.feedOwner.username}`}
+                                className={style.link}
+                            >
+                                <span className="me-2 fw-bold">
+                                    {data.feedOwner.username}
+                                </span>
+                            </NavLink>
                             {data.feed.tag && (
                                 <span className="me-2 fw-semibold">
                                     <i className="bi bi-chevron-right"></i>{" "}
                                     {data.feed.tag}
                                 </span>
                             )}
-                            <span className="text-muted">{createAt()}</span>
+                            <span className={style.text_secondary}>
+                                {createAt()}
+                            </span>
                         </div>
                     </div>
                     <Editor json={data.feed.content} editable={false} />

@@ -1,0 +1,27 @@
+.setting_container{
+    width: 900px;
+    max-width: 900px;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-border-color);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
+    color: var(--primary-text-color);
+}
+
+.nav_setting_item{
+    all: unset;
+    cursor: pointer;
+}
+
+.active li {
+    background-color: rgba(205, 205, 205, 0.413);
+}
+
+.nav_setting_item li{
+    font-weight: 600;
+}
+
+.nav_setting_item li i {
+    font-size: 20px;
+}

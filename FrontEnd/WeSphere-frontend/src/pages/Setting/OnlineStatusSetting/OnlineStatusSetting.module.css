@@ -1,0 +1,20 @@
+.radio_input{
+    font-size: 1.5rem;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.radio_input:active{
+    border-color: #E2E5E9 !important;
+}
+
+.radio_input:checked{
+    background-color: black !important;
+    border-color: black !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.text_secondary{
+    color: var(--secondary-text-color);
+}

@@ -594,7 +594,8 @@ router.route("/FeedDetail/:feed_id").get((req, res) => {
                     },
                     "feedOwner": {
                         "username": "minhanh_02k",
-                        "id": "akjndkfaksdbfasbdfkasbdfkj"
+                        "id": "akjndkfaksdbfasbdfkasbdfkj",
+                        "isOnline": true
                     }
                 },
                 {

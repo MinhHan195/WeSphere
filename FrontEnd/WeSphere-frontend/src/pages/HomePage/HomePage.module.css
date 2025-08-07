@@ -19,4 +19,17 @@
 
 .feed_card_item{
     padding: 1rem;
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text-color) !important;
+    border-color: var(--primary-border-color) !important;
+}
+
+.card{
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-border-color) !important;
+}
+
+.post_button{
+    color: var(--primary-text-color) !important;
+    border-color: var(--primary-border-color) !important;
 }

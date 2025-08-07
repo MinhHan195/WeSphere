@@ -182,15 +182,17 @@ const CommentInput = (props) => {
                         </div>
                         <div className={style.comment_input_data}>
                             <div className={style.textarea_container}>
-                                <Editor
-                                    emoji={emoji}
-                                    json={content}
-                                    editable={true}
-                                    placeholder={`Trả lời ${data.feedOwner.username} ...`}
-                                    onExport={(json) => {
-                                        setContent(json);
-                                    }}
-                                />
+                                <div className="ps-2">
+                                    <Editor
+                                        emoji={emoji}
+                                        json={content}
+                                        editable={true}
+                                        placeholder={`Trả lời ${data.feedOwner.username} ...`}
+                                        onExport={(json) => {
+                                            setContent(json);
+                                        }}
+                                    />
+                                </div>
                                 <PreviewContainer
                                     preview={true}
                                     listImage={listImage}

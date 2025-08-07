@@ -1,0 +1,85 @@
+.modal_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.306);
+    z-index: 1000;
+    display: flex !important;
+    justify-content: center;
+}
+
+
+.modal_notification_dialog {
+    display: flex;
+    align-items: center;
+    width: 320px;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.modal_background .modal_notification_container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background-color: var(--primary-color);
+    border-radius: 0.75rem;
+}
+
+.modal_notification_header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding: 16px;
+    border-bottom: 1px solid var(--primary-border-color);
+    color: var(--primary-text-color);
+}
+
+.modal_notification_body {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--primary-text-color);
+}
+
+.modal_notification_body:active{
+    background-color: #e5e5e5;
+    border-bottom-left-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+/* 
+.icon{
+    position: absolute;
+    top: 3px;
+    left: 10px;
+} */
+
+.show_notification_modal {
+    display: block;
+
+    .modal_notification_container {
+        animation: slideIn 0.3s ease-in-out forwards;
+    }
+}
+
+.hide_notification_modal {
+    display: none !important;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
