@@ -48,6 +48,45 @@ const authSlice = createSlice({
             ]
         },
         error: '',
+        listNotifycation: [
+            {
+                type: "mention",
+                data: {
+                    username: "user123",
+                    avatar: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png',
+                    postId: "post123",
+                    timeCreate: "2025-08-07T12:46:20.123Z",
+                },
+            },
+            {
+                type: "new_feed",
+                data: {
+                    username: "user123",
+                    avatar: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png',
+                    timeCreate: "2025-08-07T12:46:20.123Z",
+                    postId: "hbkjfnklasdlkadskjlfnk"
+                }
+            },
+            {
+                type: "request_follow",
+                data: {
+                    username: "user123",
+                    avatar: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png',
+                    timeCreate: "2025-08-07T12:46:20.123Z",
+                    id: "alknklads fkasdkjf",
+                    NotificationId: "akajjđkạnkádsạdkạdjándj"
+                }
+            },
+            {
+                type: "system_notification",
+                data: {
+                    message: "Thông báo hệ thống",
+                    timeCreate: "2025-08-07T12:46:20.123Z",
+                    link: "/system-notification"
+                }
+            }
+
+        ],
     },
     reducers: {
         logout: (state) => {

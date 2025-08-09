@@ -38,6 +38,14 @@ const postService = {
     getListRePostsByUserId: async () => {
         return await axiosClient.get(_url + '/ListRePosts/User');
     },
+
+    getListFavoritePost: async () => {
+        return await axiosClient.get(_url + '/ListFavoritePost');
+    },
+
+    getListSavedPost: async () => {
+        return await axiosClient.get(_url + '/ListSavedPost');
+    }
 }
 
 export default postService;

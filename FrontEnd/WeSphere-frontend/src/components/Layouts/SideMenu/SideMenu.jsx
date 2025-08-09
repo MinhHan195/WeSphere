@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { setModal } from "../../../redux/createSLide";
 import { logout } from "../../../redux/authSlide";
 import Theme from "../../../pages/Setting/Theme/Theme";
+import ReportModal from "../../Elements/Modal/ReportModal/ReportModal";
 import style from "./SideMenu.module.css";
 // import "./SideMenu.css";
 const SideMenu = () => {
@@ -15,6 +16,8 @@ const SideMenu = () => {
         dispatch(setModal(true));
     };
     const username = useSelector((state) => state.auth.user.username);
+
+    const [showReport, setShowReport] = useState(false);
 
     const logOut = () => {
         dispatch(logout());
@@ -175,33 +178,39 @@ const SideMenu = () => {
                         <hr className={`dropdown-divider ${style.border}`} />
                     </li>
                     <li>
-                        <a
-                            className="dropdown-item  text-dark"
-                            href="./save.html"
+                        <NavLink
+                            to={"/saved"}
+                            className={({ isActive }) =>
+                                `dropdown-item text-dark ${
+                                    isActive ? style.active : null
+                                }`
+                            }
                         >
                             Đã lưu
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a
-                            className="dropdown-item  text-dark"
-                            href="./favorite.html"
+                        <NavLink
+                            to={"/favorite"}
+                            className={({ isActive }) =>
+                                `dropdown-item text-dark ${
+                                    isActive ? style.active : null
+                                }`
+                            }
                         >
                             Đã thích
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
                         <hr className={`dropdown-divider ${style.border}`} />
                     </li>
                     <li>
-                        <a
+                        <span
                             className="dropdown-item text-dark"
-                            href="#"
-                            data-bs-toggle="modal"
-                            data-bs-target="#reportModal"
+                            onClick={() => setShowReport(true)}
                         >
                             Báo cáo sự cố
-                        </a>
+                        </span>
                     </li>
                     <li>
                         <a
@@ -215,6 +224,9 @@ const SideMenu = () => {
                     </li>
                 </ul>
             </div>
+            {showReport ? (
+                <ReportModal handleClose={() => setShowReport(false)} />
+            ) : null}
         </div>
     );
 };

@@ -1,0 +1,79 @@
+.background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(44, 44, 44, 0.861);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.container{
+    color: var(--primary-text-color) !important;
+    width: 390px;
+    max-width: 390px;
+
+}
+
+.dialog{
+    border: 1px solid var(--primary-border-color);
+    background-color: var(--primary-color);
+    padding: 0.7rem;
+    max-height: 300px;
+    overflow: hidden;
+}
+
+
+.form_control{
+    resize: none;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text-color) !important;
+}
+
+.form_control::placeholder {
+    color: var(--secondary-text-color) !important;
+}
+
+.input_file{
+    display: none;
+}
+
+.file_card{
+    display: flex;
+    align-items: center;
+    padding: 0px 5px;
+    background-color: var(--secondary-icon-hover-color);
+    border: 1px solid var(--primary-border-color);
+    border-radius: 60px;
+}
+
+.file_lable i {
+    color: var(--primary-text-color);
+}
+
+.file_card span {
+    max-width: 250px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    text-align: center;
+}
+
+.file_card div{
+    display: inline;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.btn{
+    border-color: var(--primary-border-color) !important;
+    text-align: center !important;
+    padding: 4px 12px !important;
+    color: var(--primary-text-color) !important;
+}

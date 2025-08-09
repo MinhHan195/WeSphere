@@ -15,6 +15,8 @@ import OnlineStatusSetting from "../pages/Setting/OnlineStatusSetting/OnlineStat
 import Account from "../pages/Setting/Account/Account.jsx";
 import Deactivate from "../pages/Setting/Deactivate/Deactivate.jsx";
 import Theme from "../pages/Setting/Theme/Theme.jsx";
+import Favorite from "../pages/Favorite/Favorite.jsx";
+import Saved from "../pages/Saved/Saved.jsx";
 
 function AppRouter() {
     return (
@@ -46,6 +48,8 @@ function AppRouter() {
                     {/* <Route path="account" element={<AccountSettings />} />
                     <Route path="help" element={<HelpSettings />} /> */}
                 </Route>
+                <Route path="/favorite" element={<Favorite />} />
+                <Route path="/Saved" element={<Saved />} />
             </Routes>
         </BrowserRouter>
     );

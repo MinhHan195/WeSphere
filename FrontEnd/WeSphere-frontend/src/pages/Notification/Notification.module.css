@@ -1,0 +1,28 @@
+.container{
+    width: 640px;
+    background: var(--primary-color);
+    border-radius: 1rem;
+    color: var(--primary-text-color);
+    padding: 2rem;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid  var(--primary-border-color);
+}
+
+.btn{
+    background-color: transparent;
+    border: none;
+    color: var(--primary-text-color);
+}
+
+.dropdown_menu{
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-border-color) !important ;
+}
+
+.dropdown_menu li span {
+    color: var(--primary-text-color) !important;
+}
+
+.dropdown_menu li span:hover {
+    background-color: var(--secondary-icon-hover-color) !important;
+}

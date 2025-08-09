@@ -39,7 +39,6 @@ const FeedDetail = () => {
     };
 
     const handleClose = (e) => {
-        e.stopPropagation();
         if (
             !e.target.classList.contains("bi-emoji-smile") &&
             !e.target.classList.contains("bi-filetype-gif") &&

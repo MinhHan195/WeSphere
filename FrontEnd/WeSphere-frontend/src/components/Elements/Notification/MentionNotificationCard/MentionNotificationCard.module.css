@@ -1,0 +1,14 @@
+.avatar{
+    width: 50px;
+    height: 50p;
+    overflow: hidden;
+}
+
+.link {
+    all: unset;
+    cursor: pointer;
+}
+
+.text_secondary {
+    color: var(--secondary-text-color);
+}
