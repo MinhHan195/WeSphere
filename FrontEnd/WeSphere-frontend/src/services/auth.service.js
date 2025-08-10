@@ -58,6 +58,14 @@ const authService = {
 
     deactivateAccount: async (userId) => {
         return await axiosClient.patch(_url + `/deactivateAccount/${userId}`)
+    },
+
+    signUp: async (userData) => {
+        return await axiosClient.post(_url + '/register', userData);
+    },
+
+    checkUsername: async (username) => {
+        return await axiosClient.get(_url + `/checkUsername/${username}`);
     }
 };
 

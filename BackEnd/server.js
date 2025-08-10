@@ -1,10 +1,14 @@
 const app = require("./app");
+const config = require("./app/config");
+const accountRepository = require("./app/repository/account.repository");
+const SQL = require("./app/utils/sqlserver.util")
 
-//Tao function server
 
 async function startServer() {
     try {
-        const PORT = 5178;
+        await SQL.connect(config.db.connectionString);
+        console.log("Connected to the database!");
+        const PORT = config.app.port;
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
