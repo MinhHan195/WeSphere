@@ -6,11 +6,12 @@ import { setLoading, setAlert } from "../../redux/authSlide";
 import Feed from "../../components/Elements/Feed/Feed";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import style from "./HomePage.module.css";
+import { _AUTH } from "../../constants/_auth";
 
 const HomePage = () => {
     const [listFeeds, setListFeeds] = useState([]);
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
+    const avatar = useSelector((state) => state.auth.user.avatar);
     const fetchData = async () => {
         try {
             dispatch(setLoading(true));
@@ -53,7 +54,7 @@ const HomePage = () => {
                                     >
                                         <img
                                             className="object-fit-cover w-100 h-100"
-                                            src={user.avatar}
+                                            src={avatar}
                                             alt=""
                                         />
                                     </div>

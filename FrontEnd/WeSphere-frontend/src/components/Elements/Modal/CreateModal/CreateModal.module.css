@@ -95,6 +95,10 @@
     box-shadow: none;
     outline: none;
 }
+
+.input_file {
+    display: none;
+}
 /* Button styles */
 
 
@@ -108,6 +112,11 @@
 .submit_btn {
     font-weight: 600 !important;
     color: #000 !important;
+    width: 65.58px;
+    height: 37.6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -153,6 +162,23 @@
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
+}
+
+.icon_container label {
+    padding-left: 0.6rem;
+    padding-right: 0.375rem;
+    position: relative;
+    top: 2px
+}
+
+.icon_container label i {
+    font-size: 17px;
+    color: var(--secondary-icon-color) !important;
+}
+
+.spinner {
+    height: 1.5rem !important;
+    width: 1.5rem !important;
 }
 
 /* Show-hide modal styles */

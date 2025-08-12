@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
+const SQL = require("../utils/sqlserver.util");
 const ApiError = require("../api-error");
+const accountRepository = require("../repository/account.repository");
 require("dotenv").config();
 
 
@@ -13,14 +15,14 @@ exports.verifyToken = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.SECRET_CODE);
         // Kiểm tra id trong token có hợp lệ không
-        // const accountService = new AccountService(MongoDB.client);
-        // const user = await accountService.findById(decoded._id);
-        // if (!user) {
-        //     return next(new ApiError(404, "Acount not found"));
-        // }
-        // // B3: Lưu thông tin trong token vào req.user
-        // req.user = decoded;
-        // // B4: Chuyển đến controller
+        const AccountRepository = new accountRepository(SQL.client);
+        const user = await AccountRepository.getAccountByUsername(decoded.UserName);
+        if (!user) {
+            return next(new ApiError(404, "Acount not found"));
+        }
+        // B3: Lưu thông tin trong token vào req.user
+        req.user = decoded;
+        // B4: Chuyển đến controller
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError') {

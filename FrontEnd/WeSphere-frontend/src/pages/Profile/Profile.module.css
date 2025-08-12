@@ -18,6 +18,12 @@
     overflow: hidden;
 }
 
+.avatar img {
+    width: 100%;
+        height: 100%;
+        object-fit: cover;
+}
+
 .text_secondary{
     color: var(--secondary-text-color);
 }

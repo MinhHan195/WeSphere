@@ -29,6 +29,17 @@ const Deactivate = () => {
                 );
                 dispatch(logout());
                 navigate("/auth");
+                return;
+            } else {
+                dispatch(setLoading(false));
+                setShowDeactivateConfirm(false);
+                dispatch(
+                    setNotifycation({
+                        show: true,
+                        isError: true,
+                        message: res.message,
+                    })
+                );
             }
         } catch (error) {
             dispatch(setLoading(false));

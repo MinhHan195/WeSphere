@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { $api } from "../../../../services/service";
 import { useDispatch } from "react-redux";
-import { setAlert, updateUser } from "../../../../redux/authSlide";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { setAlert } from "../../../../redux/authSlide";
 import LinkCard from "./LinkCard/LinkCard";
 import style from "./UpdateProfileModal.module.css";
 import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 import { Form } from "react-router-dom";
+import { _AUTH } from "../../../../constants/_auth";
 
 const UpdateProfileModal = (props) => {
     const dispatch = useDispatch();
@@ -25,17 +25,22 @@ const UpdateProfileModal = (props) => {
     const [phone, setPhone] = useState(user.phone || "");
     const [gender, setGender] = useState(user.gender || "Chọn giới tính");
     const [privateMode, setPrivateMode] = useState(
-        user.privateMode === "true" || false
+        user.privateMode == 1 || false
     );
     const [listLinks, setlistLinks] = useState(user.listLinks || []);
     const [fileAvatar, setFileAvatar] = useState(null);
 
     // Biến tạm lưu thông tin tạm thời cho các thao tác cập nhật của người dùng
     const [tempBio, setTempBio] = useState(user.bio || "Tiểu sử");
-    const [editlink, setEditLink] = useState({ title: "", url: "" });
+    const [editlink, setEditLink] = useState({
+        // link_id: "",
+        title: "",
+        url: "",
+    });
     const [isEditLink, setIsEditLink] = useState(false);
     const [linkIndex, setLinkIndex] = useState(null);
     const avatar = user.avatar;
+    const [urlError, setUrlError] = useState(false);
 
     const handleShowBio = (e) => {
         e.stopPropagation();
@@ -115,7 +120,6 @@ const UpdateProfileModal = (props) => {
         } else {
             const el2 = document.querySelector(`.${style.show_main_slide}`);
             if (el2) {
-                console.log(el2.offsetHeight);
                 updateHeightOverlay2(el2.offsetHeight);
             }
         }
@@ -152,9 +156,9 @@ const UpdateProfileModal = (props) => {
         setGender(data);
     };
 
-    const updatePrivateMode = (e) => {
-        setPrivateMode(e.target.checked);
-    };
+    // const updatePrivateMode = (e) => {
+    //     setPrivateMode(e.target.checked);
+    // };
 
     const update = async (e) => {
         e.stopPropagation();
@@ -166,6 +170,7 @@ const UpdateProfileModal = (props) => {
             payload.append("gender", gender);
             payload.append("privateMode", privateMode);
             payload.append("listLinks", JSON.stringify(listLinks));
+            payload.append("publicId", user.publicId);
             if (fileAvatar) {
                 payload.append("file", fileAvatar);
             }
@@ -174,8 +179,7 @@ const UpdateProfileModal = (props) => {
 
             const res = await $api.auth.updateUser(payload);
             if (!res.isError) {
-                console.log(res);
-                dispatch(updateUser(res.result));
+                // setListLinks(res.result.listLinks);
                 dispatch(
                     setAlert({
                         message: res.message,
@@ -196,7 +200,7 @@ const UpdateProfileModal = (props) => {
     };
 
     const ShowUpdateLinkEdit = (linkObject, idx) => {
-        setEditLink(linkObject);
+        setEditLink({ ...linkObject });
         setIsEditLink(true);
         setLinkIndex(idx);
         handleShowEditLink();
@@ -207,7 +211,10 @@ const UpdateProfileModal = (props) => {
         setlistLinks((prev) => {
             if (isEditLink) {
                 const tempList = [...prev];
-                tempList[linkIndex] = editlink;
+                tempList[linkIndex] = { ...editlink };
+                setEditLink({ title: "", url: "" });
+                setIsEditLink(false);
+                setLinkIndex(null);
                 return tempList;
             } else {
                 return [...prev, editlink];
@@ -225,24 +232,6 @@ const UpdateProfileModal = (props) => {
         setShowConfirm(false);
         handleShowAddLink();
         handleShowAddLinkFromMain(false);
-    };
-
-    const handleImagePicker = async () => {
-        try {
-            const image = await Camera.getPhoto({
-                resultType: CameraResultType.Uri,
-                source: CameraSource.Photos,
-                quality: 100,
-            });
-            const filename = `${user.id}_${Date.now()}.jpg`;
-            const response = await fetch(image.webPath);
-            const blob = await response.blob();
-            const file = new File([blob], filename, { type: blob.type });
-            setFileAvatar(file);
-        } catch (error) {
-            if (error.message === "User cancelled photos app") return;
-            console.log(error);
-        }
     };
 
     return (
@@ -313,17 +302,27 @@ const UpdateProfileModal = (props) => {
                                                 <ul
                                                     className={`dropdown-menu ${style.avatar_dropdown_menu_custom}`}
                                                 >
-                                                    <li
-                                                        // className={`${style.dropdown_item_custom}`}
-                                                        onClick={
-                                                            handleImagePicker
-                                                        }
-                                                    >
-                                                        <p
+                                                    <li>
+                                                        <label
                                                             className={`dropdown-item fw-bold ${style.dropdown_item_custom}`}
+                                                            htmlFor="file-upload"
                                                         >
                                                             Tải ảnh lên
-                                                        </p>
+                                                        </label>
+                                                        <input
+                                                            id="file-upload"
+                                                            className={
+                                                                style.input_file
+                                                            }
+                                                            accept="image/*"
+                                                            type="file"
+                                                            onChange={(e) => {
+                                                                setFileAvatar(
+                                                                    e.target
+                                                                        .files[0]
+                                                                );
+                                                            }}
+                                                        />
                                                     </li>
                                                     <li
                                                         className={`${style.dropdown_item_custom}`}
@@ -501,7 +500,11 @@ const UpdateProfileModal = (props) => {
                                                     role="switch"
                                                     id="switchCheckDefault"
                                                     checked={privateMode}
-                                                    onChange={updatePrivateMode}
+                                                    onChange={(e) => {
+                                                        setPrivateMode(
+                                                            e.target.checked
+                                                        );
+                                                    }}
                                                 />
                                                 <label
                                                     className="form-check-label"
@@ -633,7 +636,9 @@ const UpdateProfileModal = (props) => {
                                                     (linkObject, index) => {
                                                         return (
                                                             <LinkCard
-                                                                key={index}
+                                                                key={
+                                                                    linkObject.url
+                                                                }
                                                                 idx={index}
                                                                 linkObject={
                                                                     linkObject
@@ -660,7 +665,7 @@ const UpdateProfileModal = (props) => {
                                             e.stopPropagation();
                                             handleShowEditLink();
                                             handleShowAddLinkFromMain(false);
-                                            setEditLink({});
+                                            setEditLink({ url: "", title: "" });
                                             setIsEditLink(false);
                                         }}
                                     >
@@ -688,10 +693,10 @@ const UpdateProfileModal = (props) => {
                                         type="button"
                                         onClick={(e) => {
                                             e.stopPropagation();
+                                            setLinkIndex(null);
+                                            setEditLink({ title: "", url: "" });
                                             handleShowAddLink();
                                             handleShowAddLinkFromMain(false);
-                                            setLinkIndex(null);
-                                            setEditLink({});
                                         }}
                                     >
                                         <i className="bi bi-arrow-return-left"></i>
@@ -708,6 +713,8 @@ const UpdateProfileModal = (props) => {
                                         className={`${style.btn_custom}`}
                                         style={{ width: "40px" }}
                                         onClick={(e) => {
+                                            if (urlError || editlink.url == "")
+                                                return;
                                             e.stopPropagation();
                                             updateListLinks();
                                             handleShowAddLink();
@@ -728,20 +735,39 @@ const UpdateProfileModal = (props) => {
                                         >
                                             <input
                                                 type="text"
-                                                className={`${style.form_control_custom}`}
+                                                className={`${
+                                                    style.form_control_custom
+                                                }  ${
+                                                    urlError
+                                                        ? style.error
+                                                        : null
+                                                }`}
                                                 placeholder="URL"
                                                 onChange={(e) => {
                                                     setEditLink({
                                                         ...editlink,
                                                         url: e.target.value,
                                                     });
+                                                    const value =
+                                                        e.target.value;
+                                                    if (
+                                                        value &&
+                                                        !value.startsWith(
+                                                            "http"
+                                                        )
+                                                    ) {
+                                                        setUrlError(true);
+                                                    } else {
+                                                        setUrlError(false);
+                                                    }
                                                 }}
-                                                defaultValue={
-                                                    isEditLink
-                                                        ? editlink.url
-                                                        : ""
-                                                }
+                                                value={editlink.url}
                                             />
+                                            {urlError && (
+                                                <div className={style.error}>
+                                                    URL không hợp lệ
+                                                </div>
+                                            )}
                                             <input
                                                 type="text"
                                                 className={`${style.form_control_custom}`}
@@ -752,11 +778,7 @@ const UpdateProfileModal = (props) => {
                                                         title: e.target.value,
                                                     });
                                                 }}
-                                                defaultValue={
-                                                    isEditLink
-                                                        ? editlink.title
-                                                        : ""
-                                                }
+                                                value={editlink.title}
                                             />
                                         </div>
                                         {isEditLink ? (

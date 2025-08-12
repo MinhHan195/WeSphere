@@ -6,7 +6,7 @@ const UserCard = ({ user, isBlock, removeHandle }) => {
                 <div className={`rounded-circle bg-secondary ${style.avatar}`}>
                     <img
                         className="object-fit-cover w-100 h-100"
-                        src={user.avatar}
+                        src={user.avatar || "/default_avatar.jpg"}
                         alt=""
                     />
                 </div>
@@ -23,7 +23,7 @@ const UserCard = ({ user, isBlock, removeHandle }) => {
                 <button
                     className={`${style.button_custom} rounded-3 fw-bold px-3`}
                     onClick={() => {
-                        removeHandle(user.id);
+                        removeHandle(user.username);
                     }}
                 >
                     {isBlock ? "Bỏ chặn" : "Bỏ hạn chế"}

@@ -1,14 +1,14 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
-import { useSelector } from "react-redux";
 import ShowMedia from "../ShowMedia/ShowMedia";
 import Editor from "../TextEditor/Editor";
 import style from "./FeedSave.module.css";
+import { _AUTH } from "../../../constants/_auth";
 
 const FeedSave = (props) => {
     const { data, handleChose } = props;
-    const user = useSelector((state) => state.auth.user);
+    const user = { username: localStorage.getItem(_AUTH.USERNAME) };
 
     const createAt = () => {
         return formatDistanceToNow(new Date(data.feed.timeCreate), {

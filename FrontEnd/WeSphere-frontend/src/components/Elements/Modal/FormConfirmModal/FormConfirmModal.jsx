@@ -41,6 +41,7 @@ const FormConfirmModal = ({ show, username, userId, fullname, closeModal }) => {
             };
 
             const res = await $api.auth.deleteAccount(data);
+            console.log(res);
             if (!res.isError) {
                 dispatch(setLoading(false));
                 dispatch(

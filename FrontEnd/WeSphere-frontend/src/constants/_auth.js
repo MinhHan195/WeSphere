@@ -1,6 +1,8 @@
 export const _AUTH = {
     TOKEN_NAME: 'token',
-    USERNAME: 'user',
+    USERNAME: 'username',
     ROLE: 'role',
-    THEME: 'theme'
+    THEME: 'theme',
+    AVATAR: 'avatar',
+    ID: 'id',
 };

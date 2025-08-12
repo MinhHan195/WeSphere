@@ -14,8 +14,10 @@ const Feed = (props) => {
     const dispatch = useDispatch();
 
     const { data } = props;
-    const [heartClicked, setHeartClicked] = useState(false);
+    const [heartClicked, setHeartClicked] = useState(data.state.isLike);
+    const [isRePost, setIsRePost] = useState(data.state.isRePost);
     const [totalLike, setTotalLike] = useState(data.feed.totalLike);
+    const [totalReposts, setTotalReposts] = useState(data.feed.totalReposts);
     // feed( id, content, tag, listImages, totalLike, privacy, totalComment, totalReposts, totalShare, timeCreate, commentOfPost), feedOwner (username, id, isOnline),
 
     const handleHeartClick = async (e) => {
@@ -32,7 +34,7 @@ const Feed = (props) => {
         const mode = heartClicked ? "minus" : "add";
         try {
             dispatch(setLoading(true));
-            const res = await $api.post.like(mode);
+            const res = await $api.post.like(mode, data.feed.id);
             if (!res.isError) {
                 dispatch(setLoading(false));
             }
@@ -52,14 +54,19 @@ const Feed = (props) => {
     const rePost = async (e) => {
         e.stopPropagation();
         try {
-            dispatch(setLoading(true));
-            const res = await $api.post.rePost(data.feed.id);
+            if (isRePost) {
+                setIsRePost(false);
+                setTotalReposts(totalReposts - 1);
+            } else {
+                setIsRePost(true);
+                setTotalReposts(totalReposts + 1);
+            }
+            const mode = isRePost ? "minus" : "add";
+            const res = await $api.post.rePost(data.feed.id, mode);
             if (!res.isError) {
-                dispatch(setLoading(false));
                 dispatch(setAlert({ message: res.message }));
             }
         } catch (error) {
-            dispatch(setLoading(false));
             dispatch(setAlert({ message: error.message }));
         }
     };
@@ -156,8 +163,12 @@ const Feed = (props) => {
                             className={`btn rounded-pill m-0 px-2 py-1 ${style.btn_icon}`}
                             onClick={rePost}
                         >
-                            <i className="bi bi-arrow-repeat"></i>{" "}
-                            <span>{data.feed.totalReposts}</span>
+                            {isRePost ? (
+                                <i className="bi bi-repeat-1"></i>
+                            ) : (
+                                <i className="bi bi-repeat"></i>
+                            )}{" "}
+                            <span>{totalReposts}</span>
                         </button>
                     </div>
                 </div>

@@ -18,10 +18,10 @@ const Login = () => {
     const [response, setResponse] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const saveUserInfo = (userInfo, token) => {
+    const saveUserInfo = async (userInfo, token) => {
         localStorage.setItem(_AUTH.TOKEN_NAME, token);
         localStorage.setItem(_AUTH.USERNAME, userInfo["UserName"]);
-        localStorage.setItem(_AUTH.ROLE, userInfo["Role"]);
+        localStorage.setItem(_AUTH.ID, userInfo["UserId"]);
     };
     const submit = async (e) => {
         e.preventDefault();
@@ -140,9 +140,9 @@ const Login = () => {
                             autoLoad={true}
                             fields="name,email,picture,gender"
                             scope="public_profile, email"
-                            onSuccess={(response) => {
-                                console.log("Login Success!", response);
-                            }}
+                            // onSuccess={(response) => {
+                            //     console.log("Login Success!", response);
+                            // }}
                             onFail={(error) => {
                                 console.log("Login Failed!", error);
                             }}

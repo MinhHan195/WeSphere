@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setAlert, setLoading } from "../../redux/authSlide.js";
 import { setModal } from "../../redux/createSLide.js";
@@ -10,10 +10,11 @@ import UpdateProfileModal from "../../components/Elements/Modal/UpdateProfileMod
 import ProfileBar from "../../components/Layouts/ProfileBar/ProfileBar.jsx";
 import ListLinkModal from "../../components/Elements/Modal/ListLinkModal/ListLinkModal.jsx";
 import style from "./Profile.module.css";
+import { _AUTH } from "../../constants/_auth.js";
 const Profile = () => {
     const dispatch = useDispatch();
     const param = useParams();
-    const auth = useSelector((state) => state.auth.user);
+    const auth = { id: localStorage.getItem(_AUTH.ID) };
     const [user, setUser] = useState({});
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showListLinkModal, setShowListLinkModal] = useState(false);
@@ -45,15 +46,17 @@ const Profile = () => {
 
     useEffect(() => {
         fetchData(param.username);
-    }, []);
-
-    // useEffect(() => {
-    //     console.log(user);
-    // }, [user]);
+    }, [param.username]);
 
     useEffect(() => {
         document.title = `${user.fullname} (${user.username}) • WeSphere`;
     }, [user]);
+
+    useEffect(() => {
+        if (showUpdateModal === false) {
+            fetchData(param.username);
+        }
+    }, [showUpdateModal]);
     return (
         <DefaultLayout>
             <div className=" d-flex justify-content-center w-100">
@@ -65,7 +68,7 @@ const Profile = () => {
                                     className={`bg-secondary rounded-circle ${style.avatar}`}
                                 >
                                     <img
-                                        className="img-fluid"
+                                        className=""
                                         src={
                                             user.avatar
                                                 ? user.avatar
@@ -85,7 +88,7 @@ const Profile = () => {
                                 <p
                                     className={`mt-1 mb-1 ${style.text_secondary}`}
                                 >
-                                    {user.bio}
+                                    {user.bio || "Tiểu sử"}
                                 </p>
                                 <small className={`${style.text_secondary}`}>
                                     {user.followers} người theo dõi{" "}
@@ -185,7 +188,9 @@ const Profile = () => {
                             </div>
                         )}
                     </div>
-                    {!user.isFollowing && user.privateMode ? null : (
+                    {!user.isFollowing &&
+                    user.privateMode &&
+                    user.id !== auth.id ? null : (
                         <div className="w-100">
                             <ProfileBar
                                 username={user.username}

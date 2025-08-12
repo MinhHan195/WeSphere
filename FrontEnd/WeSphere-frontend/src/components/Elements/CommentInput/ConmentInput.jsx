@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Environment } from "../../../environments/environment";
 import { setAlert, setLoading } from "../../../redux/authSlide";
 import { $api } from "../../../services/service";
@@ -33,28 +32,6 @@ const CommentInput = (props) => {
             `.${style.before_content}`
         );
         beforeContent.style.height = textarea.offsetHeight + 15 + "px";
-    };
-
-    const showImagePicker = async () => {
-        try {
-            const image = await Camera.getPhoto({
-                resultType: CameraResultType.Uri,
-                source: CameraSource.Photos,
-                quality: 100,
-            });
-            const filename = listImage.length + 1 + ".jpg";
-            const response = await fetch(image.webPath);
-            const blob = await response.blob();
-            const file = new File([blob], filename, { type: blob.type });
-            setListImage((prev) => [...prev, file]);
-        } catch (error) {
-            if (error.message === "User cancelled photos app") return;
-            dispatch(
-                setAlert({
-                    message: error.errors.exceptionMessage || error.message,
-                })
-            );
-        }
     };
 
     const handleRemoveImage = (index) => {
@@ -203,12 +180,24 @@ const CommentInput = (props) => {
                         </div>
 
                         <div className={`icon ${style.icon_container}`}>
-                            <button
-                                className={`btn ${style.icon_custom}`}
-                                onClick={showImagePicker}
+                            <label
+                                className={`custom-file-label fs-5 me-1 ${style.file_lable}`}
+                                htmlFor="file-upload"
                             >
                                 <i className="bi bi-images"></i>
-                            </button>
+                            </label>
+                            <input
+                                id="file-upload"
+                                className={style.input_file}
+                                accept="image/*,video/*"
+                                type="file"
+                                onChange={(e) => {
+                                    setListImage((prev) => [
+                                        ...prev,
+                                        e.target.files[0],
+                                    ]);
+                                }}
+                            />
                             <button
                                 className={`btn btn-icon-emoji ${style.icon_custom}`}
                                 onClick={showEmojiPicker}

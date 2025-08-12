@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setModal } from "../../../redux/createSLide";
 import { logout } from "../../../redux/authSlide";
 import Theme from "../../../pages/Setting/Theme/Theme";
 import ReportModal from "../../Elements/Modal/ReportModal/ReportModal";
 import style from "./SideMenu.module.css";
+import { _AUTH } from "../../../constants/_auth";
 // import "./SideMenu.css";
 const SideMenu = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const SideMenu = () => {
     const showModal = () => {
         dispatch(setModal(true));
     };
-    const username = useSelector((state) => state.auth.user.username);
+    const username = localStorage.getItem(_AUTH.USERNAME);
 
     const [showReport, setShowReport] = useState(false);
 

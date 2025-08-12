@@ -22,12 +22,12 @@ const ImagePreview = (props) => {
                 key={key}
             >
                 {props.preview ? (
-                    <button
-                        className={`btn btn-secondary rounded-circle ${style.btn_close_custom}`}
+                    <div
+                        className={`rounded-circle ${style.btn_close_custom}`}
                         onClick={() => props.onRemove(key)}
                     >
                         <i className="bi bi-x-lg p-0 m-0 text-white"></i>
-                    </button>
+                    </div>
                 ) : null}
 
                 <img

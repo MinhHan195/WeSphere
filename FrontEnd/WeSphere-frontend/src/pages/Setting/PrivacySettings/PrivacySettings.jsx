@@ -1,20 +1,27 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { setLoading, setAlert, updateUser } from "../../../redux/authSlide";
+import { setLoading, setAlert } from "../../../redux/authSlide";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { $api } from "../../../services/service";
 import PrivacySettingConfirmModal from "../../../components/Elements/Modal/PrivacySettingConfirmModal/PrivacySettingConfirmModal";
 import BlockOrLimitUserModal from "../../../components/Elements/Modal/BlockOrLimitUserModal/BlockOrLimitUserModal";
 import style from "./PrivacySettings.module.css";
+import { useEffect } from "react";
 const PrivacySettings = () => {
     const dispatch = useDispatch();
     const { user } = useOutletContext();
 
     // PRIVACY SETTING
-    const privacySettings = user.privateMode;
+    const [privacySettings, setPrivacySettings] = useState(false);
     const [showPrivacySettingModal, setShowPrivacySettingModal] =
         useState(false);
+
+    useEffect(() => {
+        if (user.privateMode) {
+            setPrivacySettings(user.privateMode);
+        }
+    }, [user]);
 
     const confirmHandle = (value) => {
         setShowPrivacySettingModal(false);
@@ -26,10 +33,10 @@ const PrivacySettings = () => {
     const updatePrivateMode = async (value) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.updatePrivateMode(value, user.id);
+            const res = await $api.auth.updatePrivateMode(value, user.username);
             if (!res.isError) {
-                dispatch(updateUser({ privateMode: res.data.privateMode }));
                 dispatch(setLoading(false));
+                setPrivacySettings(res.data.privateMode === "true");
                 dispatch(setAlert({ message: res.message }));
                 return true;
             }
@@ -66,11 +73,11 @@ const PrivacySettings = () => {
     const fectListBlockUser = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getListUserBlock(user.id);
+            const res = await $api.auth.getListUserBlock(user.username);
             if (!res.isError) {
                 console.log(res);
                 dispatch(setLoading(false));
-                return res.data;
+                return res.result;
             }
             return [];
         } catch (error) {
@@ -87,10 +94,11 @@ const PrivacySettings = () => {
     const fectListLimitUser = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getListUserLimit(user.id);
+            const res = await $api.auth.getListUserLimit(user.username);
             if (!res.isError) {
+                console.log(res);
                 dispatch(setLoading(false));
-                return res.data;
+                return res.result;
             }
             return [];
         } catch (error) {
@@ -104,17 +112,18 @@ const PrivacySettings = () => {
         }
     };
 
-    const removeUserLimit = async (limitedUserId) => {
+    const removeUserLimit = async (limitedUsername) => {
         try {
             dispatch(setLoading(true));
             const res = await $api.auth.removeLimitedUser(
-                limitedUserId,
-                user.id
+                limitedUsername,
+                user.username
             );
             if (!res.isError) {
+                console.log(res);
                 dispatch(setLoading(false));
                 dispatch(setAlert({ message: res.message }));
-                setListUser(res.data);
+                setListUser(res.result);
             }
         } catch (error) {
             dispatch(setLoading(false));
@@ -125,16 +134,16 @@ const PrivacySettings = () => {
             );
         }
     };
-    const removeUserBlock = async (blockedUserId) => {
+    const removeUserBlock = async (blockedUsername) => {
         try {
             dispatch(setLoading(true));
             const res = await $api.auth.removeBlockedUser(
-                blockedUserId,
-                user.id
+                blockedUsername,
+                user.username
             );
             if (!res.isError) {
                 dispatch(setLoading(false));
-                setListUser(res.data);
+                setListUser(res.result);
                 dispatch(setAlert({ message: res.message }));
             }
         } catch (error) {

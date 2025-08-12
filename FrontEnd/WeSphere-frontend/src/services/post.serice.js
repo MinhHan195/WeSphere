@@ -7,16 +7,16 @@ const postService = {
         return await axiosClient.post(_url + '/create', data);
     },
 
-    like: async (mode) => {
-        return await axiosClient.get(_url + `/like/${mode}`);
+    like: async (mode, feedId) => {
+        return await axiosClient.get(_url + `/like/${mode}/${feedId}`);
     },
 
-    getListSaves: async (id) => {
-        return await axiosClient.get(_url + `/saves/${id}`)
+    getListSaves: async (username) => {
+        return await axiosClient.get(_url + `/saves/${username}`)
     },
 
-    rePost: async (feedId) => {
-        return await axiosClient.get(_url + `/repost/${feedId}`)
+    rePost: async (feedId, mode) => {
+        return await axiosClient.get(_url + `/repost/${feedId}/${mode}`)
     },
 
     getFeedDetail: async (feedId) => {

@@ -2,24 +2,26 @@ import React from "react";
 import { useOutletContext } from "react-router-dom";
 import { $api } from "../../../services/service";
 import { useDispatch } from "react-redux";
-import { setAlert, setLoading, updateUser } from "../../../redux/authSlide";
+import { setAlert, setLoading } from "../../../redux/authSlide";
 import style from "./OnlineStatusSetting.module.css";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const OnlineStatusSetting = () => {
     const dispatch = useDispatch();
     const { user } = useOutletContext();
-    const onlineStatusMode = user.onlineStatus;
+    const [onlineStatusMode, setOnlineStatusMode] = useState();
 
     const updateOnlineStatusMode = async (e) => {
         try {
             dispatch(setLoading(true));
             const res = await $api.auth.updateOnlineStatus(
-                user.id,
+                user.username,
                 e.target.value
             );
             if (!res.isError) {
                 dispatch(setLoading(false));
-                dispatch(updateUser({ onlineStatus: res.data.onlineStatus }));
+                setOnlineStatusMode(res.data.onlineMode);
                 dispatch(setAlert({ message: res.message }));
             }
         } catch (error) {
@@ -31,6 +33,10 @@ const OnlineStatusSetting = () => {
             );
         }
     };
+
+    useEffect(() => {
+        setOnlineStatusMode(user.onlineMode);
+    }, [user]);
     return (
         <div className="w-100">
             <div>

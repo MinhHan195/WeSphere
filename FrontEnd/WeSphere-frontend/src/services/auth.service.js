@@ -24,24 +24,24 @@ const authService = {
         return await axiosClient.get(_url + `/GetProfileData/${userName}`);
     },
 
-    updatePrivateMode: async (privateMode, userId) => {
-        return await axiosClient.patch(_url + `/updatePrivateMode/${userId}/${privateMode}`);
+    updatePrivateMode: async (privateMode, username) => {
+        return await axiosClient.patch(_url + `/updatePrivateMode/${username}/${privateMode}`);
     },
 
     sendHeartbeat: async (userId) => {
         return await axiosClient.post(_url + '/isAlive', { userId });
     },
 
-    updateOnlineStatus: async (userId, onlineStatus) => {
-        return await axiosClient.patch(_url + `/updateOnlineStatus/${userId}/${onlineStatus}`);
+    updateOnlineStatus: async (username, onlineStatus) => {
+        return await axiosClient.patch(_url + `/updateOnlineStatus/${username}/${onlineStatus}`);
     },
 
-    getListUserBlock: async (userId) => {
-        return await axiosClient.get(_url + `/ListUserBlock/${userId}`);
+    getListUserBlock: async (username) => {
+        return await axiosClient.get(_url + `/ListUserBlock/${username}`);
     },
 
-    getListUserLimit: async (userId) => {
-        return await axiosClient.get(_url + `/ListUserLimit/${userId}`);
+    getListUserLimit: async (username) => {
+        return await axiosClient.get(_url + `/ListUserLimit/${username}`);
     },
 
     removeBlockedUser: async (blockedUserId, ownerUserId) => {

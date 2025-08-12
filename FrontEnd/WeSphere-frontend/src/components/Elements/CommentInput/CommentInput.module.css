@@ -11,10 +11,6 @@
     max-width: 616px;
 }
 
-.textarea_container{
-    /* height: 50px; */
-}
-
 .comment_input_data{
     position: relative;
 }
@@ -40,6 +36,7 @@
 .icon_container {
     position: relative;
     display: flex;
+    align-items: center;
 }
 
 .comment_input_dialog button {
@@ -51,18 +48,18 @@
 
 .emoji_picker_popup{
     position: absolute;
-    transform: translate(60px, -400px);
+    transform: translate(64px, -210px);
     z-index: 1500;
 }
 
 .gif_picker_popup {
     position: absolute;
-    transform: translate(100px, -400px);
+    transform: translate(100px, -210px);
     z-index: 1000;
 }
 
 .icon_custom{
-    padding-top: 0 !important;
+    padding-right: 0 !important;
     border: none !important;
 }
 
@@ -79,4 +76,17 @@
     width: 40px;
     height: 40px;
     overflow: hidden;
+}
+
+.icon_container label {
+    padding-left: 0.6rem;
+}
+
+.icon_container label i {
+    font-size: 17px;
+    color: var(--secondary-icon-color) !important;
+}
+
+.input_file {
+    display: none;
 }

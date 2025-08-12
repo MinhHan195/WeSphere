@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import { NavLink, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import style from "./Setting.module.css";
 import { useEffect } from "react";
+import { setAlert, setLoading } from "../../redux/authSlide";
+import { $api } from "../../services/service";
+import { _AUTH } from "../../constants/_auth";
 const Setting = () => {
-    const user = useSelector((state) => state.auth.user);
+    const dispatch = useDispatch();
+    const [user, setUser] = useState({});
+
+    const fetchData = async (userName) => {
+        try {
+            dispatch(setLoading(true));
+            const res = await $api.auth.getUser(userName);
+            if (!res.isError) {
+                setUser(res.data);
+                dispatch(setLoading(false));
+            }
+        } catch (error) {
+            dispatch(setLoading(false));
+            dispatch(
+                setAlert({
+                    message: error?.errors?.exceptionMessage ?? error.message,
+                })
+            );
+        }
+    };
     useEffect(() => {
         document.title = "Cài đặt • WeSphere";
+        const username = localStorage.getItem(_AUTH.USERNAME);
+        if (username) {
+            fetchData(username);
+        }
     }, []);
 
     return (

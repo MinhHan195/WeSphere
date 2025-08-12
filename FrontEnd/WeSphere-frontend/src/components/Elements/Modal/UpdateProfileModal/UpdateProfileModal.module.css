@@ -251,6 +251,20 @@ button.btn_done:hover {
     color: var(--primary-text-color)
 }
 
+.add_link_form_container input.error {
+    margin-bottom: 0;
+}
+
+.add_link_form_container div.error {
+    margin: 0 15px 0 15px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.error {
+    color: red !important;
+}
+
 .add_link_form_container input:focus {
     background-color: #ffffff;
 }
@@ -299,6 +313,11 @@ button.btn_done:hover {
 .dropdown_item_custom{
     cursor: pointer !important;
     color: var(--primary-text-color) !important;
+}
+
+
+.input_file{
+    display: none;
 }
 
 .hide_modal {

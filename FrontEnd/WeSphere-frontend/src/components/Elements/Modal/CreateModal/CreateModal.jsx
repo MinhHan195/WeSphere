@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Environment } from "../../../../environments/environment";
 import { setModal } from "../../../../redux/createSLide";
 import { setAlert, setLoading } from "../../../../redux/authSlide";
@@ -12,12 +11,15 @@ import EmojiPicker from "emoji-picker-react";
 import Giphy from "react-awesome-giphy";
 import style from "./CreateModal.module.css";
 import Editor from "../../TextEditor/Editor";
+import { _AUTH } from "../../../../constants/_auth";
+import { set } from "date-fns";
 
 const CreateModal = () => {
     const dispatch = useDispatch();
     const [listSaves, setListSaves] = useState([]);
     const [content, setContent] = useState(null);
     const [listImage, setListImage] = useState([]);
+    const [listImageTmp, setListImageTmp] = useState([]);
     const [tag, setTag] = useState("");
     const [privacy, setPrivacy] = useState("Công khai");
 
@@ -29,6 +31,8 @@ const CreateModal = () => {
     const user = useSelector((state) => state.auth.user);
     const [emoji, setEmoji] = useState(null);
     const [editorKey, setEditorKey] = useState(0);
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [id, setId] = useState(null);
 
     const updateBefore = () => {
         const textarea = document.querySelector(`.${style.textarea_container}`);
@@ -36,29 +40,6 @@ const CreateModal = () => {
             `.${style.before_content}`
         );
         beforeContent.style.height = textarea.offsetHeight + 15 + "px";
-    };
-
-    const showImagePicker = async (e) => {
-        e.stopPropagation();
-        try {
-            const image = await Camera.getPhoto({
-                resultType: CameraResultType.Uri,
-                source: CameraSource.Photos,
-                quality: 100,
-            });
-            const filename = listImage.length + 1 + ".jpg";
-            const response = await fetch(image.webPath);
-            const blob = await response.blob();
-            const file = new File([blob], filename, { type: blob.type });
-            setListImage((prev) => [...prev, file]);
-        } catch (error) {
-            if (error.message === "User cancelled photos app") return;
-            dispatch(
-                setAlert({
-                    message: error.errors.exceptionMessage || error.message,
-                })
-            );
-        }
     };
 
     const showEmojiPicker = (e) => {
@@ -172,16 +153,24 @@ const CreateModal = () => {
 
     const handleRemoveImage = (index) => {
         setListImage((prev) => prev.filter((item, idx) => idx !== index));
+        setListImageTmp((prev) => prev.filter((item, idx) => idx !== index));
     };
 
+    useEffect(() => {
+        console.log("main: ", listImage);
+        console.log("tmp: ", listImageTmp);
+    }, [listImage]);
+
     const handleSave = () => {
-        console.log("Save clicked");
+        submit(false);
     };
 
     const handleChoseFeedSave = (data) => {
+        setId(data.feed.id);
         setContent(data.feed.content);
         setTag(data.feed.tag);
         setListImage(data.feed.listImages);
+        setListImageTmp(data.feed.listImages);
         showMainModal();
         setEditorKey((prev) => prev + 1);
     };
@@ -199,31 +188,33 @@ const CreateModal = () => {
         return true;
     };
 
-    const submit = async (save) => {
+    const submit = async (active) => {
         try {
             if (!validate()) {
                 return;
             }
-            dispatch(setLoading(true));
+            setSubmitLoading(true);
             const formData = new FormData();
-            formData.append("content", content);
+            const data = JSON.stringify(content);
+            if (id) {
+                formData.append("id", id);
+            }
+            formData.append("content", data);
             formData.append("tag", tag);
             listImage.forEach((file) => {
                 formData.append("file[]", file);
             });
-            formData.append("privacy", privacy);
-            formData.append("save", save);
-            formData.forEach((value, key) => {
-                console.log(key, value);
-            });
+            formData.append("listImageTmp", JSON.stringify(listImageTmp));
+            formData.append("privateMode", privacy);
+            formData.append("active", active);
             const res = await $api.post.create(formData);
             if (!res.isError) {
-                dispatch(setLoading(false));
+                setSubmitLoading(false);
                 dispatch(setAlert({ message: res.message }));
                 handleClose();
             }
         } catch (error) {
-            dispatch(setLoading(false));
+            setSubmitLoading(false);
             dispatch(setAlert({ message: error.message }));
         }
     };
@@ -231,7 +222,7 @@ const CreateModal = () => {
     const getListSaves = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.post.getListSaves(user.id);
+            const res = await $api.post.getListSaves(user.username);
             if (!res.isError && res.data != null) {
                 setListSaves(res.data);
                 dispatch(setLoading(false));
@@ -399,12 +390,30 @@ const CreateModal = () => {
                                         <div
                                             className={`icon ${style.icon_container}`}
                                         >
-                                            <button
+                                            <label
+                                                className={`custom-file-label fs-5 me-1 ${style.file_lable}`}
+                                                htmlFor="file-upload"
+                                            >
+                                                <i className="bi bi-images"></i>
+                                            </label>
+                                            <input
+                                                id="file-upload"
+                                                className={style.input_file}
+                                                accept="image/*,video/*"
+                                                type="file"
+                                                onChange={(e) => {
+                                                    setListImage((prev) => [
+                                                        ...prev,
+                                                        e.target.files[0],
+                                                    ]);
+                                                }}
+                                            />
+                                            {/* <button
                                                 className="btn"
                                                 onClick={showImagePicker}
                                             >
                                                 <i className="bi bi-images"></i>
-                                            </button>
+                                            </button> */}
                                             <button
                                                 className="btn btn-icon-emoji"
                                                 onClick={showEmojiPicker}
@@ -501,13 +510,24 @@ const CreateModal = () => {
                                     <button
                                         type="button"
                                         className={`btn btn-light ms-2 ${style.submit_btn}`}
-                                        disabled={!validate()}
+                                        disabled={!validate() || submitLoading}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            submit(false);
+                                            submit(true);
                                         }}
                                     >
-                                        Đăng
+                                        {submitLoading ? (
+                                            <div
+                                                className={`spinner-border text-dark ${style.spinner}`}
+                                                role="status"
+                                            >
+                                                <span className="visually-hidden">
+                                                    Loading...
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            "Đăng"
+                                        )}
                                     </button>
                                 </div>
                             </div>
