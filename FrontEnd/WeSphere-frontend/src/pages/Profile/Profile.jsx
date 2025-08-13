@@ -18,6 +18,7 @@ const Profile = () => {
     const [user, setUser] = useState({});
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showListLinkModal, setShowListLinkModal] = useState(false);
+    const [key, setKey] = useState(0);
     const handleShowHideUpdateModal = () => {
         setShowUpdateModal(!showUpdateModal);
     };
@@ -46,6 +47,7 @@ const Profile = () => {
 
     useEffect(() => {
         fetchData(param.username);
+        setKey(key + 1);
     }, [param.username]);
 
     useEffect(() => {
@@ -193,8 +195,9 @@ const Profile = () => {
                     user.id !== auth.id ? null : (
                         <div className="w-100">
                             <ProfileBar
-                                username={user.username}
+                                username={param.username}
                                 isUser={user.id === auth.id}
+                                key={key}
                             />
                         </div>
                     )}

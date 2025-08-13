@@ -10,7 +10,7 @@ import Editor from "../TextEditor/Editor";
 import style from "./CommentInput.module.css";
 const CommentInput = (props) => {
     const dispatch = useDispatch();
-    const { data, close } = props;
+    const { data, close, setKey } = props;
     const [content, setContent] = useState("");
     const [listImage, setListImage] = useState([]);
     const [tag, setTag] = useState("");
@@ -82,24 +82,29 @@ const CommentInput = (props) => {
         return true;
     };
 
-    const submit = async (save) => {
+    const submit = async () => {
         try {
             if (!validate()) {
                 return;
             }
             dispatch(setLoading(true));
             const formData = new FormData();
-            formData.append("content", content);
+            formData.append("content", JSON.stringify(content));
             formData.append("tag", tag);
             listImage.forEach((file) => {
                 formData.append("file[]", file);
             });
-            formData.append("save", save);
+            formData.append("listImageTmp", JSON.stringify([]));
+            formData.append("privateMode", "Công khai");
+            formData.append("active", true);
             formData.append("commentOfPost", data.feed.id);
             const res = await $api.post.create(formData);
             if (!res.isError) {
                 dispatch(setLoading(false));
-                dispatch(setAlert({ message: res.message }));
+                setContent("");
+                setListImage([]);
+                setTag("");
+                setKey();
             }
         } catch (error) {
             dispatch(setLoading(false));

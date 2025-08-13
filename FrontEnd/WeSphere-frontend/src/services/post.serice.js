@@ -27,16 +27,16 @@ const postService = {
         return await axiosClient.get(_url + '/ListFeeds');
     },
 
-    getListFeedsByUserId: async () => {
-        return await axiosClient.get(_url + '/ListFeeds/User');
+    getListFeedsByUserId: async (username) => {
+        return await axiosClient.get(_url + `/ListFeeds/${username}`);
     },
 
-    getListMediasByUserId: async () => {
-        return await axiosClient.get(_url + '/ListMedias/User');
+    getListMediasByUserId: async (username) => {
+        return await axiosClient.get(_url + `/ListMedias/${username}`);
     },
 
-    getListRePostsByUserId: async () => {
-        return await axiosClient.get(_url + '/ListRePosts/User');
+    getListRePostsByUserId: async (username) => {
+        return await axiosClient.get(_url + `/ListRePosts/${username}`);
     },
 
     getListFavoritePost: async () => {

@@ -16,3 +16,6 @@
     padding: 2rem;
     border-bottom: 0.5px solid var(--primary-border-color);
 }
+.text_secondary {
+    color: var(--secondary-text-color);
+}

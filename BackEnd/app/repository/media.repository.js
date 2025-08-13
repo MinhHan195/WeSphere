@@ -45,6 +45,19 @@ class MediaRepository {
             throw new ApiError(500, "Error deleting media by feed ID");
         }
     }
+
+    async getListMediasByUserName(username) {
+        try {
+            const query = `select DISTINCT feed_id from media m join feed f on m.feed_id = f.id where f.username = @username`;
+            const result = await this.db.request()
+                .input("username", sql.VarChar, username)
+                .query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error getting media by username:", error);
+            throw new ApiError(500, "Error getting media by username");
+        }
+    }
 }
 
 module.exports = MediaRepository;

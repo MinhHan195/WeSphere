@@ -10,8 +10,8 @@ class FeedRepository {
     async createFeed(data, username) {
         try {
             const feedId = ObjectId().toString();
-            const { content, tag, privateMode, active } = data;
-            const query = `INSERT INTO feed (id, content, tag, privateMode, active, username) VALUES (@id, @content, @tag, @privateMode, @active, @username)`;
+            const { content, tag, privateMode, active, commentOfPost } = data;
+            const query = `INSERT INTO feed (id, content, tag, privateMode, active, username, commentOfPost) VALUES (@id, @content, @tag, @privateMode, @active, @username, @commentOfPost)`;
             const result = await this.db.request()
                 .input("id", sql.VarChar, feedId)
                 .input("content", sql.VarChar, content)
@@ -19,6 +19,7 @@ class FeedRepository {
                 .input("privateMode", sql.VarChar, privateMode)
                 .input("active", sql.Bit, active)
                 .input("username", sql.VarChar, username)
+                .input("commentOfPost", sql.VarChar, commentOfPost !== undefined ? commentOfPost : null)
                 .query(query);
             return feedId;
         } catch (error) {
@@ -181,6 +182,71 @@ class FeedRepository {
         } catch (error) {
             console.error("Error deleting feed by ID:", error);
             throw new ApiError(500, "Error deleting feed by ID");
+        }
+    }
+
+    async getFeedById(feedId) {
+        try {
+            const query = `SELECT * FROM feed WHERE id = @feedId`;
+            const result = await this.db.request()
+                .input("feedId", sql.VarChar, feedId)
+                .query(query);
+            return result.recordset[0];
+        } catch (error) {
+            console.error("Error getting feed by ID:", error);
+            throw new ApiError(500, "Error getting feed by ID");
+        }
+    }
+
+    async getListCommentFeedId(feedId) {
+        try {
+            const query = `SELECT id FROM feed WHERE commentOfPost = @feedId`;
+            const result = await this.db.request()
+                .input("feedId", sql.VarChar, feedId)
+                .query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error getting list comment by feed ID:", error);
+            throw new ApiError(500, "Error getting list comment by feed ID");
+        }
+    }
+
+    async getMyFeeds(username) {
+        try {
+            const query = `SELECT id FROM feed where active=1 AND username = @username`;
+            const result = await this.db.request()
+                .input("username", sql.VarChar, username)
+                .query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error getting list feeds:", error);
+            throw new ApiError(500, "Error getting list feeds");
+        }
+    }
+
+    async getListFavoritePostsByUserName(username) {
+        try {
+            const query = `SELECT * FROM likes WHERE username = @username`;
+            const result = await this.db.request()
+                .input("username", sql.VarChar, username)
+                .query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error getting list feeds:", error);
+            throw new ApiError(500, "Error getting list favorite feeds");
+        }
+    }
+
+    async getListSavedPostsByUserName(username) {
+        try {
+            const query = `SELECT * FROM save_feed WHERE username = @username`;
+            const result = await this.db.request()
+                .input("username", sql.VarChar, username)
+                .query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error getting list feeds:", error);
+            throw new ApiError(500, "Error getting list saved feeds");
         }
     }
 }

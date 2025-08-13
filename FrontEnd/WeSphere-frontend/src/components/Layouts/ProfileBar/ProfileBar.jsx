@@ -40,7 +40,7 @@ const ProfileBar = (props) => {
                 </div>
             </div>
             <div className={`${style.profile_bar_bordy}`}>
-                <Outlet context={{ isUser }} />
+                <Outlet context={{ isUser, username }} />
             </div>
         </div>
     );

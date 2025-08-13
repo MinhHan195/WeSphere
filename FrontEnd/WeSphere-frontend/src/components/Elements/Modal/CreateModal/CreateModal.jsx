@@ -12,7 +12,6 @@ import Giphy from "react-awesome-giphy";
 import style from "./CreateModal.module.css";
 import Editor from "../../TextEditor/Editor";
 import { _AUTH } from "../../../../constants/_auth";
-import { set } from "date-fns";
 
 const CreateModal = () => {
     const dispatch = useDispatch();
@@ -155,11 +154,6 @@ const CreateModal = () => {
         setListImage((prev) => prev.filter((item, idx) => idx !== index));
         setListImageTmp((prev) => prev.filter((item, idx) => idx !== index));
     };
-
-    useEffect(() => {
-        console.log("main: ", listImage);
-        console.log("tmp: ", listImageTmp);
-    }, [listImage]);
 
     const handleSave = () => {
         submit(false);

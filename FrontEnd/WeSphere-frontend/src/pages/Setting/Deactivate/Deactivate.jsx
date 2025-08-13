@@ -56,10 +56,10 @@ const Deactivate = () => {
         <>
             <div>
                 <div className={`${style.user_card}`}>
-                    <img
-                        src="https://i.pinimg.com/736x/50/b7/16/50b716a944c630c9a324b54be6a90027.jpg"
-                        alt="Avatar"
-                    />
+                    <div className={`${style.avatar}`}>
+                        <img src={user.avatar} alt="Avatar" />
+                    </div>
+
                     <div>
                         <div>
                             <strong>@{user.username}</strong>

@@ -17,13 +17,14 @@ import Deactivate from "../pages/Setting/Deactivate/Deactivate.jsx";
 import Theme from "../pages/Setting/Theme/Theme.jsx";
 import Favorite from "../pages/Favorite/Favorite.jsx";
 import Saved from "../pages/Saved/Saved.jsx";
+import MovieDetail from "../pages/MovieDetail/MovieDetail.jsx";
 
 function AppRouter() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/find" element={<FindPage />} />
+                <Route path="/find" element={<MovieDetail />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/notification" element={<Notification />} />
                 <Route

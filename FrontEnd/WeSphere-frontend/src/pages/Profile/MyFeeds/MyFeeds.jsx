@@ -7,7 +7,7 @@ import { $api } from "../../../services/service";
 import Feed from "../../../components/Elements/Feed/Feed";
 import style from "./MyFeeds.module.css";
 const MyFeeds = () => {
-    const { isUser } = useOutletContext();
+    const { isUser, username } = useOutletContext();
     const dispatch = useDispatch();
 
     const [listMyFeeds, setListMyFeeds] = useState([]);
@@ -15,7 +15,7 @@ const MyFeeds = () => {
     const fectData = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.post.getListFeedsByUserId();
+            const res = await $api.post.getListFeedsByUserId(username);
             if (!res.isError) {
                 setListMyFeeds(res.data);
                 dispatch(setLoading(false));
@@ -29,13 +29,13 @@ const MyFeeds = () => {
             );
         }
     };
-
     const showModal = () => {
         dispatch(setModal(true));
     };
 
     useEffect(() => {
         fectData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <div className="w-100">
@@ -55,17 +55,27 @@ const MyFeeds = () => {
             ) : null}
 
             <div className="w-100">
-                {listMyFeeds.map((feed, idx) => {
-                    return (
-                        <div
-                            className={`${style.feed_dialog}`}
-                            key={feed.feed.id}
-                            idx={idx}
-                        >
-                            <Feed data={feed} />
+                {listMyFeeds.length > 0 ? (
+                    listMyFeeds.map((feed, idx) => {
+                        return (
+                            <div
+                                className={`${style.feed_dialog}`}
+                                key={feed.feed.id}
+                                idx={idx}
+                            >
+                                <Feed data={feed} />
+                            </div>
+                        );
+                    })
+                ) : (
+                    <>
+                        <div className="w-100 d-flex justify-content-center align-items-center  py-4">
+                            <p className={style.text_secondary}>
+                                Chưa có bài viết nào được đăng lại
+                            </p>
                         </div>
-                    );
-                })}
+                    </>
+                )}
             </div>
         </div>
     );

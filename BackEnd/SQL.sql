@@ -147,3 +147,7 @@ select * from media where feed_id='689bc9d88b607d3238468375'
 select * from feed where id = '689bc9d88b607d3238468375'
 
 update feed set active = 0 where id = '689bc9d88b607d3238468375'
+
+update feed set commentOfPost = '689b94b7574cfc46cc5c3eda' where id = '689bc2996b07fa53582d38b7' OR id = '689bc2024acb894b34c791a9'
+
+SELECT id FROM feed WHERE commentOfPost = '689b94b7574cfc46cc5c3eda'

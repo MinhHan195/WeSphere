@@ -3,6 +3,7 @@ const feedService = require("../services/feed.service");
 exports.createFeed = async (req, res, next) => {
     try {
         const data = req.body;
+        console.log(data);
         data.listImageTmp = JSON.parse(data.listImageTmp);
         const mediaFiles = req.files;
         const username = req.user.UserName;
@@ -81,6 +82,99 @@ exports.getSavedFeeds = async (req, res, next) => {
             isError: false,
             message: "Lấy danh sách bài viết đã lưu thành công",
             data: savedFeeds
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.getFeedDetail = async (req, res, next) => {
+    try {
+        const feedId = req.params.feed_id;
+        const username = req.user.UserName;
+        const feedDetail = await feedService.getFeedDetail(feedId, username);
+        return res.send({
+            isError: false,
+            message: "Lấy thông tin bài viết thành công",
+            data: feedDetail
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.getListFeedsByUser = async (req, res, next) => {
+    try {
+        const username = req.params.username;
+        const feeds = await feedService.getListFeedsByUser(username);
+        return res.send({
+            isError: false,
+            message: "Lấy danh sách bài viết của người dùng thành công",
+            data: feeds
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.getListMediasByUser = async (req, res, next) => {
+    try {
+        const username = req.params.username;
+
+        console.log(username);
+        const medias = await feedService.getListMediasByUser(username);
+        return res.send({
+            isError: false,
+            message: "Lấy danh sách media của người dùng thành công",
+            data: medias
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.getListRePostsByUser = async (req, res, next) => {
+    try {
+        const username = req.params.username;
+        const rePosts = await feedService.getListRePostsByUser(username);
+        return res.send({
+            isError: false,
+            message: "Lấy danh sách bài viết đã repost của người dùng thành công",
+            data: rePosts
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.getListFavoritePost = async (req, res, next) => {
+    try {
+        const username = req.user.UserName;
+        const favoritePosts = await feedService.getListFavoritePostsByUser(username);
+        return res.send({
+            isError: false,
+            message: "Lấy danh sách bài viết yêu thích của người dùng thành công",
+            data: favoritePosts
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.getListSavePost = async (req, res, next) => {
+    try {
+        const username = req.user.UserName;
+        const savedPosts = await feedService.getListSavedPostsByUser(username);
+        return res.send({
+            isError: false,
+            message: "Lấy danh sách bài viết đã lưu của người dùng thành công",
+            data: savedPosts
         });
     } catch (error) {
         console.log(error);

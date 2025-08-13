@@ -14,6 +14,7 @@ const FeedDetail = () => {
     const { feedId } = useParams();
     const [data, setData] = useState(null);
     const [close, setClose] = useState(0);
+    const [key, setKey] = useState(0);
 
     useEffect(() => {
         document.title = "WeSphere • Bình luận";
@@ -73,6 +74,11 @@ const FeedDetail = () => {
                                             <CommentInput
                                                 data={data}
                                                 close={close}
+                                                setKey={() => {
+                                                    setKey(key + 1);
+                                                    fetchData();
+                                                }}
+                                                key={key}
                                             />
                                         </div>
                                         <div className={style.list_comments}>
