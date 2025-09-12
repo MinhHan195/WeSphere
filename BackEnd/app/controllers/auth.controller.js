@@ -139,3 +139,17 @@ exports.deleteAccount = async (req, res, next) => {
         return next(error)
     }
 }
+
+exports.followUser = async (req, res, next) => {
+    try {
+        const { username, mode } = req.params;
+        const { user } = req;
+        const result = await authService.followUser(username, mode, user);
+        return res.send({
+            isError: !result,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error)
+    }
+}

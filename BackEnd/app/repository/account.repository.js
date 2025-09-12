@@ -1,11 +1,12 @@
 const sql = require("mssql");
 const ApiError = require("../api-error");
 const bcrypt = require("bcrypt");
+const db = require('../../models');  // Sequelize sẽ load index.js và init toàn bộ models
 
 
 class accountRepository {
     constructor(client) {
-        this.db = client;
+        this.account = db.accounts;
     }
 
     extractAccountData(payload) {
@@ -26,11 +27,9 @@ class accountRepository {
 
     async getAccountByUsername(username) {
         try {
-            const query = "SELECT * FROM accounts WHERE username = @username";
-            const result = await this.db.request()
-                .input("username", sql.NVarChar, username)
-                .query(query);
-            return result.recordset[0];
+            const account = await this.account.findOne({ where: { username: username } });
+            console.log(account);
+            return account;
         } catch (error) {
             console.log(error);
             throw new ApiError(500, "Internal Server Error");
@@ -49,16 +48,8 @@ class accountRepository {
     async createAccount(username, avatar, userId, password) {
         try {
             const hash = await bcrypt.hash(password, 5);
-            const query = "INSERT INTO accounts (username, password, bio, privateMode, onlineMode, userId, avatar) VALUES (@username, @password, @bio, @privateMode, @onlineMode, @userId, @avatar)";
-            await this.db.request()
-                .input("username", sql.NVarChar, username)
-                .input("password", sql.NVarChar, hash)
-                .input("bio", sql.NVarChar, "")
-                .input("privateMode", sql.Bit, false)
-                .input("onlineMode", sql.NVarChar, "Công khai")
-                .input("userId", sql.NVarChar, userId)
-                .input("avatar", sql.NVarChar, avatar)
-                .query(query);
+            const newAccount = await this.account.create({ username: username, password: hash, bio: "", privateMode: false, onlineMode: "Công khai", userId: userId, avatar: avatar });
+            console.log(newAccount);
 
             return;
         } catch (error) {
@@ -68,20 +59,27 @@ class accountRepository {
     }
 
     async updateAccount(data) {
-
         try {
             data = this.extractAccountData(data);
+
+            console.log(data);
             let string = "";
             for (const [key, value] of Object.entries(data)) {
                 if (key !== "username") {
-                    string += `${key} = '${value !== 'false' && value !== 'true' ? value : value === 'true' ? 1 : 0}', `;
+                    // string += `${key} = '${value !== 'false' && value !== 'true' ? value : value === 'true' ? 1 : 0}', `;
+                    string += `${key} = @${key}, `;
                 }
             }
             string = string.slice(0, -2);
 
+            console.log(string);
             const query = `UPDATE accounts SET ${string} WHERE username = @username`;
             await this.db.request()
                 .input("username", sql.NVarChar, data.username)
+                .input("bio", sql.NVarChar, data.bio)
+                .input("privateMode", sql.Bit, data.privateMode)
+                .input("userId", sql.VarChar, data.userId)
+                .input("publicId", sql.VarChar, data.publicId)
                 .query(query);
             return data;
         } catch (error) {
@@ -197,6 +195,38 @@ class accountRepository {
         }
     }
 
+    async followUser(username, user) {
+        try {
+            const query = `
+                INSERT INTO follows (follower_username, following_username)
+                VALUES (@follower_username, @following_username)
+            `;
+            await this.db.request()
+                .input("follower_username", sql.NVarChar, user.UserName)
+                .input("following_username", sql.NVarChar, username)
+                .query(query);
+            return true;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
+    async unfollowUser(username, user) {
+        try {
+            const query = `
+                DELETE FROM follows
+                WHERE follower_username = @follower_username AND following_username = @following_username
+            `;
+            await this.db.request()
+                .input("follower_username", sql.NVarChar, user.UserName)
+                .input("following_username", sql.NVarChar, username)
+                .query(query);
+            return true;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
 }
 
 module.exports = accountRepository;

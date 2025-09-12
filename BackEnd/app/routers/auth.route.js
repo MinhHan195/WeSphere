@@ -29,12 +29,13 @@ router.route("/ListUserLimit/:username").get(userController.getListUserLimit);
 
 router.route("/removeLimitedUser/:limitedUsername/:ownerUsername").patch(userController.removeLimitedUser);
 
-
 router.route("/removeBlockedUser/:blockedUsername/:ownerUsername").patch(userController.removeBlockedUser);
 
 router.route("/deactivateAccount/:userId").patch(verifyToken, authController.deactivateAccount);
 
 router.route("/deleteAccount").delete(verifyToken, authController.deleteAccount);
+
+router.route("/followUser/:username/:mode").post(verifyToken, authController.followUser);
 
 router.route("/isAlive").post((req, res) => {
     const { userId } = req.body;
@@ -45,14 +46,14 @@ router.route("/isAlive").post((req, res) => {
     res.sendStatus(200); // Tương đương với res.status(200).end();
 });
 
-
-
 router.route("/deleteImage").post(async (req, res) => {
     const Cloudinary = new cloudinaryRepsitory();
     const result = await Cloudinary.deleteImage(req.body.publicId);
     console.log(result);
     res.send(result);
 })
+
+
 
 
 

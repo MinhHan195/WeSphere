@@ -97,7 +97,6 @@ create table likes (
 	like_id INT PRIMARY KEY IDENTITY(1,1),
 	username varchar(30) not null,
 	feedId varchar(50) not null,
-	timeCreate DATETIME2 DEFAULT CURRENT_TIMESTAMP
 	CONSTRAINT fk_like_account foreign key (username) REFERENCES accounts(username),
 	CONSTRAINT fk_like_feed foreign key (feedId) REFERENCES feed(id),
 )
@@ -120,14 +119,45 @@ create table reposts (
 	CONSTRAINT fk_reposts_feed foreign key (feedId) REFERENCES feed(id),
 )
 
+create table report (
+	id varchar(50) primary key,
+	description varchar(max) not null,
+	userId varchar(50),
+	media varchar (1024), 
+	publicId varchar(50),
+	timeCreate DATETIME2 DEFAULT CURRENT_TIMESTAMP
+	CONSTRAINT fk_report_users foreign key (userId) REFERENCES users(userId),
+)
 
+create table movie (
+	id varchar(50) primary key,
+	description nvarchar(2048),
+	title varchar(50)
+	category varchar(30),
+	actor varchar(30),
+	duration TIME,
+	poster varchar(1024) not null,
+	publicId varchar(50) not null
+) 
 
-ALTER TABLE accounts
-ADD COLUMN isOnline BIT;
+alter table movie add title varchar(50)
 
+update movie set title = 'Marvel Ironheart' where id = '689d2df231af8d4cfc112716'
 
+create table movie_rate (
+	id INT PRIMARY KEY IDENTITY(1,1),
+	movie_id varchar(50) not null,
+	userId varchar(50) not null,
+	rate int not null,
+	CONSTRAINT fk_rate_movie foreign key (movie_id) REFERENCES movie(id),
+	CONSTRAINT fk_rate_users foreign key (userId) REFERENCES users(userId),
+)
+689d2df231af8d4cfc112716
 
+insert into movie (id, description, category, actor, title,  duration, poster, publicId ) values  ('689d2df231af8d4cfc112716', 'Lấy bối cảnh sau các sự kiện của “Black Panther: Wakanda Forever”, Riri trở lại Chicago và tiếp tục theo đuổi lý tưởng của mình. Song hành trình này không hề dễ dàng, khi Riri sớm bị cuốn vào một cuộc đối đầu gây cấn với Parker Robbins, hay còn gọi là The Hood (Anthony Ramos thủ vai), một phản diện bí ẩn sử dụng phép thuật. Cuộc đối đầu giữa công nghệ và ma thuật hứa hẹn là trục xung đột chính, tạo nên màu sắc riêng cho loạt phim.',
+'Hành động', 'Chinaka Hodge', 'Marvel Ironheart' , '02:30:15',  'https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp', 'e29c0fe492873043f31a5128dc98255d_q6bsve')
 
+select * from movie
 
 delete follows where follower_username='mh.minh_han'
 
@@ -140,14 +170,12 @@ insert into limits (limiter_username, limited_username) values('mh.minh_han','bn
 
 
 
-  
+SELECT DISTINCT m.feed_id from media m join feed f on m.feed_id = f.id where f.username = 'mn.minh_han'
 
-select * from media where feed_id='689bc9d88b607d3238468375'
+select DISTINCT feed_id from media m join feed f on m.feed_id = f.id where f.username = 'mh.minh_han'
 
-select * from feed where id = '689bc9d88b607d3238468375'
+select * from save_feed;
 
-update feed set active = 0 where id = '689bc9d88b607d3238468375'
+insert into save_feed (feedId, username) values ( '689b94b7574cfc46cc5c3eda', 'mh.minh_han')
 
-update feed set commentOfPost = '689b94b7574cfc46cc5c3eda' where id = '689bc2996b07fa53582d38b7' OR id = '689bc2024acb894b34c791a9'
-
-SELECT id FROM feed WHERE commentOfPost = '689b94b7574cfc46cc5c3eda'
+update feed set username = 'bn.ngoc' where id =  '689b94b7574cfc46cc5c3eda'

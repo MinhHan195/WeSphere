@@ -24,7 +24,7 @@ function AppRouter() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/find" element={<MovieDetail />} />
+                <Route path="/find" element={<FindPage />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/notification" element={<Notification />} />
                 <Route
@@ -45,12 +45,10 @@ function AppRouter() {
                     <Route path="account" element={<Account />} />
                     <Route path="deactivate" element={<Deactivate />} />
                     <Route path="theme" element={<Theme />} />
-                    {/* Add other settings routes here */}
-                    {/* <Route path="account" element={<AccountSettings />} />
-                    <Route path="help" element={<HelpSettings />} /> */}
                 </Route>
                 <Route path="/favorite" element={<Favorite />} />
                 <Route path="/Saved" element={<Saved />} />
+                <Route path="/movie/:movie_id" element={<MovieDetail />} />
             </Routes>
         </BrowserRouter>
     );

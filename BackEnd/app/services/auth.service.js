@@ -51,8 +51,8 @@ exports.logInWithFacebook = async (email, name) => {
 }
 
 exports.signUp = async (data) => {
-    const AccountRepository = new accountRepository(SQL.client);
-    const UserRepository = new userRepository(SQL.client);
+    const AccountRepository = new accountRepository();
+    const UserRepository = new userRepository();
     const user = await UserRepository.createUser(data);
     const newAccount = await AccountRepository.createAccount(data.username, data.avatar, user.userId, data.password);
     const payload = {
@@ -222,4 +222,15 @@ exports.deleteAccount = async (AuthUsername, data) => {
         const res = await UserRepository.deleteUser(data.id);
         return res;
     }
+}
+
+exports.followUser = async (username, mode, user) => {
+    const AccountRepository = new accountRepository(SQL.client);
+    let res;
+    if (mode) {
+        res = await AccountRepository.followUser(username, user);
+    } else {
+        res = await AccountRepository.unfollowUser(username, user);
+    }
+    return res;
 }

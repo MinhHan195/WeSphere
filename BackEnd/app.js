@@ -5,6 +5,7 @@ const authRouter = require("./app/routers/auth.route");
 const postRouter = require("./app/routers/post.router");
 const eventsRouter = require("./app/routers/events.route");
 const systemRouter = require("./app/routers/system.route");
+const movieRouter = require("./app/routers/movie.route");
 const ApiError = require("./app/api-error");
 
 const app = express();
@@ -17,6 +18,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/system", systemRouter);
+app.use("/api/movie", movieRouter);
 
 app.use((req, res, next) => {
     return next(new ApiError(404, "Resource not found"));

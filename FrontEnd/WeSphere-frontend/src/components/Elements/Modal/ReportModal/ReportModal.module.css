@@ -77,3 +77,7 @@
     padding: 4px 12px !important;
     color: var(--primary-text-color) !important;
 }
+
+.spinner{
+    color: var(--primary-text-color) !important;
+}

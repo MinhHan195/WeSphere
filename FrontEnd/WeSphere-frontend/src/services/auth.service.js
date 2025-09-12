@@ -66,6 +66,10 @@ const authService = {
 
     checkUsername: async (username) => {
         return await axiosClient.get(_url + `/checkUsername/${username}`);
+    },
+
+    followUser: async (username, mode) => {
+        return await axiosClient.post(_url + `/followUser/${username}/${mode}`);
     }
 };
 

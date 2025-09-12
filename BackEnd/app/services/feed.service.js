@@ -82,7 +82,8 @@ exports.getListFeeds = async (username) => {
         listFeeds.push(item);
 
     }
-    return listFeeds;
+
+    return listFeeds.reverse();
 }
 
 exports.rePostFeed = async (feedId, username, mode) => {

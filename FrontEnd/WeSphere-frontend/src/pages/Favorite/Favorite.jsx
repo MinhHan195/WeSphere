@@ -34,7 +34,7 @@ const Favorite = () => {
     }, []);
     return (
         <DefaultLayout>
-            <div className="d-flex flex-column align-items-center w-100 h-100 pt-5">
+            <div className="d-flex flex-column align-items-center w-100 h-100 py-5">
                 <div className={style.header}>
                     <strong>Đã thích</strong>
                 </div>
@@ -44,12 +44,17 @@ const Favorite = () => {
                     {listFeed
                         ? listFeed.map((feed, idx) => {
                               return (
-                                  <div
-                                      className={style.feed_card}
-                                      key={feed.feed.id}
-                                  >
-                                      <Feed data={feed} idx={idx} />
-                                  </div>
+                                  <>
+                                      <div
+                                          className={style.feed_card}
+                                          key={feed.feed.id}
+                                      >
+                                          <Feed data={feed} idx={idx} />
+                                      </div>
+                                      {idx < listFeed.length - 1 ? (
+                                          <hr className={style.line} />
+                                      ) : null}
+                                  </>
                               );
                           })
                         : null}

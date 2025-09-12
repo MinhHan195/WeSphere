@@ -1,25 +1,26 @@
 import { useState } from "react";
 import style from "./ReportModal.module.css";
 import { $api } from "../../../../services/service";
-import { setLoading, setAlert } from "../../../../redux/authSlide";
+import { setAlert } from "../../../../redux/authSlide";
 import { useDispatch } from "react-redux";
 import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 const ReportModal = ({ handleClose }) => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
     const [file, setFile] = useState("");
+    const [loading, setLoading] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const submit = async (e) => {
         e.preventDefault();
         try {
-            dispatch(setLoading(false));
+            setLoading(true);
             const formData = new FormData();
             formData.append("description", text);
             formData.append("file", file);
 
             const res = await $api.system.reportError(formData);
             if (!res.isError) {
-                dispatch(setLoading(false));
+                setLoading(false);
                 dispatch(
                     setAlert({
                         message: res.message,
@@ -31,7 +32,7 @@ const ReportModal = ({ handleClose }) => {
                 console.log(key, ": ", value);
             });
         } catch (error) {
-            dispatch(setLoading(false));
+            setLoading(false);
             dispatch(
                 setAlert({
                     message: error.errors?.exceptionMessage || error.message,
@@ -76,6 +77,7 @@ const ReportModal = ({ handleClose }) => {
                                     rows={5}
                                     placeholder="Vui lòng chia sẽ chi tiết nhất có thể..."
                                     onChange={(e) => setText(e.target.value)}
+                                    disabled={loading}
                                 ></textarea>
                             </div>
 
@@ -90,6 +92,7 @@ const ReportModal = ({ handleClose }) => {
                                     <input
                                         id="file-upload"
                                         className={style.input_file}
+                                        accept="image/*,video/*"
                                         type="file"
                                         onChange={(e) => {
                                             // console.log(e.target.files[0]);
@@ -112,9 +115,20 @@ const ReportModal = ({ handleClose }) => {
                                 </div>
                                 <button
                                     className={`btn ${style.btn}`}
-                                    disabled={!validate()}
+                                    disabled={!validate() || loading}
                                 >
-                                    Gửi
+                                    {loading ? (
+                                        <div
+                                            class={`spinner-border spinner-border-sm ${style.spinner}`}
+                                            role="status"
+                                        >
+                                            <span class="visually-hidden">
+                                                Loading...
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        "Gửi"
+                                    )}
                                 </button>
                             </div>
                         </form>

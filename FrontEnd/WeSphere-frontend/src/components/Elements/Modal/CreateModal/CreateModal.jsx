@@ -402,12 +402,6 @@ const CreateModal = () => {
                                                     ]);
                                                 }}
                                             />
-                                            {/* <button
-                                                className="btn"
-                                                onClick={showImagePicker}
-                                            >
-                                                <i className="bi bi-images"></i>
-                                            </button> */}
                                             <button
                                                 className="btn btn-icon-emoji"
                                                 onClick={showEmojiPicker}

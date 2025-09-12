@@ -1,13 +1,11 @@
 const express = require("express");
+const upload = require("../middleware/multerMediaFeedMiddleware");
+const systemController = require("../controllers/system.controller");
+const { verifyToken } = require("../middleware/authMiddleware");
 
 
 const router = express.Router();
 
-router.route("/report_error").post((req, res) => {
-    res.send({
-        "isError": false,
-        "message": "Đã gửi báo cáo về hệ thống",
-    })
-})
+router.route("/report_error").post(verifyToken, upload.single("file"), systemController.createReport);
 
 module.exports = router;

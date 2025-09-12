@@ -14,8 +14,8 @@ class FeedRepository {
             const query = `INSERT INTO feed (id, content, tag, privateMode, active, username, commentOfPost) VALUES (@id, @content, @tag, @privateMode, @active, @username, @commentOfPost)`;
             const result = await this.db.request()
                 .input("id", sql.VarChar, feedId)
-                .input("content", sql.VarChar, content)
-                .input("tag", sql.VarChar, tag)
+                .input("content", sql.NVarChar, content)
+                .input("tag", sql.NVarChar, tag)
                 .input("privateMode", sql.VarChar, privateMode)
                 .input("active", sql.Bit, active)
                 .input("username", sql.VarChar, username)

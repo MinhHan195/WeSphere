@@ -1,12 +1,12 @@
 const app = require("./app");
 const config = require("./app/config");
-const accountRepository = require("./app/repository/account.repository");
 const SQL = require("./app/utils/sqlserver.util")
 
 
 async function startServer() {
     try {
-        await SQL.connect(config.db.connectionString);
+        const connect = await SQL.connect();
+        await connect.authenticate();
         console.log("Connected to the database!");
         const PORT = config.app.port;
         app.listen(PORT, () => {

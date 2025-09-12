@@ -7,10 +7,35 @@ import { useState } from "react";
 import { setAlert, setLoading } from "../../redux/authSlide";
 import { $api } from "../../services/service";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 const MovieDetail = () => {
+    const movie_id = useParams().movie_id;
     const [listMyFeeds, setListMyFeeds] = useState([]);
-    const [showModal, setShowModal] = useState(true);
+    const [movie, setMovie] = useState({});
+    const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
+
+    const fetchMovieData = async () => {
+        try {
+            dispatch(setLoading(true));
+            const res = await $api.movie.getMovie(movie_id);
+            if (!res.isError) {
+                setMovie(res.data);
+                dispatch(setLoading(false));
+            }
+        } catch (error) {
+            dispatch(setLoading(false));
+            dispatch(
+                setAlert({
+                    message: error?.errors.exceptionMessage ?? error.message,
+                })
+            );
+        }
+    };
+
+    useEffect(() => {
+        fetchMovieData();
+    }, [movie_id]);
 
     const fetchData = async () => {
         try {
@@ -30,6 +55,18 @@ const MovieDetail = () => {
         }
     };
 
+    function isoToDurationHM() {
+        const date = new Date(movie.duration);
+
+        const hours = date.getUTCHours(); // UTC vì chuỗi có 'Z'
+        const minutes = date.getUTCMinutes();
+
+        let result = [];
+        if (hours) result.push(`${hours} giờ`);
+        if (minutes) result.push(`${minutes} phút`);
+
+        return result.join(" ");
+    }
     useEffect(() => {
         fetchData();
     }, []);
@@ -49,37 +86,36 @@ const MovieDetail = () => {
                             <div className="col-6">
                                 <div className="rounded-3 overflow-hidden">
                                     <img
-                                        src="https://static.nutscdn.com/vimg/300-0/68757d6484424e994701bbb562aff7a0.jpg"
+                                        src={movie.poster}
                                         alt="Poster phim"
                                         className={` ${style.poster}`}
                                     />
                                 </div>
                             </div>
                             <div className="col-6">
-                                <h2>Phong Thần 2: Chiến Hỏa Tây Kỳ</h2>
+                                <h2>{movie.title}</h2>
                                 <p>
-                                    <strong>Thể loại:</strong> Hành động, Phiêu
-                                    lưu
+                                    <strong>Thể loại:</strong> {movie.category}
                                 </p>
                                 <p>
-                                    <strong>Giới thiệu:</strong> Thái sư Văn
-                                    Trọng trinh chiến nhiều năm ở xa trở về giữa
-                                    lúc Triều Ca loạn lạc mang theo Đặng Trung,
-                                    Tân Hoàn, Trương Tiết, Đào Vinh. Cùng lúc
-                                    đó, Cơ Phát khởi quân cùng sự giúp đỡ của
-                                    Khương Tử Nha và những vị thần Núi Côn Luân
+                                    <strong>Giới thiệu:</strong>{" "}
+                                    {movie.description}
                                 </p>
                                 <p>
-                                    <strong>Đạo diễn:</strong> John Doe
+                                    <strong>Đạo diễn:</strong> {movie.actor}
                                 </p>
                                 <p>
-                                    <strong>Thời lượng:</strong> 120 phút
+                                    <strong>Thời lượng:</strong>{" "}
+                                    {isoToDurationHM()}
                                 </p>
                                 <p className="rating">⭐⭐⭐⭐☆ (8.2/10)</p>
                                 <button className="btn btn-primary me-2">
                                     🎥 Xem Trailer
                                 </button>
-                                <button className="btn btn-warning">
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={() => setShowModal(true)}
+                                >
                                     ⭐ Đánh giá
                                 </button>
                             </div>
@@ -104,9 +140,8 @@ const MovieDetail = () => {
             {showModal ? (
                 <MovieRatingModal
                     show={showModal}
-                    handleClose={() => setShowModal(false)}
-                    movieTitle="Phong Thần 2: Chiến Hỏa Tây Kỳ"
-                    // onSubmit={handleRatingSubmit}
+                    close={() => setShowModal(false)}
+                    movie={movie}
                 />
             ) : null}
         </DefaultLayout>
