@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       blocks.belongsTo(models.accounts, {
+        as: 'blocker',
         foreignKey: 'blocker_username',
         targetKey: 'username'
       });
       blocks.belongsTo(models.accounts, {
+        as: 'blocked',
         foreignKey: 'blocked_username',
         targetKey: 'username'
       });

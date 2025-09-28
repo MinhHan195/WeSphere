@@ -18,7 +18,6 @@ router.route("/FeedDetail/:feed_id").get(verifyToken, feedController.getFeedDeta
 
 router.route("/ListFeeds/:username").get(verifyToken, feedController.getListFeedsByUser);
 
-
 router.route("/ListMedias/:username").get(verifyToken, feedController.getListMediasByUser);
 
 router.route("/ListRePosts/:username").get(verifyToken, feedController.getListRePostsByUser);

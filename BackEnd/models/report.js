@@ -23,10 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.UUID,
     media: DataTypes.STRING(1024),
     publicId: DataTypes.STRING(50),
-    timeCreate: DataTypes.DATE
+    timeCreate: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false,
+    }
   }, {
     sequelize,
-    modelName: 'report',
+    modelName: 'reports',
     timestamps: false
   });
   return report;

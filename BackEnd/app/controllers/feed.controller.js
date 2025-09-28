@@ -2,12 +2,12 @@ const feedService = require("../services/feed.service");
 
 exports.createFeed = async (req, res, next) => {
     try {
-        const data = req.body;
-        console.log(data);
+        let data = req.body;
+        // console.log(data);
         data.listImageTmp = JSON.parse(data.listImageTmp);
         const mediaFiles = req.files;
-        const username = req.user.UserName;
-        const feedData = await feedService.createFeed(data, mediaFiles, username);
+        data.username = req.user.UserName;
+        const feedData = await feedService.createFeed(data, mediaFiles);
         if (feedData === true) {
             return res.send({
                 isError: false,
@@ -26,6 +26,7 @@ exports.likeHandler = async (req, res, next) => {
     try {
         const { mode, feedId } = req.params;
         const username = req.user.UserName;
+        console.log(mode, feedId, username);
         const result = await feedService.likeFeed(mode, feedId, username);
         if (result) {
             return res.send({

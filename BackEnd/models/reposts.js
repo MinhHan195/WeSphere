@@ -23,7 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     username: DataTypes.STRING(30),
     feedId: DataTypes.UUID,
-    timeCreate: DataTypes.DATE
+    timeCreate: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'reposts',

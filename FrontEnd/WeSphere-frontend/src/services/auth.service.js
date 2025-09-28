@@ -36,12 +36,12 @@ const authService = {
         return await axiosClient.patch(_url + `/updateOnlineStatus/${username}/${onlineStatus}`);
     },
 
-    getListUserBlock: async (username) => {
-        return await axiosClient.get(_url + `/ListUserBlock/${username}`);
+    getListUserBlock: async () => {
+        return await axiosClient.get(_url + `/ListUserBlock`);
     },
 
-    getListUserLimit: async (username) => {
-        return await axiosClient.get(_url + `/ListUserLimit/${username}`);
+    getListUserLimit: async () => {
+        return await axiosClient.get(_url + `/ListUserLimit`);
     },
 
     removeBlockedUser: async (blockedUserId, ownerUserId) => {

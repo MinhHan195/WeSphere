@@ -112,9 +112,8 @@ exports.updateOnlineStatus = async (req, res, next) => {
 
 exports.deactivateAccount = async (req, res, next) => {
     try {
-        const { userId } = req.params;
-        const { user } = req;
-        const result = await authService.deactivateAccount(userId, user);
+        const username = req.user.UserName;
+        const result = await authService.deactivateAccount(username);
         return res.send({
             isError: !result,
             message: result ? "Vô hiệu hóa tài khoản thành công" : "Vô hiệu hóa tài khoản thất bại",
@@ -147,6 +146,21 @@ exports.followUser = async (req, res, next) => {
         const result = await authService.followUser(username, mode, user);
         return res.send({
             isError: !result,
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error)
+    }
+}
+
+exports.test = async (req, res, next) => {
+    try {
+
+        const user = req.user;
+        const data = req.body;
+        const result = await authService.test(data, user);
+        return res.send({
+            result: result
         });
     } catch (error) {
         console.log(error);

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       feed.belongsTo(models.accounts, { foreignKey: 'username', targetKey: 'username' });
+      feed.hasMany(models.likes, { foreignKey: 'feed_id', sourceKey: 'id' });
     }
   }
   feed.init({
@@ -25,7 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING(30),
     commentOfPost: DataTypes.UUID,
     active: DataTypes.BOOLEAN,
-    timeCreate: DataTypes.DATE
+    timeCreate: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     sequelize,
     modelName: 'feed',

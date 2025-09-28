@@ -78,6 +78,9 @@ const authSlice = createSlice({
         },
         setUser: (state, { payload }) => {
             state.user = { ...state.user, ...payload };
+            if (!payload.avatar) {
+                state.user.avatar = "/default_avatar.jpg";
+            }
         }
     }
 });

@@ -3,6 +3,8 @@ const accountRepository = require("../repository/account.repository");
 const userRepository = require("../repository/user.repository");
 const followRepository = require("../repository/follow.repository");
 const linkRepository = require("../repository/link.repository");
+const limitRepository = require("../repository/limit.repository");
+const blockRepository = require("../repository/block.repository");
 const cloudinaryRepsitory = require("../repository/cloudinary.respository");
 const SQL = require("../utils/sqlserver.util");
 const Joi = require("../validation/user.validate")
@@ -128,18 +130,19 @@ exports.updateUser = async (data, file) => {
     const updateAccount = await AccountRepository.updateAccount(data);
     const updateUser = await UserRepository.updateUser(data);
 
-    let listLinks = JSON.parse(data.listLinks);
+    let listLinks = await LinkRepository.getListLinks(data.username);
 
-    for (const link of listLinks) {
-        if (!link.link_id) {
-            await LinkRepository.createLink(link, data.username);
-        } else {
-            await LinkRepository.updateLink(link);
+    if (data.listLinks !== undefined) {
+        listLinks = JSON.parse(data.listLinks);
+        for (const link of listLinks) {
+            if (!link.link_id) {
+                await LinkRepository.createLink(link, data.username);
+            } else {
+                await LinkRepository.updateLink(link);
+            }
         }
+        listLinks = await LinkRepository.getListLinks(data.username);
     }
-
-    listLinks = await LinkRepository.getListLinks(data.username);
-
     const dataResult = { ...updateAccount, ...updateUser, listLinks };
     return dataResult;
 }
@@ -158,21 +161,21 @@ exports.updateOnlineStatus = async (username, onlineStatus) => {
 }
 
 exports.getListUserBlock = async (username) => {
-    const AccountRepository = new accountRepository(SQL.client);
-    const res = await AccountRepository.getListUserBlock(username);
+    const BlockRepository = new blockRepository();
+    const res = await BlockRepository.getListUserBlock(username);
     return res;
 }
 
 exports.getListUserLimit = async (username) => {
-    const AccountRepository = new accountRepository(SQL.client);
-    const res = await AccountRepository.getListUserLimit(username);
+    const LimitRepository = new limitRepository();
+    const res = await LimitRepository.getListUserLimit(username);
     return res;
 }
 
 exports.removeLimitedUser = async (limitedUsername, ownerUsername) => {
-    const AccountRepository = new accountRepository(SQL.client);
-    await AccountRepository.removeLimitedUser(limitedUsername, ownerUsername);
-    const res = await AccountRepository.getListUserLimit(ownerUsername);
+    const LimitRepository = new limitRepository();
+    await LimitRepository.removeLimitedUser(limitedUsername, ownerUsername);
+    const res = await LimitRepository.getListUserLimit(ownerUsername);
     return res;
 }
 
@@ -183,15 +186,11 @@ exports.removeBlockedUser = async (blockedUsername, ownerUsername) => {
     return res;
 }
 
-exports.deactivateAccount = async (userId, user) => {
+exports.deactivateAccount = async (username) => {
     const AccountRepository = new accountRepository(SQL.client);
-    let res;
-    console.log(user);
-    if (userId === user.UserId) {
-        res = await AccountRepository.deactivateAccount(userId, user);
-        if (res.rowsAffected[0] == 1) {
-            return true;
-        }
+    const res = await AccountRepository.deactivateAccount(username);
+    if (res == 1) {
+        return true;
     }
     return false;
 }
@@ -199,8 +198,12 @@ exports.deactivateAccount = async (userId, user) => {
 exports.deleteAccount = async (AuthUsername, data) => {
     console.log(data);
 
-    const AccountRepository = new accountRepository(SQL.client);
-    const UserRepository = new userRepository(SQL.client);
+    const AccountRepository = new accountRepository();
+    const UserRepository = new userRepository();
+    const LinkRepository = new linkRepository();
+    const BlockRepository = new blockRepository();
+    const LimitRepository = new limitRepository();
+    const FollowRepository = new followRepository();
     const account = await AccountRepository.getAccountByUsername(data.username);
     if (!account) {
         throw new ApiError(404, "Tài khoản không tồn tại");
@@ -215,7 +218,12 @@ exports.deleteAccount = async (AuthUsername, data) => {
         throw new ApiError(400, "Mật khẩu không chính xác");
     }
 
+    await LinkRepository.deleteLinksByUsername(data.username);
+    await FollowRepository.deleteFollowsByUsername(data.username);
+    await BlockRepository.deleteBlocksByOwnerUsername(data.username);
+    await LimitRepository.deleteLimitsByOwnerUsername(data.username);
     const result = await AccountRepository.deleteAccount(AuthUsername);
+
     if (!result) {
         throw new ApiError(500, "Xóa tài khoản thất bại");
     } else {
@@ -225,12 +233,20 @@ exports.deleteAccount = async (AuthUsername, data) => {
 }
 
 exports.followUser = async (username, mode, user) => {
-    const AccountRepository = new accountRepository(SQL.client);
+    const FollowRepository = new followRepository();
     let res;
     if (mode) {
-        res = await AccountRepository.followUser(username, user);
+        res = await FollowRepository.followUser(username, user);
     } else {
-        res = await AccountRepository.unfollowUser(username, user);
+        res = await FollowRepository.unfollowUser(username, user);
     }
     return res;
+}
+
+
+exports.test = async (data, user) => {
+    const LinkRepository = new linkRepository();
+    let result = await LinkRepository.updateLink(data);
+    console.log(result);
+    return result;
 }

@@ -1,97 +1,58 @@
-const ObjectId = require('bson-objectid');
-const sql = require("mssql");
-const ApiError = require('../api-error');
+const ObjectId = require("bson-objectid");
+const db = require("../../models");
+const ApiError = require("../api-error");
 
 class FeedRepository {
-    constructor(client) {
-        this.db = client;
+    constructor() {
+        this.feed = db.feed;
     }
 
-    async createFeed(data, username) {
+    extractFeedData(payload) {
+        const object = {
+            id: payload.id,
+            content: payload.content,
+            tag: payload.tag,
+            privateMode: payload.privateMode,
+            active: payload.active,
+            username: payload.username,
+            commentOfPost: payload.commentOfPost,
+            timeCreate: payload.timeCreate,
+        };
+        return Object.fromEntries(
+            Object.entries(object).filter(([_, value]) => value !== undefined)
+        );
+    }
+
+    async createFeed(data) {
         try {
-            const feedId = ObjectId().toString();
-            const { content, tag, privateMode, active, commentOfPost } = data;
-            const query = `INSERT INTO feed (id, content, tag, privateMode, active, username, commentOfPost) VALUES (@id, @content, @tag, @privateMode, @active, @username, @commentOfPost)`;
-            const result = await this.db.request()
-                .input("id", sql.VarChar, feedId)
-                .input("content", sql.NVarChar, content)
-                .input("tag", sql.NVarChar, tag)
-                .input("privateMode", sql.VarChar, privateMode)
-                .input("active", sql.Bit, active)
-                .input("username", sql.VarChar, username)
-                .input("commentOfPost", sql.VarChar, commentOfPost !== undefined ? commentOfPost : null)
-                .query(query);
-            return feedId;
+            const payload = this.extractFeedData(data);
+            const result = await this.feed.create(payload);
+            return result.dataValues.id;
         } catch (error) {
             console.error("Error creating feed:", error);
             throw new ApiError(500, "Error creating feed");
         }
     }
 
-    async likeFeed(mode, feedId, username) {
-        try {
-            let query;
-            if (mode === "add") {
-                query = `INSERT INTO likes (username, feedId) VALUES (@username, @feedId)`;
-            } else if (mode === "minus") {
-                query = `DELETE FROM likes WHERE username = @username AND feedId = @feedId`;
-            }
-            const res = await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return true;
-        } catch (error) {
-            console.error("Error liking feed:", error);
-            throw new ApiError(500, "Error liking feed");
-        }
-    }
-
     async getListFeeds(username) {
         try {
-            const query = `SELECT * FROM feed where active=1`;
-            const result = await this.db.request()
-                .query(query);
-            return result.recordset;
+            const result = await this.feed.findAll({
+                attributes: ["id", "username"],
+                where: { active: 1 },
+            });
+            return result.map((item) => item.dataValues);
         } catch (error) {
             console.error("Error getting list feeds:", error);
             throw new ApiError(500, "Error getting list feeds");
         }
     }
 
-    async getTotalLike(feed_id) {
-        try {
-            const query = `SELECT COUNT(*) AS totalLike FROM likes WHERE feedId = @feedId`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feed_id)
-                .query(query);
-            return result.recordset[0].totalLike;
-        } catch (error) {
-            console.error("Error getting total likes:", error);
-            throw new ApiError(500, "Error getting total likes");
-        }
-    }
-
-    async getTotalRepost(feed_id) {
-        try {
-            const query = `SELECT COUNT(*) AS totalReposts FROM reposts WHERE feedId = @feedId`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feed_id)
-                .query(query);
-            return result.recordset[0].totalReposts;
-        } catch (error) {
-            console.error("Error getting total likes:", error);
-            throw new ApiError(500, "Error getting total repost");
-        }
-    }
-
     async getTotalComment(feed_id) {
         try {
-            const query = `SELECT COUNT(*) AS totalComments FROM feed WHERE commentOfPost = @feedId`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feed_id)
-                .query(query);
-            return result.recordset[0].totalComments;
+            const result = await this.feed.count({
+                where: { commentOfPost: feed_id },
+            });
+            return result;
         } catch (error) {
             console.error("Error getting total comments:", error);
             throw new ApiError(500, "Error getting total comments");
@@ -100,72 +61,36 @@ class FeedRepository {
 
     async getOwner(feed_id) {
         try {
-            const query = `select a.username, u.userId as id, a.isOnline from accounts a join users u on a.userId=u.userId join feed f on f.username = a.username where f.id = @feedId`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feed_id)
-                .query(query);
-            return result.recordset[0];
+            const result = await this.feed.findOne({
+                include: [
+                    {
+                        model: db.accounts,
+                        attributes: ["username", "isOnline", "avatar"],
+                        include: [
+                            {
+                                model: db.users,
+                                as: "user",
+                                attributes: ["userId"],
+                            },
+                        ],
+                    },
+                ],
+                attributes: [],
+                where: { id: feed_id },
+            });
+            return result;
         } catch (error) {
             console.error("Error getting feed owner:", error);
             throw new ApiError(500, "Error getting feed owner");
         }
     }
 
-    async rePostFeed(feedId, username, mode) {
-        try {
-            let query;
-            if (mode === "add") {
-                query = `INSERT INTO reposts ( username, feedId) VALUES (@username, @feedId)`;
-            } else if (mode === "minus") {
-                query = `DELETE FROM reposts WHERE username = @username AND feedId = @feedId`;
-            }
-
-            await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return true;
-        } catch (error) {
-            console.error("Error reposting feed:", error);
-            throw new ApiError(500, "Error reposting feed");
-        }
-    }
-
-    async isLike(feedId, username) {
-        try {
-            const query = `SELECT COUNT(*) AS isLiked FROM likes WHERE feedId = @feedId AND username = @username`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return result.recordset[0].isLiked > 0;
-        } catch (error) {
-            console.error("Error checking if feed is liked:", error);
-            throw new ApiError(500, "Error checking if feed is liked");
-        }
-    }
-
-    async isRePost(feedId, username) {
-        try {
-            const query = `SELECT COUNT(*) AS isRePosted FROM reposts WHERE feedId = @feedId AND username = @username`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return result.recordset[0].isRePosted > 0;
-        } catch (error) {
-            console.error("Error checking if feed is reposted:", error);
-            throw new ApiError(500, "Error checking if feed is reposted");
-        }
-    }
-
     async getListSaveFeedsByUserName(username) {
         try {
-            const query = `SELECT * FROM feed WHERE username = @username and active=0`;
-            const result = await this.db.request()
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return result.recordset;
+            const result = await this.feed.findAll({
+                where: { username: username, active: 0 },
+            });
+            return result.map((item) => item.dataValues);
         } catch (error) {
             console.error("Error getting list feeds:", error);
             throw new ApiError(500, "Error getting list feeds");
@@ -174,11 +99,11 @@ class FeedRepository {
 
     async deleteFeedById(feedId) {
         try {
-            const query = `
-            DELETE FROM feed WHERE id = @feedId`;
-            await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .query(query);
+            const result = await this.feed.destroy({ where: { id: feedId } });
+            if (result[0] === 0) {
+                throw new ApiError(404, "Feed not found");
+            }
+            return true; // number of rows deleted
         } catch (error) {
             console.error("Error deleting feed by ID:", error);
             throw new ApiError(500, "Error deleting feed by ID");
@@ -187,11 +112,8 @@ class FeedRepository {
 
     async getFeedById(feedId) {
         try {
-            const query = `SELECT * FROM feed WHERE id = @feedId`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .query(query);
-            return result.recordset[0];
+            const result = await this.feed.findOne({ where: { id: feedId } });
+            return result ? result.dataValues : null;
         } catch (error) {
             console.error("Error getting feed by ID:", error);
             throw new ApiError(500, "Error getting feed by ID");
@@ -200,24 +122,24 @@ class FeedRepository {
 
     async getListCommentFeedId(feedId) {
         try {
-            const query = `SELECT id FROM feed WHERE commentOfPost = @feedId`;
-            const result = await this.db.request()
-                .input("feedId", sql.VarChar, feedId)
-                .query(query);
-            return result.recordset;
+            const result = await this.feed.findAll({
+                attributes: ["id", "username"],
+                where: { commentOfPost: feedId, active: 1 },
+            });
+            return result.map((item) => item.dataValues);
         } catch (error) {
             console.error("Error getting list comment by feed ID:", error);
             throw new ApiError(500, "Error getting list comment by feed ID");
         }
     }
 
-    async getMyFeeds(username) {
+    async getListFeedsByUsername(username) {
         try {
-            const query = `SELECT id FROM feed where active=1 AND username = @username`;
-            const result = await this.db.request()
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return result.recordset;
+            const result = await this.feed.findAll({
+                attributes: ["id", "username"],
+                where: { active: 1, username: username },
+            });
+            return result.map((item) => item.dataValues);
         } catch (error) {
             console.error("Error getting list feeds:", error);
             throw new ApiError(500, "Error getting list feeds");
@@ -226,27 +148,16 @@ class FeedRepository {
 
     async getListFavoritePostsByUserName(username) {
         try {
-            const query = `SELECT * FROM likes WHERE username = @username`;
-            const result = await this.db.request()
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return result.recordset;
+            console.log(username);
+            const result = await this.feed.findAll({
+                include: [{ model: db.likes, as: 'likes', attributes: [], where: { username: username } }],
+                attributes: ['id', 'username'],
+                where: { active: 1 },
+            });
+            return result.map((item) => item.dataValues);
         } catch (error) {
             console.error("Error getting list feeds:", error);
             throw new ApiError(500, "Error getting list favorite feeds");
-        }
-    }
-
-    async getListSavedPostsByUserName(username) {
-        try {
-            const query = `SELECT * FROM save_feed WHERE username = @username`;
-            const result = await this.db.request()
-                .input("username", sql.VarChar, username)
-                .query(query);
-            return result.recordset;
-        } catch (error) {
-            console.error("Error getting list feeds:", error);
-            throw new ApiError(500, "Error getting list saved feeds");
         }
     }
 }

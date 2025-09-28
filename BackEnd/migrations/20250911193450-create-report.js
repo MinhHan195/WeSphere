@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('report', {
+    await queryInterface.createTable('reports', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4, // Sequelize tự sinh UUID v4
@@ -31,11 +31,12 @@ module.exports = {
       },
       timeCreate: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('report');
+    await queryInterface.dropTable('reports');
   }
 };

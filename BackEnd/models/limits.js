@@ -10,11 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      limits.belongsTo(models.accounts, { foreignKey: 'limiter_username', targetKey: 'username' });
-      limits.belongsTo(models.accounts, { foreignKey: 'limited_username', targetKey: 'username' });
+      limits.belongsTo(models.accounts, { as: 'limiter', foreignKey: 'limiter_username', targetKey: 'username' });
+      limits.belongsTo(models.accounts, { as: 'limited', foreignKey: 'limited_username', targetKey: 'username' });
     }
   }
   limits.init({
+    limit_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
     limiter_username: DataTypes.STRING(30),
     limited_username: DataTypes.STRING(30)
   }, {

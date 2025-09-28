@@ -3,13 +3,13 @@ const SQL = require("../utils/sqlserver.util");
 const feedRepository = require("../repository/feed.repository");
 const mediaRepository = require("../repository/media.repository");
 const rePostRepository = require("../repository/repost.repository");
-const fs = require('fs');
+const likesRepository = require("../repository/likes.repository");
+const fs = require("fs");
 
-exports.createFeed = async (data, mediaFiles, username) => {
-
+exports.createFeed = async (data, mediaFiles) => {
     const CloudinaryRepsitory = new cloudinaryRepsitory();
-    const FeedRepository = new feedRepository(SQL.client);
-    const MediaRepository = new mediaRepository(SQL.client);
+    const FeedRepository = new feedRepository();
+    const MediaRepository = new mediaRepository();
     let listMedia = [];
     for (const file of mediaFiles) {
         const type = file.mimetype.split("/")[0];
@@ -24,13 +24,13 @@ exports.createFeed = async (data, mediaFiles, username) => {
             listMedia.push(result);
             fs.unlinkSync(file.path);
         }
-    };
+    }
 
     if (data.listImageTmp.length > 0) {
         listMedia = [...listMedia, ...data.listImageTmp];
     }
 
-    const feedId = await FeedRepository.createFeed(data, username);
+    const feedId = await FeedRepository.createFeed(data);
     for (const media of listMedia) {
         await MediaRepository.addMediaToFeed(feedId, media);
     }
@@ -40,57 +40,82 @@ exports.createFeed = async (data, mediaFiles, username) => {
         await FeedRepository.deleteFeedById(data.id);
     }
     return true;
-}
+};
 
 exports.likeFeed = async (mode, feedId, username) => {
-    const FeedRepository = new feedRepository(SQL.client);
-    const result = await FeedRepository.likeFeed(mode, feedId, username);
+    const LikesRepository = new likesRepository();
+    const result = await LikesRepository.likeFeed(mode, feedId, username);
     return result;
-}
+};
 
 exports.getListFeeds = async (username) => {
     let listFeeds = [];
-    const FeedRepository = new feedRepository(SQL.client);
-    const MediaRepository = new mediaRepository(SQL.client);
-
+    let result = {};
+    const FeedRepository = new feedRepository();
     const feeds = await FeedRepository.getListFeeds(username);
     for (const feedItem of feeds) {
-        feedItem.content = JSON.parse(feedItem.content);
-        const media = await MediaRepository.getListMediasByFeedId(feedItem.id);
-        feedItem.listImages = media;
+        result = await this.getFeed(feedItem.id, feedItem.username);
+        listFeeds.push(result);
+    }
+    return listFeeds.reverse();
+};
 
-        const totalLike = await FeedRepository.getTotalLike(feedItem.id);
-        feedItem.totalLike = totalLike;
+exports.getFeed = async (feedId, username) => {
+    const FeedRepository = new feedRepository();
+    const MediaRepository = new mediaRepository();
+    const RePostRepository = new rePostRepository();
+    const LikesRepository = new likesRepository();
+    let results = {};
+    const mainFeed = await FeedRepository.getFeedById(feedId);
+    if (mainFeed) {
+        mainFeed.content = JSON.parse(mainFeed.content);
 
-        const totalReposts = await FeedRepository.getTotalRepost(feedItem.id);
-        feedItem.totalReposts = totalReposts;
+        const media = await MediaRepository.getListMediasByFeedId(mainFeed.id);
+        mainFeed.listImages = media;
 
-        const totalComment = await FeedRepository.getTotalComment(feedItem.id);
-        feedItem.totalComment = totalComment;
+        const totalLike = await LikesRepository.getTotalLike(mainFeed.id);
+        mainFeed.totalLike = totalLike;
 
-        const owner = await FeedRepository.getOwner(feedItem.id);
-        const isLike = await FeedRepository.isLike(feedItem.id, username);
-        const isRePost = await FeedRepository.isRePost(feedItem.id, username);
-        let item = {
-            feed: feedItem,
-            feedOwner: owner,
-            state: {
-                isLike: isLike,
-                isRePost: isRePost
-            }
+        const totalReposts = await RePostRepository.getTotalRepost(mainFeed.id);
+        mainFeed.totalReposts = totalReposts;
+
+        const totalComment = await FeedRepository.getTotalComment(mainFeed.id);
+        mainFeed.totalComment = totalComment;
+        results.feed = mainFeed;
+        const owner = await FeedRepository.getOwner(mainFeed.id);
+        const dataOwner = {
+            username: owner.dataValues.account.dataValues.username,
+            id: owner.dataValues.account.dataValues.user.dataValues.userId,
+            isOnline:
+                owner.dataValues.account.dataValues.isOnline === 1
+                    ? true
+                    : false,
+            avatar: owner.dataValues.account.dataValues.avatar,
         };
-        listFeeds.push(item);
+        const isLike = await LikesRepository.isLike(mainFeed.id, username);
+        const isRePost = await RePostRepository.isRePost(mainFeed.id, username);
+        results.state = {
+            isLike: isLike,
+            isRePost: isRePost,
+        };
 
+        results.feedOwner = dataOwner;
     }
 
-    return listFeeds.reverse();
-}
+    return results;
+};
 
 exports.rePostFeed = async (feedId, username, mode) => {
-    const FeedRepository = new feedRepository(SQL.client);
-    const result = await FeedRepository.rePostFeed(feedId, username, mode);
+    const RePostRepository = new rePostRepository();
+    let result;
+    if (mode === "add") {
+        result = await RePostRepository.rePostFeed(feedId, username, mode);
+    }
+    else if (mode === "minus") {
+        result = await RePostRepository.unRePostFeed(feedId, username);
+    }
     return result;
-}
+};
 
 exports.getSavedFeeds = async (username) => {
     let listFeeds = [];
@@ -107,42 +132,7 @@ exports.getSavedFeeds = async (username) => {
         listFeeds.push(item);
     }
     return listFeeds;
-}
-
-exports.getFeed = async (feedId, username) => {
-    const FeedRepository = new feedRepository(SQL.client);
-    const MediaRepository = new mediaRepository(SQL.client);
-    let results = {};
-    const mainFeed = await FeedRepository.getFeedById(feedId);
-    if (mainFeed) {
-        mainFeed.content = JSON.parse(mainFeed.content);
-
-        const media = await MediaRepository.getListMediasByFeedId(mainFeed.id);
-        mainFeed.listImages = media;
-
-        const totalLike = await FeedRepository.getTotalLike(mainFeed.id);
-        mainFeed.totalLike = totalLike;
-
-        const totalReposts = await FeedRepository.getTotalRepost(mainFeed.id);
-        mainFeed.totalReposts = totalReposts;
-
-        const totalComment = await FeedRepository.getTotalComment(mainFeed.id);
-        mainFeed.totalComment = totalComment;
-        results.feed = mainFeed;
-        const owner = await FeedRepository.getOwner(mainFeed.id);
-        owner.isOnline = owner.isOnline === 1 ? true : false;
-        const isLike = await FeedRepository.isLike(mainFeed.id, username);
-        const isRePost = await FeedRepository.isRePost(mainFeed.id, username);
-        results.state = {
-            isLike: isLike,
-            isRePost: isRePost,
-        }
-
-        results.feedOwner = owner;
-    }
-
-    return results;
-}
+};
 
 exports.getFeedDetail = async (feedId, username) => {
     const FeedRepository = new feedRepository(SQL.client);
@@ -160,20 +150,20 @@ exports.getFeedDetail = async (feedId, username) => {
     mainFeed.listComments = listComment;
 
     return mainFeed;
-}
+};
 
 exports.getListFeedsByUser = async (username) => {
     const FeedRepository = new feedRepository(SQL.client);
-    const feeds = await FeedRepository.getMyFeeds(username);
+    const feeds = await FeedRepository.getListFeedsByUsername(username);
     let listfeed = [];
     for (const item of feeds) {
-        const feed = await this.getFeed(item.id, username);
+        const feed = await this.getFeed(item.id, item.username);
         if (feed) {
             listfeed.push(feed);
         }
     }
     return listfeed;
-}
+};
 
 exports.getListMediasByUser = async (username) => {
     const MediaRepository = new mediaRepository(SQL.client);
@@ -186,7 +176,7 @@ exports.getListMediasByUser = async (username) => {
         }
     }
     return listFeeds;
-}
+};
 
 exports.getListRePostsByUser = async (username) => {
     const RePostRepository = new rePostRepository(SQL.client);
@@ -201,31 +191,36 @@ exports.getListRePostsByUser = async (username) => {
                     timeCreate: item.timeCreate,
                 },
                 ...feed,
-            }
+            };
             listFeeds.push(data);
         }
     }
     return listFeeds;
-}
+};
 
 exports.getListFavoritePostsByUser = async (username) => {
-    const FeedRepository = new feedRepository(SQL.client);
-    const favoritePosts = await FeedRepository.getListFavoritePostsByUserName(username);
+    const FeedRepository = new feedRepository();
+    const favoritePosts = await FeedRepository.getListFavoritePostsByUserName(
+        username
+    );
     let listFeeds = [];
+    console.log(favoritePosts);
     for (const item of favoritePosts) {
-        const feed = await this.getFeed(item.feedId, username);
+        const feed = await this.getFeed(item.id, item.username);
         listFeeds.push(feed);
     }
     return listFeeds;
-}
+};
 
 exports.getListSavedPostsByUser = async (username) => {
     const FeedRepository = new feedRepository(SQL.client);
-    const savedPosts = await FeedRepository.getListSavedPostsByUserName(username);
+    const savedPosts = await FeedRepository.getListSavedPostsByUserName(
+        username
+    );
     let listFeeds = [];
     for (const item of savedPosts) {
         const feed = await this.getFeed(item.feedId, username);
         listFeeds.push(feed);
     }
     return listFeeds;
-}
+};

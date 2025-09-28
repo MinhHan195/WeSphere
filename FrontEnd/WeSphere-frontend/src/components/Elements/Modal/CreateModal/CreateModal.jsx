@@ -190,6 +190,7 @@ const CreateModal = () => {
             setSubmitLoading(true);
             const formData = new FormData();
             const data = JSON.stringify(content);
+            console.log(data);
             if (id) {
                 formData.append("id", id);
             }

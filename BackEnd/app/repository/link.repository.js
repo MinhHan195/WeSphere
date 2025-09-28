@@ -1,35 +1,67 @@
-const sql = require("mssql");
+const db = require('../../models');
 
 class LinkRepository {
-    constructor(client) {
-        this.db = client;
+    constructor() {
+        this.links = db.links;
     }
 
     async getListLinks(username) {
-        const query = "select * from links where username = @username";
-        const result = await this.db.request()
-            .input("username", sql.VarChar, username)
-            .query(query);
-        return result.recordset;
+        try {
+            const result = await this.links.findAll({ where: { username: username } });
+            return result;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Lỗi hệ thống");
+        }
     }
 
     async createLink(link, username) {
-        const query = "INSERT INTO links (username, title, url) VALUES (@username, @title, @url)";
-        await this.db.request()
-            .input("username", sql.VarChar, username)
-            .input("title", sql.VarChar, link.title)
-            .input("url", sql.VarChar, link.url)
-            .query(query);
+        try {
+            const result = await this.links.create({
+                username: username,
+                title: link.title,
+                url: link.url
+            });
+            console.log(result);
+            return result.dataValues;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Lỗi hệ thống");
+        }
     }
 
     async updateLink(link) {
-        const query = "UPDATE links SET title = @title, url = @url WHERE link_id = @linkId AND username = @username";
-        await this.db.request()
-            .input("linkId", sql.Int, link.link_id)
-            .input("username", sql.VarChar, link.username)
-            .input("title", sql.VarChar, link.title)
-            .input("url", sql.VarChar, link.url)
-            .query(query);
+        try {
+            const result = await this.links.update(
+                {
+                    title: link.title,
+                    url: link.url
+                },
+                {
+                    where: {
+                        link_id: link.link_id,
+                        username: link.username
+                    }
+                }
+            );
+            if (result[0] === 0) {
+                throw new ApiError(404, "Link not found or no changes made");
+            }
+            return result[0];
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Lỗi hệ thống");
+        }
+    }
+
+    async deleteLinksByUsername(username) {
+        try {
+            const result = await this.links.destroy({ where: { username: username } });
+            return result;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Lỗi hệ thống");
+        }
     }
 
 }

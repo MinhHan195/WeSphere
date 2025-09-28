@@ -1,9 +1,9 @@
 const SQL = require("../utils/sqlserver.util");
 
-const movieRepository = require("../repository/movie.repository");
+const MovieRateRepository = require("../repository/movie_rate.repository");
 exports.rate = async (userId, movie_id, rate) => {
-    const MovieRepository = new movieRepository(SQL.client);
-    const result = await MovieRepository.rateMovie(userId, movie_id, rate);
+    const movieRateRepository = new MovieRateRepository();
+    const result = await movieRateRepository.rateMovie(userId, movie_id, rate);
     return result;
 }
 

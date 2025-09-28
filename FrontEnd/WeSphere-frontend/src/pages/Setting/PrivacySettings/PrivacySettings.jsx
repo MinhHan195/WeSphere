@@ -73,7 +73,7 @@ const PrivacySettings = () => {
     const fectListBlockUser = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getListUserBlock(user.username);
+            const res = await $api.auth.getListUserBlock();
             if (!res.isError) {
                 console.log(res);
                 dispatch(setLoading(false));
@@ -94,9 +94,8 @@ const PrivacySettings = () => {
     const fectListLimitUser = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getListUserLimit(user.username);
+            const res = await $api.auth.getListUserLimit();
             if (!res.isError) {
-                console.log(res);
                 dispatch(setLoading(false));
                 return res.result;
             }

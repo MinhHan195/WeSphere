@@ -20,7 +20,7 @@ exports.updateUser = async (req, res, next) => {
 
 exports.getListUserBlock = async (req, res, next) => {
     try {
-        const username = req.params.username;
+        const username = req.user.UserName;
         const blockedUsers = await authService.getListUserBlock(username);
         return res.send({
             isError: false,
@@ -34,7 +34,7 @@ exports.getListUserBlock = async (req, res, next) => {
 
 exports.getListUserLimit = async (req, res, next) => {
     try {
-        const username = req.params.username;
+        const username = req.user.UserName;
         const limitedUsers = await authService.getListUserLimit(username);
         return res.send({
             isError: false,

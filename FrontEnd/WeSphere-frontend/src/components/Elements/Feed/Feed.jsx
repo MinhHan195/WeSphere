@@ -18,7 +18,7 @@ const Feed = (props) => {
     const [isRePost, setIsRePost] = useState(data.state.isRePost);
     const [totalLike, setTotalLike] = useState(data.feed.totalLike);
     const [totalReposts, setTotalReposts] = useState(data.feed.totalReposts);
-    // feed( id, content, tag, listImages, totalLike, privacy, totalComment, totalReposts, totalShare, timeCreate, commentOfPost), feedOwner (username, id, isOnline),
+    // feed( id, content, tag, listImages, totalLike, privacy, totalComment, totalReposts, totalShare, timeCreate, commentOfPost), feedOwner (username, id, avatar,  isOnline),
 
     const handleHeartClick = async (e) => {
         e.stopPropagation();
@@ -100,7 +100,11 @@ const Feed = (props) => {
                             >
                                 <img
                                     className="object-fit-cover w-100 h-100"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4YreOWfDX3kK-QLAbAL4ufCPc84ol2MA8Xg&s"
+                                    src={
+                                        data.feedOwner.avatar
+                                            ? data.feedOwner.avatar
+                                            : "/default_avatar.jpg"
+                                    }
                                     alt=""
                                 />
                             </div>

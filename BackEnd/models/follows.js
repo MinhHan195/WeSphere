@@ -10,8 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   follows.init({
-    follower_username: DataTypes.STRING(30),
-    following_username: DataTypes.STRING(30)
+    follower_username: {
+      type: DataTypes.STRING(30),
+      primaryKey: true
+    },
+    following_username: {
+      type: DataTypes.STRING(30),
+      primaryKey: true
+    }
   }, {
     sequelize,
     modelName: 'follows',

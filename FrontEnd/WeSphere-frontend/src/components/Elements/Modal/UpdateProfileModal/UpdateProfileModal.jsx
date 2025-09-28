@@ -165,11 +165,24 @@ const UpdateProfileModal = (props) => {
         try {
             setLoading(true);
             const payload = new FormData();
-            payload.append("bio", tempBio);
-            payload.append("phone", phone);
-            payload.append("gender", gender);
-            payload.append("privateMode", privateMode);
-            payload.append("listLinks", JSON.stringify(listLinks));
+            tempBio.trim() === user.bio.trim()
+                ? null
+                : payload.append("bio", tempBio.trim());
+
+            phone.trim() === user.phone.trim()
+                ? null
+                : payload.append("phone", phone);
+
+            gender === user.gender ? null : payload.append("gender", gender);
+
+            privateMode === (user.privateMode == 1 || false)
+                ? null
+                : payload.append("privateMode", privateMode);
+
+            JSON.stringify(listLinks) === JSON.stringify(user.listLinks)
+                ? null
+                : payload.append("listLinks", JSON.stringify(listLinks));
+
             payload.append("publicId", user.publicId);
             if (fileAvatar) {
                 payload.append("file", fileAvatar);
@@ -179,7 +192,6 @@ const UpdateProfileModal = (props) => {
 
             const res = await $api.auth.updateUser(payload);
             if (!res.isError) {
-                // setListLinks(res.result.listLinks);
                 dispatch(
                     setAlert({
                         message: res.message,

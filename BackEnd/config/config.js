@@ -11,7 +11,8 @@ module.exports = {
             options: {
                 encrypt: false
             }
-        }
+        },
+        logging: false
     }
 
 }

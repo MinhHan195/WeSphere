@@ -23,15 +23,15 @@ router.route("/updatePrivateMode/:username/:privateMode").patch(authController.u
 
 router.route("/updateOnlineStatus/:username/:onlineStatus").patch(authController.updateOnlineStatus);
 
-router.route("/ListUserBlock/:username").get(userController.getListUserBlock);
+router.route("/ListUserBlock").get(verifyToken, userController.getListUserBlock);
 
-router.route("/ListUserLimit/:username").get(userController.getListUserLimit);
+router.route("/ListUserLimit").get(verifyToken, userController.getListUserLimit);
 
 router.route("/removeLimitedUser/:limitedUsername/:ownerUsername").patch(userController.removeLimitedUser);
 
 router.route("/removeBlockedUser/:blockedUsername/:ownerUsername").patch(userController.removeBlockedUser);
 
-router.route("/deactivateAccount/:userId").patch(verifyToken, authController.deactivateAccount);
+router.route("/deactivateAccount").patch(verifyToken, authController.deactivateAccount);
 
 router.route("/deleteAccount").delete(verifyToken, authController.deleteAccount);
 
@@ -54,7 +54,7 @@ router.route("/deleteImage").post(async (req, res) => {
 })
 
 
-
+router.route("/test").post(verifyToken, authController.test);
 
 
 module.exports = router;
