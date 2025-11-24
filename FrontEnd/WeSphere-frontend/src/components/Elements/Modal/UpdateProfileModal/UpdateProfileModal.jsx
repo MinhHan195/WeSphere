@@ -23,7 +23,7 @@ const UpdateProfileModal = (props) => {
     // Biến trạng thái để lưu thông tin người dùng
     const [bio, setBio] = useState(user.bio || "Tiểu sử");
     const [phone, setPhone] = useState(user.phone || "");
-    const [gender, setGender] = useState(user.gender || "Chọn giới tính");
+    const [gender, setGender] = useState(user.gender || null);
     const [privateMode, setPrivateMode] = useState(
         user.privateMode == 1 || false
     );
@@ -404,7 +404,9 @@ const UpdateProfileModal = (props) => {
                                                 data-bs-toggle="dropdown"
                                                 aria-expanded="false"
                                             >
-                                                {gender}
+                                                {gender
+                                                    ? gender
+                                                    : "Chọn giới tính"}
                                             </button>
                                             <ul
                                                 className={`dropdown-menu ${style.dropdown_menu_custom}`}

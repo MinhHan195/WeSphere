@@ -16,7 +16,7 @@ class UserRepository {
             phone: payload.phone,
         };
         return Object.fromEntries(
-            Object.entries(object).filter(([_, value]) => value !== undefined)
+            Object.entries(object).filter(([_, value]) => value !== undefined && value !== 'null')
         );
     }
 
@@ -37,6 +37,7 @@ class UserRepository {
     async updateUser(data) {
         try {
             data = this.extractUserData(data);
+            console.log("Updating user with data:", data);
             const result = await this.users.update(data, { where: { userId: data.userId } });
             if (result[0] === 0) {
                 throw new ApiError(404, "Người dùng không tồn tại");
@@ -44,6 +45,7 @@ class UserRepository {
             const newUser = await this.getUserById(data.userId);
             return newUser.dataValues;
         } catch (error) {
+            console.log("Error updating user:", error);
             throw new ApiError(500, "Lỗi hệ thống!")
         }
     }

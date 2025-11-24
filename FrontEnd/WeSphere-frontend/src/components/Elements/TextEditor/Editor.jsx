@@ -4,6 +4,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import MentionPlugin from "../../../plugin/MentionPlugin/MentionPlugin";
 import { MentionNode } from "../../../plugin/MentionPlugin/MentionNode";
 import AutoLinkPlugin from "../../../plugin/LinkPlugin/AutoLinkPlugin";
@@ -22,7 +23,18 @@ function Editor({ onExport, json, editable, emoji, placeholder }) {
         namespace: "MyEditor",
         onError,
         nodes: [AutoLinkNode, MentionNode],
-        editorState: json ? JSON.stringify(json, null, 2) : null,
+        // editorState: json ? JSON.stringify(json, null, 2) : null,
+        editorState: json
+            ? JSON.stringify(json, null, 2)
+            : (editor) => {
+                  console.log(json);
+                  editor.update(() => {
+                      const root = $getRoot();
+                      const paragraph = $createParagraphNode();
+                      paragraph.append($createTextNode("")); // <-- tạo text node rỗng
+                      root.append(paragraph);
+                  });
+              },
         editable: editable,
     };
 
@@ -33,11 +45,12 @@ function Editor({ onExport, json, editable, emoji, placeholder }) {
                     contentEditable={
                         <ContentEditable
                             className={style.editor_input}
-                            aria-placeholder={"Enter some text..."}
                             placeholder={
-                                <div className={style.placeholder}>
-                                    {placeholder ?? "Có gì mới?"}
-                                </div>
+                                editable ? (
+                                    <div className={style.placeholder}>
+                                        {placeholder ?? "Có gì mới?"}
+                                    </div>
+                                ) : null
                             }
                         />
                     }

@@ -2,7 +2,7 @@ const express = require("express");
 const authController = require("../controllers/auth.controller")
 const userController = require("../controllers/user.controller");
 const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/multerPictureMiddleware");
+const upload = require("../middleware/multerMediaFeedMiddleware");
 const cloudinaryRepsitory = require("../repository/cloudinary.respository");
 
 const router = express.Router();

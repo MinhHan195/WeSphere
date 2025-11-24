@@ -120,14 +120,17 @@ exports.updateUser = async (data, file) => {
             result = await CloudinaryRepsitory.updateImage(file, data.publicId);
         }
         else {
-            result = await CloudinaryRepsitory.uploadImageBuffer(file);
+            result = await CloudinaryRepsitory.uploadImagePath(file);
         }
 
         data.avatar = result.url;
         data.publicId = result.publicId;
     }
 
+
+
     const updateAccount = await AccountRepository.updateAccount(data);
+    // console.log(updateAccount);
     const updateUser = await UserRepository.updateUser(data);
 
     let listLinks = await LinkRepository.getListLinks(data.username);
@@ -196,7 +199,6 @@ exports.deactivateAccount = async (username) => {
 }
 
 exports.deleteAccount = async (AuthUsername, data) => {
-    console.log(data);
 
     const AccountRepository = new accountRepository();
     const UserRepository = new userRepository();

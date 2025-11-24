@@ -133,7 +133,12 @@ const Feed = (props) => {
                             </span>
                         </div>
                     </div>
-                    <Editor json={data.feed.content} editable={false} />
+                    {data.feed.content.root.children.length === 1 &&
+                    data.feed.content.root.children[0].children.length ===
+                        0 ? null : (
+                        <Editor json={data.feed.content} editable={false} />
+                    )}
+
                     <ShowMedia
                         listImage={data.feed.listImages}
                         preview={false}

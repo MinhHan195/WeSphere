@@ -4,7 +4,7 @@ const feedRepository = require("../repository/feed.repository");
 const mediaRepository = require("../repository/media.repository");
 const rePostRepository = require("../repository/repost.repository");
 const likesRepository = require("../repository/likes.repository");
-const fs = require("fs");
+const fs = require("fs").promises;
 
 exports.createFeed = async (data, mediaFiles) => {
     const CloudinaryRepsitory = new cloudinaryRepsitory();
@@ -17,12 +17,12 @@ exports.createFeed = async (data, mediaFiles) => {
         if (type === "image") {
             result = await CloudinaryRepsitory.uploadImagePath(file);
         } else if (type === "video") {
-            result = await CloudinaryRepsitory.uploadVideo(file);
+            result = await CloudinaryRepsitory.uploadVideoPath(file);
         }
         if (result) {
             result.type = type;
             listMedia.push(result);
-            fs.unlinkSync(file.path);
+            await fs.unlink(file.path);
         }
     }
 

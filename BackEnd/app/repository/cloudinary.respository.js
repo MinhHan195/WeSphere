@@ -55,19 +55,22 @@ class CloudinaryRepsitory {
     }
 
     async updateImage(file, publicId) {
+
         try {
             const delResult = await this.deleteImage(publicId);
+            console.log("Delete result:", delResult);
             if (delResult.result !== "ok") {
                 throw new ApiError(500, "Error deleting old image from Cloudinary");
             }
-            const uploadResult = await this.uploadImage(file);
+            const uploadResult = await this.uploadImagePath(file);
             return uploadResult;
         } catch (error) {
+            console.log("Error updating image:", error);
             throw new ApiError(500, "Error updating image in Cloudinary");
         }
     }
 
-    async uploadVideo(file) {
+    async uploadVideoPath(file) {
         try {
             const path = file.path;
             return new Promise((resolve, reject) => {

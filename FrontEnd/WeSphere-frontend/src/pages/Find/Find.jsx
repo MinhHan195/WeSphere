@@ -6,135 +6,158 @@ import FilmCard from "./FilmCard/FilmCard";
 import FeedCard from "./FeedCard/FeedCard";
 import style from "./Find.module.css";
 const Find = () => {
-    const data = [
-        {
-            fullname: "khoai lang thang",
-            username: "khoailangthang",
-            email: "contact@52hzmedia.com",
-            totalFollowers: 12400000,
-            isFollowing: false,
-            avatar: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp",
-        },
-        {
-            fullname: "Fahoka",
-            username: "fahoka",
-            email: "fahoka@example.com",
-            totalFollowers: 500000,
-            isFollowing: true,
-            avatar: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp",
-        },
-        {
-            title: "Marvel Ironheart",
-            actor: "Chinaka Hodge",
-            id: "689d2df231af8d4cfc112716",
-            poster: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp",
-        },
-        {
-            feed: {
-                id: "689b94b7574cfc46cc5c3eda",
-                content: {
-                    root: {
-                        children: [
-                            {
-                                children: [
-                                    {
-                                        detail: 0,
-                                        format: 0,
-                                        mode: "normal",
-                                        style: "",
-                                        text: "Xin chào ",
-                                        type: "text",
-                                        version: 1,
-                                    },
-                                ],
-                                direction: "ltr",
-                                format: "",
-                                indent: 0,
-                                type: "paragraph",
-                                version: 1,
-                                textFormat: 0,
-                                textStyle: "",
-                            },
-                        ],
-                        direction: "ltr",
-                        format: "",
-                        indent: 0,
-                        type: "root",
-                        version: 1,
-                    },
-                },
-                tag: "love",
-                privateMode: "Công khai",
-                username: "bn.ngoc",
-                commentOfPost: null,
-                timeCreate: "2025-08-13T02:23:35.430Z",
-                active: true,
-                listImages: [
-                    {
-                        url: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755026601/WeSphere/ynbwtshdv6sm7fqrjpod.jpg",
-                        type: "image",
-                        publicId: "WeSphere/ynbwtshdv6sm7fqrjpod",
-                    },
-                    {
-                        url: "https://res.cloudinary.com/dcgog8pcw/video/upload/v1755026615/WeSphere/lnjylyo0xdhbvsuhrnpw.mp4",
-                        type: "video",
-                        publicId: "WeSphere/lnjylyo0xdhbvsuhrnpw",
-                    },
-                ],
-                totalLike: 1,
-                totalReposts: 1,
-                totalComment: 14,
-            },
-            feedOwner: {
-                username: "bn.ngoc",
-                id: "68990d2193bcb5236e36c18e",
-                isOnline: false,
-            },
-            state: {
-                isLike: true,
-                isRePost: true,
-            },
-        },
-    ];
-
+    // const data = [
+    //     {
+    //         fullname: "khoai lang thang",
+    //         username: "khoailangthang",
+    //         email: "contact@52hzmedia.com",
+    //         totalFollowers: 12400000,
+    //         isFollowing: false,
+    //         avatar: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp",
+    //     },
+    //     {
+    //         fullname: "Fahoka",
+    //         username: "fahoka",
+    //         email: "fahoka@example.com",
+    //         totalFollowers: 500000,
+    //         isFollowing: true,
+    //         avatar: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp",
+    //     },
+    //     {
+    //         title: "Marvel Ironheart",
+    //         actor: "Chinaka Hodge",
+    //         id: "689d2df231af8d4cfc112716",
+    //         poster: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755131100/e29c0fe492873043f31a5128dc98255d_q6bsve.webp",
+    //     },
+    //     {
+    //         feed: {
+    //             id: "689b94b7574cfc46cc5c3eda",
+    //             content: {
+    //                 root: {
+    //                     children: [
+    //                         {
+    //                             children: [
+    //                                 {
+    //                                     detail: 0,
+    //                                     format: 0,
+    //                                     mode: "normal",
+    //                                     style: "",
+    //                                     text: "Xin chào ",
+    //                                     type: "text",
+    //                                     version: 1,
+    //                                 },
+    //                             ],
+    //                             direction: "ltr",
+    //                             format: "",
+    //                             indent: 0,
+    //                             type: "paragraph",
+    //                             version: 1,
+    //                             textFormat: 0,
+    //                             textStyle: "",
+    //                         },
+    //                     ],
+    //                     direction: "ltr",
+    //                     format: "",
+    //                     indent: 0,
+    //                     type: "root",
+    //                     version: 1,
+    //                 },
+    //             },
+    //             tag: "love",
+    //             privateMode: "Công khai",
+    //             username: "bn.ngoc",
+    //             commentOfPost: null,
+    //             timeCreate: "2025-08-13T02:23:35.430Z",
+    //             active: true,
+    //             listImages: [
+    //                 {
+    //                     url: "https://res.cloudinary.com/dcgog8pcw/image/upload/v1755026601/WeSphere/ynbwtshdv6sm7fqrjpod.jpg",
+    //                     type: "image",
+    //                     publicId: "WeSphere/ynbwtshdv6sm7fqrjpod",
+    //                 },
+    //                 {
+    //                     url: "https://res.cloudinary.com/dcgog8pcw/video/upload/v1755026615/WeSphere/lnjylyo0xdhbvsuhrnpw.mp4",
+    //                     type: "video",
+    //                     publicId: "WeSphere/lnjylyo0xdhbvsuhrnpw",
+    //                 },
+    //             ],
+    //             totalLike: 1,
+    //             totalReposts: 1,
+    //             totalComment: 14,
+    //         },
+    //         feedOwner: {
+    //             username: "bn.ngoc",
+    //             id: "68990d2193bcb5236e36c18e",
+    //             isOnline: false,
+    //         },
+    //         state: {
+    //             isLike: true,
+    //             isRePost: true,
+    //         },
+    //     },
+    // ];
+    const [data, setData] = useState([]);
     const [keyword, setKeyword] = useState("");
-    const [filteredData, setFilteredData] = useState(data);
+
+    // useEffect(() => {
+    //     if (!keyword.trim()) {
+    //         setFilteredData(data);
+    //         return;
+    //     }
+    //     const lowerKeyword = keyword.toLowerCase();
+    //     setFilteredData(
+    //         data.filter((item) => {
+    //             // User
+    //             if (item.fullname || item.username) {
+    //                 return (
+    //                     item.fullname?.toLowerCase().includes(lowerKeyword) ||
+    //                     item.username?.toLowerCase().includes(lowerKeyword)
+    //                 );
+    //             }
+    //             // Film
+    //             if (item.title || item.actor) {
+    //                 return (
+    //                     item.title?.toLowerCase().includes(lowerKeyword) ||
+    //                     item.actor?.toLowerCase().includes(lowerKeyword)
+    //                 );
+    //             }
+    //             // Feed
+    //             if (item.feed) {
+    //                 return (
+    //                     item.feed.tag?.toLowerCase().includes(lowerKeyword) ||
+    //                     item.feedOwner?.username
+    //                         ?.toLowerCase()
+    //                         .includes(lowerKeyword)
+    //                 );
+    //             }
+    //             return false;
+    //         })
+    //     );
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [keyword]);
+
+    // const debounce = (keyword, delay) => {
+    //     let timeout;
+    //     return function (...args) {
+    //         clearTimeout(timeout);
+    //         timeout = setTimeout(() => keyword.apply(this, args), delay);
+    //     };
+    // };
+
+    const findData = async () => {
+        try {
+            if (!keyword.trim()) {
+                setData([]);
+                return;
+            }
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    };
 
     useEffect(() => {
-        if (!keyword.trim()) {
-            setFilteredData(data);
-            return;
-        }
-        const lowerKeyword = keyword.toLowerCase();
-        setFilteredData(
-            data.filter((item) => {
-                // User
-                if (item.fullname || item.username) {
-                    return (
-                        item.fullname?.toLowerCase().includes(lowerKeyword) ||
-                        item.username?.toLowerCase().includes(lowerKeyword)
-                    );
-                }
-                // Film
-                if (item.title || item.actor) {
-                    return (
-                        item.title?.toLowerCase().includes(lowerKeyword) ||
-                        item.actor?.toLowerCase().includes(lowerKeyword)
-                    );
-                }
-                // Feed
-                if (item.feed) {
-                    return (
-                        item.feed.tag?.toLowerCase().includes(lowerKeyword) ||
-                        item.feedOwner?.username
-                            ?.toLowerCase()
-                            .includes(lowerKeyword)
-                    );
-                }
-                return false;
-            })
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        const handler = setTimeout(() => findData(), 500);
+        return () => clearTimeout(handler);
     }, [keyword]);
 
     useEffect(() => {
@@ -170,7 +193,7 @@ const Find = () => {
                         <h6 className="mb-3">Kết quả tìm kiếm</h6>
 
                         <div className={`${style.list_custom}`}>
-                            {filteredData.map((item, idx) => {
+                            {data.map((item, idx) => {
                                 if (item.fullname || item.username) {
                                     return <UserCard data={item} key={idx} />;
                                 } else if (item.title || item.actor) {
