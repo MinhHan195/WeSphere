@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import style from "./Alert.module.css";
 import { setAlert } from "../../../redux/authSlide";
@@ -18,6 +18,15 @@ const Alert = (props) => {
             dispatch(setAlert({ message: "" })); // Clear the alert message
         }
     };
+
+    useEffect(() => {
+        if (props.show) {
+            const timer = setTimeout(() => {
+                closeAlert();
+            }, 10000);
+            return () => clearTimeout(timer);
+        }
+    }, [props.show]);
     return (
         <div
             className={`${style.alert_container} ${
