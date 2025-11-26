@@ -37,7 +37,6 @@ class UserRepository {
     async updateUser(data) {
         try {
             data = this.extractUserData(data);
-            console.log("Updating user with data:", data);
             const result = await this.users.update(data, { where: { userId: data.userId } });
             if (result[0] === 0) {
                 throw new ApiError(404, "Người dùng không tồn tại");

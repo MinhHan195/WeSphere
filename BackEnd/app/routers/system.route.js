@@ -1,5 +1,5 @@
 const express = require("express");
-const upload = require("../middleware/multerMediaFeedMiddleware");
+const upload = require("../middleware/multerMediaMiddleware");
 const systemController = require("../controllers/system.controller");
 const { verifyToken } = require("../middleware/authMiddleware");
 

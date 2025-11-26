@@ -72,10 +72,11 @@ const Feed = (props) => {
     };
 
     const createAt = () => {
-        return formatDistanceToNow(new Date(data.feed.timeCreate), {
+        const raw = formatDistanceToNow(new Date(data.feed.timeCreate), {
             addSuffix: true,
             locale: vi,
         });
+        return raw.replace(/^khoảng\s+/i, "");
     };
 
     const goToFeedDetail = () => {

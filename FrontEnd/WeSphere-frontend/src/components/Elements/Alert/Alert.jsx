@@ -1,22 +1,34 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import "./Alert.css";
+import style from "./Alert.module.css";
 import { setAlert } from "../../../redux/authSlide";
 const Alert = (props) => {
     const dispatch = useDispatch();
     const closeAlert = () => {
         // Logic to close the alert
-        const alertContainer = document.querySelector('.alert-container');
-        if (alertContainer && alertContainer.classList.contains('show-alert')) {
-            alertContainer.classList.remove('show-alert');
-            alertContainer.classList.add('hide-alert');
-            dispatch(setAlert({ message: '' })); // Clear the alert message
+        const alertContainer = document.querySelector(
+            `.${style.alert_container}`
+        );
+        if (
+            alertContainer &&
+            alertContainer.classList.contains(style.show_alert)
+        ) {
+            alertContainer.classList.remove(style.show_alert);
+            alertContainer.classList.add(`${style.hide_alert}`);
+            dispatch(setAlert({ message: "" })); // Clear the alert message
         }
     };
     return (
-        <div className={`alert-container ${props.show ? "show-alert" : "hide-alert"}`}>
-            <button type="button" className="btn-close btn-close-custom focus-ring focus-ring-light" onClick={closeAlert}></button>
-            <div className="btn-custom">
+        <div
+            className={`${style.alert_container} ${
+                props.show ? style.show_alert : style.hide_alert
+            }`}
+        >
+            <i
+                className={`bi bi-x-lg ${style.btn_close_custom}`}
+                onClick={closeAlert}
+            ></i>
+            <div className={style.btn_custom}>
                 <span>{props.message}</span>
             </div>
         </div>

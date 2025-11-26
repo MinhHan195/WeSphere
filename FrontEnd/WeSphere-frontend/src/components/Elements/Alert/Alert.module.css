@@ -1,4 +1,4 @@
-.alert-container {
+.alert_container {
     position: fixed;
     top: 86%;
     left: 1.5%;
@@ -8,28 +8,35 @@
     animation: slideIn 0.7s ease;
     z-index: 1100;
 }
-.btn-custom{
+.btn_custom{
     min-width: 100px;
     width: auto;
-    background-color: Black;
-    color: white;
+    background-color: var(--primary-button-color);
+    color: var(--background-color);
     border-radius: 10px;
     padding: 0.8rem 1rem;
     font-weight: 750;
 }
 
-.btn-close-custom{
-    font-size: 10px;
+.btn_close_custom{
+    font-size: 13px;
     position: relative;
+    color: var(--primary-button-color);
     left: 15px;
     top: -1px;
 }
 
-.hide-alert {
+.btn_close_custom:hover{
+    color: var(--secondary-text-color);
+    cursor: pointer;
+}
+
+
+.hide_alert {
     animation: slideOut 0.5s ease forwards;
 }
 
-.show-alert {
+.show_alert {
     animation: slideIn 0.5s ease forwards;
 }
 /* 

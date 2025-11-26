@@ -1,7 +1,7 @@
 const express = require("express");
 const feedController = require("../controllers/feed.controller");
 const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/multerMediaFeedMiddleware");
+const upload = require("../middleware/multerMediaMiddleware");
 const router = express.Router();
 
 router.route("/create").post(verifyToken, upload.array("file[]", 10), feedController.createFeed);

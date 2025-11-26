@@ -3,37 +3,37 @@ const ApiError = require("../api-error");
 const cloudinary = require("../config/cloudinary.config");
 
 class CloudinaryRepsitory {
-    async uploadImageBuffer(file) {
-        try {
-            const byteArrayBuffer = file.buffer;
-            return new Promise((resolve, reject) => {
-                cloudinary.uploader.upload_stream(
-                    { folder: "WeSphere", resource_type: "image" },
-                    (error, uploadResult) => {
-                        if (error) {
-                            return reject(new ApiError(500, "Error uploading image to Cloudinary"));
-                        }
-                        return resolve({
-                            publicId: uploadResult.public_id,
-                            url: uploadResult.secure_url
-                        });
-                    }
-                ).end(byteArrayBuffer);
-            })
-        } catch (error) {
-            throw error;
-        }
-    }
+    // async uploadImageBuffer(file) {
+    //     try {
+    //         const byteArrayBuffer = file.buffer;
+    //         return new Promise((resolve, reject) => {
+    //             cloudinary.uploader.upload_stream(
+    //                 { folder: "WeSphere", resource_type: "image" },
+    //                 (error, uploadResult) => {
+    //                     if (error) {
+    //                         return reject(new ApiError(500, "Error uploading image to Cloudinary"));
+    //                     }
+    //                     return resolve({
+    //                         publicId: uploadResult.public_id,
+    //                         url: uploadResult.secure_url
+    //                     });
+    //                 }
+    //             ).end(byteArrayBuffer);
+    //         })
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
     async uploadImagePath(file) {
         try {
             const path = file.path;
             const result = await cloudinary.uploader
                 .upload(path, { resource_type: "image", folder: "WeSphere" })
-                .then(result => {
+                .then((result) => {
                     return {
                         publicId: result.public_id,
-                        url: result.secure_url
+                        url: result.secure_url,
                     };
                 });
             if (result.publicId) {
@@ -46,7 +46,7 @@ class CloudinaryRepsitory {
 
     async deleteImage(publicId) {
         try {
-            return cloudinary.uploader.destroy(publicId).then(result => {
+            return cloudinary.uploader.destroy(publicId).then((result) => {
                 return result;
             });
         } catch (error) {
@@ -54,16 +54,35 @@ class CloudinaryRepsitory {
         }
     }
 
-    async updateImage(file, publicId) {
+    // async updateImage(file, publicId) {
 
+    //     try {
+    //         const delResult = await this.deleteImage(publicId);
+    //         console.log("Delete result:", delResult);
+    //         if (delResult.result !== "ok") {
+    //             throw new ApiError(500, "Error deleting old image from Cloudinary");
+    //         }
+    //         const uploadResult = await this.uploadImagePath(file);
+    //         return uploadResult;
+    //     } catch (error) {
+    //         console.log("Error updating image:", error);
+    //         throw new ApiError(500, "Error updating image in Cloudinary");
+    //     }
+    // }
+
+    async updateImage(file, publicId) {
         try {
-            const delResult = await this.deleteImage(publicId);
-            console.log("Delete result:", delResult);
-            if (delResult.result !== "ok") {
-                throw new ApiError(500, "Error deleting old image from Cloudinary");
-            }
-            const uploadResult = await this.uploadImagePath(file);
-            return uploadResult;
+            const result = await cloudinary.uploader.upload(file.path, {
+                public_id: publicId.replace(/^WeSphere\//, ''),
+                overwrite: true,
+                invalidate: true,
+                resource_type: "image",
+                folder: "WeSphere",
+            });
+            return {
+                publicId: result.public_id,
+                url: result.secure_url,
+            };
         } catch (error) {
             console.log("Error updating image:", error);
             throw new ApiError(500, "Error updating image in Cloudinary");
@@ -76,20 +95,27 @@ class CloudinaryRepsitory {
             return new Promise((resolve, reject) => {
                 cloudinary.uploader.upload_large(
                     path,
-                    { resource_type: "video", folder: "WeSphere", chunk_size: 52428800 },
+                    {
+                        resource_type: "video",
+                        folder: "WeSphere",
+                        chunk_size: 52428800,
+                    },
                     (error, uploadResult) => {
                         if (error) {
-                            return reject(new ApiError(500, "Error uploading video to Cloudinary"));
+                            return reject(
+                                new ApiError(
+                                    500,
+                                    "Error uploading video to Cloudinary"
+                                )
+                            );
                         }
                         return resolve({
                             publicId: uploadResult.public_id,
-                            url: uploadResult.secure_url
+                            url: uploadResult.secure_url,
                         });
                     }
                 );
-
-            })
-
+            });
         } catch (error) {
             throw error;
         }
