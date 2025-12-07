@@ -48,16 +48,16 @@ exports.likeFeed = async (mode, feedId, username) => {
     return result;
 };
 
-exports.getListFeeds = async (username) => {
+exports.getListFeeds = async (username, index) => {
     let listFeeds = [];
     let result = {};
     const FeedRepository = new feedRepository();
-    const feeds = await FeedRepository.getListFeeds(username);
+    const feeds = await FeedRepository.getListFeeds(username, index);
     for (const feedItem of feeds) {
         result = await this.getFeed(feedItem.id, feedItem.username);
         listFeeds.push(result);
     }
-    return listFeeds.reverse();
+    return listFeeds;
 };
 
 exports.getFeed = async (feedId, username) => {

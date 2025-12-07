@@ -6,8 +6,9 @@
 .home_main_dialog{
     width: 777px;
     max-width: 777px;
-    height: auto;
-    overflow-x: hidden;
+    height: 100vh;
+    overflow-x: auto;
+    scrollbar-width: none;
 }
 
 .avatar{
@@ -32,4 +33,8 @@
 .post_button{
     color: var(--primary-text-color) !important;
     border-color: var(--primary-border-color) !important;
+}
+
+.spinner{
+    color: var(--primary-text-color) !important;
 }

@@ -125,7 +125,7 @@ const Login = () => {
                         />
                     </div>
                     <div className={`${style.login_box} rounded-4`}>
-                        <h6 className="mb-4 fw-bold">Đăng nhập</h6>
+                        <h6 className="mb-4 fw-bold">Đăng nhập vào WeSphere</h6>
                         <form
                             onSubmit={(e) => submit(e)}
                             onKeyDown={(e) => {

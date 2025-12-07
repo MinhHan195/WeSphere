@@ -44,7 +44,8 @@ exports.likeHandler = async (req, res, next) => {
 exports.getListFeeds = async (req, res, next) => {
     try {
         const username = req.user.UserName;
-        const feeds = await feedService.getListFeeds(username);
+        const index = req.query.index || 0;
+        const feeds = await feedService.getListFeeds(username, index);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết thành công",

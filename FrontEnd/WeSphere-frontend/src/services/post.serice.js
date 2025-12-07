@@ -23,8 +23,8 @@ const postService = {
         return await axiosClient.get(_url + `/FeedDetail/${feedId}`)
     },
 
-    getListFeeds: async () => {
-        return await axiosClient.get(_url + '/ListFeeds');
+    getListFeeds: async (startIndex) => {
+        return await axiosClient.get(_url + '/ListFeeds?index=' + startIndex);
     },
 
     getListFeedsByUserId: async (username) => {

@@ -1,6 +1,7 @@
 const ObjectId = require("bson-objectid");
 const db = require("../../models");
 const ApiError = require("../api-error");
+const { or } = require("sequelize");
 
 class FeedRepository {
     constructor() {
@@ -34,11 +35,14 @@ class FeedRepository {
         }
     }
 
-    async getListFeeds(username) {
+    async getListFeeds(username, index) {
         try {
             const result = await this.feed.findAll({
                 attributes: ["id", "username"],
                 where: { active: 1 },
+                order: [["timeCreate", "DESC"]],
+                limit: 10,
+                offset: parseInt(index),
             });
             return result.map((item) => item.dataValues);
         } catch (error) {
