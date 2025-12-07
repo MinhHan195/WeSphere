@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.UUID,
     avatar: DataTypes.STRING(1024),
     publicId: DataTypes.STRING(40),
+    accessToken: DataTypes.STRING(1024),
     active: DataTypes.BOOLEAN,
     isOnline: DataTypes.BOOLEAN
   }, {

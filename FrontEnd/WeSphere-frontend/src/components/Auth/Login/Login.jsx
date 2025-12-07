@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { $api } from "../../../services/service";
 import { _AUTH } from "../../../constants/_auth";
 import { jwtDecode } from "jwt-decode";
-import FacebookLogin from "@greatsumini/react-facebook-login";
 import { Environment } from "../../../environments/environment";
 import { useDispatch } from "react-redux";
 import style from "./Login.module.css";
@@ -16,6 +15,9 @@ const Login = () => {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [response, setResponse] = useState(null);
+    const [_baseURL, _setBaseURL] = useState("");
+    const [_code, _setCode] = useState("");
+    const { search } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const saveUserInfo = async (userInfo, token) => {
@@ -23,12 +25,35 @@ const Login = () => {
         localStorage.setItem(_AUTH.USERNAME, userInfo["UserName"]);
         localStorage.setItem(_AUTH.ID, userInfo["UserId"]);
     };
+
+    const getCodeFromURL = () => {
+        const query = new URLSearchParams(search);
+        if (query.get("code")) {
+            _setCode(query.get("code"));
+            console.log("Code:", query.get("code"));
+        }
+    };
+
+    const createUrlInstagramLogin = () => {
+        const query = {
+            client_id: Environment.INSTA_CLIENT_ID,
+            redirect_uri: Environment.REDIRECT_URL,
+            scope: "instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights",
+            response_type: "code",
+            // force_reauth: "true",
+        };
+        const url =
+            Environment.OAUTH_URL + "?" + new URLSearchParams(query).toString();
+        _setBaseURL(url);
+    };
+
     const submit = async (e) => {
         e.preventDefault();
         try {
             dispatch(setLoading(true));
             const credential = { username: username, password: password };
             const res = await $api.auth.login(credential);
+            console.log(res);
             let obj_login = await jwtDecode(res.result);
             saveUserInfo(obj_login, res.result);
             if (obj_login["Role"] === "User") {
@@ -36,6 +61,7 @@ const Login = () => {
             }
             dispatch(setLoading(false));
         } catch (error) {
+            console.log(error);
             dispatch(setLoading(false));
             dispatch(
                 setAlert({
@@ -45,10 +71,10 @@ const Login = () => {
         }
     };
 
-    const handleLoginWithFacebook = async (response) => {
+    const handleLoginWithInstagram = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.loginWithFacebook(response);
+            const res = await $api.auth.loginWithInstagram(_code);
             if (res.isError) {
                 dispatch(setLoading(false));
                 setResponse(response);
@@ -74,6 +100,19 @@ const Login = () => {
             );
         }
     };
+
+    useEffect(() => {
+        createUrlInstagramLogin();
+        getCodeFromURL();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (_code !== "") {
+            handleLoginWithInstagram();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [_code]);
     return (
         <>
             <div className={style.login_background}>
@@ -86,9 +125,7 @@ const Login = () => {
                         />
                     </div>
                     <div className={`${style.login_box} rounded-4`}>
-                        <h6 className="mb-4 fw-bold">
-                            Đăng nhập bằng tài khoản Facebook
-                        </h6>
+                        <h6 className="mb-4 fw-bold">Đăng nhập</h6>
                         <form
                             onSubmit={(e) => submit(e)}
                             onKeyDown={(e) => {
@@ -111,7 +148,6 @@ const Login = () => {
                                 Đăng nhập
                             </button>
                         </form>
-
                         <div className="mt-3">
                             <a
                                 href="#"
@@ -126,30 +162,15 @@ const Login = () => {
                         >
                             Hoặc
                         </div>
-                        <FacebookLogin
-                            children={
-                                <>
-                                    <div className="d-flex align-items-center justify-content-center">
-                                        <i className="bi bi-facebook me-3 fs-4"></i>
-                                        Tiếp tục bằng Facebook
-                                    </div>
-                                </>
-                            }
-                            className={style.facebook_login_btn}
-                            appId={Environment.FB_APP_ID}
-                            autoLoad={true}
-                            fields="name,email,picture,gender"
-                            scope="public_profile, email"
-                            // onSuccess={(response) => {
-                            //     console.log("Login Success!", response);
-                            // }}
-                            onFail={(error) => {
-                                console.log("Login Failed!", error);
-                            }}
-                            onProfileSuccess={(response) => {
-                                handleLoginWithFacebook(response);
-                            }}
-                        />
+
+                        <a href={_baseURL} className={style.link_btn}>
+                            <div
+                                className={`d-flex align-items-center justify-content-center ${style.instagram_login_btn}`}
+                            >
+                                <i className="bi bi-instagram me-3 fs-4"></i>
+                                Tiếp tục bằng Instagram
+                            </div>
+                        </a>
                     </div>
 
                     <div

@@ -18,7 +18,8 @@ class accountRepository {
             onlineMode: payload.onlineMode,
             userId: payload.userId,
             avatar: payload.avatar,
-            publicId: payload.publicId
+            publicId: payload.publicId,
+            accessToken: payload.accessToken,
         };
         return Object.fromEntries(
             Object.entries(object).filter(([_, value]) => value !== undefined)
@@ -34,12 +35,12 @@ class accountRepository {
             console.log(error);
             throw new ApiError(500, "Internal Server Error");
         }
-
     }
 
-    async getAccountByEmail(email) {
+    async getAccountByUserId(userId) {
         try {
-            const account = await this.account.findOne({ where: { email: email } });
+            const account = await this.account.findOne({ where: { userId: userId } });
+            // console.log(account.username);
             return account;
         } catch (error) {
             console.log(error);
@@ -47,10 +48,23 @@ class accountRepository {
         }
     }
 
-    async createAccount(username, avatar, userId, password) {
+    async getAccountByEmail(email) {
         try {
+            const account = await this.account.findOne({ where: { email: email } });
+            return account;
+        } catch (error) {
+            console.log("Lỗi database", error);
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
+
+    async createAccount(username, avatar, userId, password, accessToken) {
+        try {
+            console.log("password:", password);
             const hash = await bcrypt.hash(password, 5);
-            const newAccount = await this.account.create({ username: username, password: hash, bio: "", privateMode: false, onlineMode: "Công khai", userId: userId, avatar: avatar });
+            const data = this.extractAccountData({ username: username, avatar: avatar, userId: userId, accessToken: accessToken, password: hash });
+            console.log("Account data to create:", data);
+            const newAccount = await this.account.create(data);
             console.log(newAccount);
 
             return;

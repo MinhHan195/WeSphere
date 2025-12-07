@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'feed',
+          model: 'feeds',
           key: 'id'
         }
       }

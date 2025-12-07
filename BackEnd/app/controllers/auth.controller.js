@@ -11,29 +11,30 @@ exports.logIn = async (req, res, next) => {
             result: token,
         });
     } catch (error) {
-        return next(error)
+        return next(error);
     }
-}
+};
 
-
-exports.logInWithFacebook = async (req, res, next) => {
+exports.logInWithInstagram = async (req, res, next) => {
     try {
-        const { email, id, name, picture } = req.body.accessToken;
-        const token = await authService.logInWithFacebook(email, name);
-        if (!token) {
-            return res.send({
-                isError: true,
-                message: "Tài khoản không tồn tại, vui lòng đăng ký",
-            });
-        }
+        const { code } = req.body;
+        const token = await authService.logInWithInstagram(code);
         return res.send({
             isError: false,
-            message: "Đăng nhập bằng Facebook thành công",
+            message: "Đăng nhập bằng Instagram thành công",
             result: token,
         });
     } catch (error) {
-        return next(error)
+        console.log(error);
+        return next(error);
     }
+};
+
+exports.getAccessToken = async (req, res, next) => {
+    console.log(req.body);
+    return res.send({
+        message: "Lấy access token thành công",
+    })
 }
 
 exports.signUp = async (req, res, next) => {
@@ -46,9 +47,9 @@ exports.signUp = async (req, res, next) => {
             result: token,
         });
     } catch (error) {
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.checkUsername = async (req, res, next) => {
     try {
@@ -60,9 +61,9 @@ exports.checkUsername = async (req, res, next) => {
             result: isAvailable,
         });
     } catch (error) {
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.getDetailUser = async (req, res, next) => {
     try {
@@ -76,14 +77,17 @@ exports.getDetailUser = async (req, res, next) => {
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.updatePrivateMode = async (req, res, next) => {
     try {
         const { username, privateMode } = req.params;
-        const result = await authService.updatePrivateMode(username, privateMode);
+        const result = await authService.updatePrivateMode(
+            username,
+            privateMode
+        );
         return res.send({
             isError: false,
             message: "Cập nhật chế độ riêng tư thành công",
@@ -91,14 +95,17 @@ exports.updatePrivateMode = async (req, res, next) => {
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.updateOnlineStatus = async (req, res, next) => {
     try {
         const { username, onlineStatus } = req.params;
-        const result = await authService.updateOnlineStatus(username, onlineStatus);
+        const result = await authService.updateOnlineStatus(
+            username,
+            onlineStatus
+        );
         return res.send({
             isError: false,
             message: "Cập nhật trạng thái trực tuyến thành công",
@@ -106,9 +113,9 @@ exports.updateOnlineStatus = async (req, res, next) => {
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.deactivateAccount = async (req, res, next) => {
     try {
@@ -116,13 +123,15 @@ exports.deactivateAccount = async (req, res, next) => {
         const result = await authService.deactivateAccount(username);
         return res.send({
             isError: !result,
-            message: result ? "Vô hiệu hóa tài khoản thành công" : "Vô hiệu hóa tài khoản thất bại",
+            message: result
+                ? "Vô hiệu hóa tài khoản thành công"
+                : "Vô hiệu hóa tài khoản thất bại",
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.deleteAccount = async (req, res, next) => {
     try {
@@ -131,13 +140,15 @@ exports.deleteAccount = async (req, res, next) => {
         const result = await authService.deleteAccount(AuthUsername, data);
         return res.send({
             isError: !result,
-            message: result ? "Xóa tài khoản thành công" : "Xóa tài khoản thất bại",
+            message: result
+                ? "Xóa tài khoản thành công"
+                : "Xóa tài khoản thất bại",
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.followUser = async (req, res, next) => {
     try {
@@ -149,21 +160,20 @@ exports.followUser = async (req, res, next) => {
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};
 
 exports.test = async (req, res, next) => {
     try {
-
         const user = req.user;
         const data = req.body;
         const result = await authService.test(data, user);
         return res.send({
-            result: result
+            result: result,
         });
     } catch (error) {
         console.log(error);
-        return next(error)
+        return next(error);
     }
-}
+};

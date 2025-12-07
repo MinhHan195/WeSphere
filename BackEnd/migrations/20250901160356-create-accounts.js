@@ -47,6 +47,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
+      accessToken: {
+        allowNull: true,
+        type: Sequelize.STRING(1024),
+      },
       isOnline: {
         allowNull: false,
         type: Sequelize.BOOLEAN,

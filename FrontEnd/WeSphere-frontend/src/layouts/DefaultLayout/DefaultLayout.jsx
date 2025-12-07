@@ -44,6 +44,7 @@ const DefaultLayout = (props) => {
             dispatch(setLoading(true));
             const res = await $api.auth.getUser(username);
             if (!res.isError) {
+                console.log(res);
                 dispatch(setUser(res.data));
                 dispatch(setLoading(false));
             }

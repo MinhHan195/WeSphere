@@ -7,7 +7,7 @@ function App() {
         <>
             <AppRoutes />
             <ThemePlugin />
-            <EventPlugin />
+            {/* <EventPlugin /> */}
         </>
     );
 }

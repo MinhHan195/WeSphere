@@ -23,9 +23,10 @@ const Alert = (props) => {
         if (props.show) {
             const timer = setTimeout(() => {
                 closeAlert();
-            }, 10000);
+            }, 5000);
             return () => clearTimeout(timer);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.show]);
     return (
         <div

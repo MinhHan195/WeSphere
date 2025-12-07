@@ -2,6 +2,7 @@ import axios from 'axios';
 import { _AUTH } from '../constants/_auth';
 
 const axiosClient = axios.create({
+    // baseURL: 'https://backend.loca.lt/api',
     baseURL: 'http://localhost:5178/api',
     headers: {
         Accept: 'application/json',
@@ -25,7 +26,11 @@ axiosClient.interceptors.response.use((response) => {
     (error) => {
         if (error.response.data) {
             return Promise.reject(error.response.data);
-        } else {
+        }
+        else if (error.message) {
+            return Promise.reject(error.message);
+        }
+        else {
             return Promise.reject(error);
         }
     }

@@ -21,7 +21,8 @@ class UserRepository {
     }
 
     async createUser(userData) {
-        const result = await this.users.create({ email: userData.email, fullname: userData.fullname, gender: userData.gender, phone: userData.phone });
+        const data = this.extractUserData(userData);
+        const result = await this.users.create(data);
         return { ...result.dataValues, ...userData };
     }
 

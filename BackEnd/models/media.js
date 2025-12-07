@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      media.belongsTo(models.feed, { foreignKey: 'feed_id', targetKey: 'id' });
+      media.belongsTo(models.feeds, { foreignKey: 'feed_id', targetKey: 'id' });
     }
   }
   media.init({

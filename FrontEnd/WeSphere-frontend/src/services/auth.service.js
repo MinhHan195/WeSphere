@@ -5,8 +5,9 @@ const authService = {
     login: async (credentials) => {
         return await axiosClient.post(_url + '/login', credentials);
     },
-    loginWithFacebook: async (accessToken) => {
-        return await axiosClient.post(_url + '/login/facebook', { accessToken });
+
+    loginWithInstagram: async (code) => {
+        return await axiosClient.post(_url + '/login/instagram', { code });
     },
 
     logout: async () => {

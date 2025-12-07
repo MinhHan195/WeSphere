@@ -10,7 +10,14 @@ const ApiError = require("./app/api-error");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin:
+        [
+            "http://localhost:5173",
+            "https://unpropped-dexter-unwakefully.ngrok-free.dev"
+        ],
+    credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 

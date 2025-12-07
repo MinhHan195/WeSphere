@@ -3,18 +3,18 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class feed extends Model {
+  class feeds extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      feed.belongsTo(models.accounts, { foreignKey: 'username', targetKey: 'username' });
-      feed.hasMany(models.likes, { foreignKey: 'feed_id', sourceKey: 'id' });
+      feeds.belongsTo(models.accounts, { foreignKey: 'username', targetKey: 'username' });
+      feeds.hasMany(models.likes, { foreignKey: 'feed_id', sourceKey: 'id' });
     }
   }
-  feed.init({
+  feeds.init({
     id: {
       type: DataTypes.UUID, // hoặc kiểu bạn dùng
       defaultValue: DataTypes.UUIDV4, // nếu muốn tự động sinh UUID
@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'feed',
+    modelName: 'feeds',
     timestamps: false
   });
-  return feed;
+  return feeds;
 };

@@ -4,7 +4,7 @@ const ApiError = require("../api-error");
 
 class FeedRepository {
     constructor() {
-        this.feed = db.feed;
+        this.feed = db.feeds;
     }
 
     extractFeedData(payload) {

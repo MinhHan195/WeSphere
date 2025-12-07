@@ -12,7 +12,7 @@ module.exports = {
       feed_id: {
         type: Sequelize.UUID,
         references: {
-          model: 'feed',
+          model: 'feeds',
           key: 'id'
         },
         allowNull: false

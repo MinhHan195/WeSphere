@@ -13,7 +13,7 @@ router.route("/register").post(authController.signUp);
 
 router.route("/checkUsername/:username").get(authController.checkUsername);
 
-router.route("/login/facebook").post(authController.logInWithFacebook);
+router.route("/login/instagram").post(authController.logInWithInstagram);
 
 router.route("/GetProfileData/:username").get(verifyToken, authController.getDetailUser);
 

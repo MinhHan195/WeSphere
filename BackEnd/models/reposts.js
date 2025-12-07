@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       reposts.belongsTo(models.accounts, { foreignKey: 'username', targetKey: 'username' });
-      reposts.belongsTo(models.feed, { foreignKey: 'feedId', targetKey: 'id' });
+      reposts.belongsTo(models.feeds, { foreignKey: 'feedId', targetKey: 'id' });
     }
   }
   reposts.init({
