@@ -164,25 +164,27 @@ exports.checkUsername = async (username) => {
     return account === undefined;
 };
 
-exports.getDetailUser = async (username, ownUser) => {
+exports.getDetailUser = async (userId, ownUser) => {
     const UserRepository = new userRepository();
     const AccountRepository = new accountRepository();
     const FollowRepository = new followRepository();
     const LinkRepository = new linkRepository();
 
     let result = {};
-    const account = await AccountRepository.getAccountByUsername(username);
+    const account = await AccountRepository.getAccountByUserId(userId);
     const user = await UserRepository.getUserById(account.userId);
     const isFollowing = await FollowRepository.isFollowing(
-        ownUser.UserName,
-        account.username
+        ownUser.UserId,
+        account.userId
     );
-    const listFollowers = await FollowRepository.getFollowers(account.username);
-    const listFollowing = await FollowRepository.getFollowing(account.username);
-    const listLinks = await LinkRepository.getListLinks(account.username);
+    const listFollowers = await FollowRepository.getFollowers(account.userId);
+    const listFollowing = await FollowRepository.getFollowing(account.userId);
+    const listLinks = await LinkRepository.getListLinks(account.userId);
+    listLinks.username = account.username;
     result = {
         id: account.userId,
         username: account.username,
+        accessToken: account.accessToken,
         bio: account.bio,
         privateMode: account.privateMode,
         avatar: account.avatar,
@@ -202,8 +204,7 @@ exports.getDetailUser = async (username, ownUser) => {
     return result;
 };
 
-exports.updateUser = async (data, file) => {
-    // console.log(JSON.parse(data.listLinks));
+exports.updateUser = async (data, file, username) => {
     const AccountRepository = new accountRepository();
     const UserRepository = new userRepository();
     const CloudinaryRepsitory = new cloudinaryRepsitory();
@@ -222,21 +223,32 @@ exports.updateUser = async (data, file) => {
     const updateAccount = await AccountRepository.updateAccount(data);
     const updateUser = await UserRepository.updateUser(data);
 
-    let listLinks = await LinkRepository.getListLinks(data.username);
+    let listLinks = await LinkRepository.getListLinks(data.userId);
 
     if (data.listLinks !== undefined) {
         listLinks = JSON.parse(data.listLinks);
         for (const link of listLinks) {
             if (!link.link_id) {
-                await LinkRepository.createLink(link, data.username);
+                await LinkRepository.createLink(link, data.userId);
             } else {
                 await LinkRepository.updateLink(link);
             }
         }
         listLinks = await LinkRepository.getListLinks(data.username);
     }
-    const dataResult = { ...updateAccount, ...updateUser, listLinks };
-    return dataResult;
+    const payload = {
+        UserName: updateAccount.username,
+        Role: "User",
+        UserId: updateUser.userId,
+        avatar: updateAccount.avatar,
+    };
+    const JWTtoken = jwt.sign(payload, process.env.SECRET_CODE);
+    const authData = {
+        token: JWTtoken,
+        UserName: updateAccount.username,
+        UserId: updateUser.userId,
+    };
+    return authData;
 };
 
 exports.updatePrivateMode = async (username, privateMode) => {
@@ -257,28 +269,35 @@ exports.updateOnlineStatus = async (username, onlineStatus) => {
     return res;
 };
 
-exports.getListUserBlock = async (username) => {
+exports.getListUserBlock = async (userId) => {
     const BlockRepository = new blockRepository();
-    const res = await BlockRepository.getListUserBlock(username);
+    const res = await BlockRepository.getListUserBlock(userId);
     return res;
 };
 
-exports.getListUserLimit = async (username) => {
+exports.getListUserLimit = async (userId) => {
     const LimitRepository = new limitRepository();
-    const res = await LimitRepository.getListUserLimit(username);
+    const res = await LimitRepository.getListUserLimit(userId);
     return res;
 };
 
 exports.removeLimitedUser = async (limitedUsername, ownerUsername) => {
     const LimitRepository = new limitRepository();
-    await LimitRepository.removeLimitedUser(limitedUsername, ownerUsername);
-    const res = await LimitRepository.getListUserLimit(ownerUsername);
+    const AccountRepository = new accountRepository();
+    const limitedUserId = await AccountRepository.getUserIdFromUsername(limitedUsername);
+    const ownerUserId = await AccountRepository.getUserIdFromUsername(ownerUsername);
+    await LimitRepository.removeLimitedUser(limitedUserId, ownerUserId);
+    const res = await LimitRepository.getListUserLimit(ownerUserId);
     return res;
 };
 
 exports.removeBlockedUser = async (blockedUsername, ownerUsername) => {
-    await AccountRepository.removeBlockedUser(blockedUsername, ownerUsername);
-    const res = await AccountRepository.getListUserBlock(ownerUsername);
+    const AccountRepository = new accountRepository();
+    const BlockRepository = new blockRepository();
+    const blockedUserId = await AccountRepository.getUserIdFromUsername(blockedUsername);
+    const ownerUserId = await AccountRepository.getUserIdFromUsername(ownerUsername);
+    await BlockRepository.removeBlockedUser(blockedUserId, ownerUserId);
+    const res = await BlockRepository.getListUserBlock(ownerUserId);
     return res;
 };
 
@@ -312,10 +331,10 @@ exports.deleteAccount = async (AuthUsername, data) => {
         throw new ApiError(400, "Mật khẩu không chính xác");
     }
 
-    await LinkRepository.deleteLinksByUsername(data.username);
-    await FollowRepository.deleteFollowsByUsername(data.username);
-    await BlockRepository.deleteBlocksByOwnerUsername(data.username);
-    await LimitRepository.deleteLimitsByOwnerUsername(data.username);
+    await LinkRepository.deleteLinksByUserId(data.userId);
+    await FollowRepository.deleteFollowsByUserId(data.userId);
+    await BlockRepository.deleteBlocksByOwnerUserId(data.userId);
+    await LimitRepository.deleteLimitsByOwnerUserId(data.userId);
     const result = await AccountRepository.deleteAccount(AuthUsername);
 
     if (!result) {
@@ -328,18 +347,13 @@ exports.deleteAccount = async (AuthUsername, data) => {
 
 exports.followUser = async (username, mode, user) => {
     const FollowRepository = new followRepository();
+    const AccountRepository = new accountRepository();
+    const userId = await AccountRepository.getUserIdFromUsername(username);
     let res;
     if (mode) {
-        res = await FollowRepository.followUser(username, user);
+        res = await FollowRepository.followUser(userId, user);
     } else {
-        res = await FollowRepository.unfollowUser(username, user);
+        res = await FollowRepository.unfollowUser(userId, user);
     }
     return res;
-};
-
-exports.test = async (data, user) => {
-    const LinkRepository = new linkRepository();
-    let result = await LinkRepository.updateLink(data);
-    console.log(result);
-    return result;
 };

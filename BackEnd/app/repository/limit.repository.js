@@ -5,22 +5,23 @@ class limitRepository {
         this.limits = db.limits;
     }
 
-    async getListUserLimit(username) {
+    async getListUserLimit(userId) {
         try {
             const result = await this.limits.findAll({
-                include: [
-                    {
-                        model: db.accounts, attributes: ['username', 'avatar'],
-                        as: 'limiter', required: true,
-                        include: [{
-                            model: db.users,
-                            attributes: ['userId', 'fullname'],
-                            required: true
-                        }]
-                    }],
+                include: [{
+                    model: db.users,
+                    attributes: ['userId', 'fullname'],
+                    as: 'limiter',
+                    required: true,
+                    include: [
+                        {
+                            model: db.accounts, attributes: ['username', 'avatar'],
+                            required: true,
+                        }],
+                }],
                 attributes: [],
                 where: {
-                    limiter_username: username
+                    limiter_userId: userId
                 }
             });
             return result;
@@ -30,12 +31,12 @@ class limitRepository {
         }
     }
 
-    async removeLimitedUser(limitedUsername, ownerUsername) {
+    async removeLimitedUser(limitedUserId, ownerUserId) {
         try {
             const result = await this.limits.destroy({
                 where: {
-                    limited_username: limitedUsername,
-                    limiter_username: ownerUsername
+                    limited_userId: limitedUserId,
+                    limiter_userId: ownerUserId
                 }
             });
             return result;
@@ -45,9 +46,9 @@ class limitRepository {
         }
     }
 
-    async deleteLimitsByOwnerUsername(username) {
+    async deleteLimitsByOwnerUserId(userId) {
         try {
-            const result = await this.limits.destroy({ where: { limiter_username: username } });
+            const result = await this.limits.destroy({ where: { limiter_userId: userId } });
             return result;
         } catch (error) {
             console.log(error);

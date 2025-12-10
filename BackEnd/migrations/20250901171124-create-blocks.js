@@ -9,26 +9,26 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      blocker_username: {
-        type: Sequelize.STRING(30),
+      blocker_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       },
-      blocked_username: {
-        type: Sequelize.STRING(30),
+      blocked_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       }
     }, {
       uniqueKeys: {
         blocks_unique: {
-          fields: ['blocker_username', 'blocked_username']
+          fields: ['blocker_id', 'blocked_id']
         }
       }
     });

@@ -15,8 +15,8 @@ exports.verifyToken = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.SECRET_CODE);
         // Kiểm tra id trong token có hợp lệ không
-        const AccountRepository = new accountRepository(SQL.client);
-        const user = await AccountRepository.getAccountByUsername(decoded.UserName);
+        const AccountRepository = new accountRepository();
+        const user = await AccountRepository.getAccountByUserId(decoded.UserId);
         if (!user) {
             return next(new ApiError(404, "Acount not found"));
         }

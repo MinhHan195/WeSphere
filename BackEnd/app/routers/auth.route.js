@@ -15,7 +15,7 @@ router.route("/checkUsername/:username").get(authController.checkUsername);
 
 router.route("/login/instagram").post(authController.logInWithInstagram);
 
-router.route("/GetProfileData/:username").get(verifyToken, authController.getDetailUser);
+router.route("/GetProfileData/:userId").get(verifyToken, authController.getDetailUser);
 
 router.route("/update").put(verifyToken, upload.single("file"), userController.updateUser);
 

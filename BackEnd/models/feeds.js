@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      feeds.belongsTo(models.accounts, { foreignKey: 'username', targetKey: 'username' });
+      feeds.belongsTo(models.users, { as: 'user', foreignKey: 'userId', targetKey: 'userId' });
       feeds.hasMany(models.likes, { foreignKey: 'feed_id', sourceKey: 'id' });
     }
   }
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING(2048),
     tag: DataTypes.STRING(30),
     privateMode: DataTypes.STRING(15),
-    username: DataTypes.STRING(30),
+    userId: DataTypes.UUID,
     commentOfPost: DataTypes.UUID,
     active: DataTypes.BOOLEAN,
     timeCreate: {

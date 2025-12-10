@@ -9,26 +9,26 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      limiter_username: {
-        type: Sequelize.STRING(30),
+      limiter_userId: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       },
-      limited_username: {
-        type: Sequelize.STRING(30),
+      limited_userId: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       }
     }, {
       uniqueKeys: {
         limits_unique: {
-          fields: ['limiter_username', 'limited_username']
+          fields: ['limiter_userId', 'limited_userId']
         }
       }
     });

@@ -9,12 +9,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      username: {
-        type: Sequelize.STRING(30),
+      userId: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       },
       feedId: {

@@ -4,13 +4,13 @@ exports.updateUser = async (req, res, next) => {
     try {
         const file = req.file;
         const data = req.body;
-        data.username = req.user.UserName;
+        const username = req.user.UserName;
         data.userId = req.user.UserId;
-        const userData = await authService.updateUser(data, file);
+        const authData = await authService.updateUser(data, file, username);
         return res.send({
             isError: false,
             message: "Cập nhật thông tin người dùng thành công",
-            result: userData,
+            result: authData,
         });
     } catch (error) {
         console.log(error);
@@ -20,8 +20,8 @@ exports.updateUser = async (req, res, next) => {
 
 exports.getListUserBlock = async (req, res, next) => {
     try {
-        const username = req.user.UserName;
-        const blockedUsers = await authService.getListUserBlock(username);
+        const userId = req.user.UserId;
+        const blockedUsers = await authService.getListUserBlock(userId);
         return res.send({
             isError: false,
             result: blockedUsers,
@@ -34,8 +34,8 @@ exports.getListUserBlock = async (req, res, next) => {
 
 exports.getListUserLimit = async (req, res, next) => {
     try {
-        const username = req.user.UserName;
-        const limitedUsers = await authService.getListUserLimit(username);
+        const userId = req.user.UserId;
+        const limitedUsers = await authService.getListUserLimit(userId);
         return res.send({
             isError: false,
             result: limitedUsers,

@@ -29,7 +29,6 @@ class accountRepository {
     async getAccountByUsername(username) {
         try {
             const account = await this.account.findOne({ where: { username: username } });
-            // console.log(account.username);
             return account;
         } catch (error) {
             console.log(error);
@@ -40,10 +39,9 @@ class accountRepository {
     async getAccountByUserId(userId) {
         try {
             const account = await this.account.findOne({ where: { userId: userId } });
-            // console.log(account.username);
-            return account;
+            return account.dataValues;
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             throw new ApiError(500, "Internal Server Error");
         }
     }
@@ -60,13 +58,9 @@ class accountRepository {
 
     async createAccount(username, avatar, userId, password, accessToken) {
         try {
-            console.log("password:", password);
             const hash = await bcrypt.hash(password, 5);
             const data = this.extractAccountData({ username: username, avatar: avatar, userId: userId, accessToken: accessToken, password: hash });
-            console.log("Account data to create:", data);
             const newAccount = await this.account.create(data);
-            console.log(newAccount);
-
             return;
         } catch (error) {
             console.log(error);
@@ -77,7 +71,7 @@ class accountRepository {
     async updateAccount(data) {
         try {
             data = this.extractAccountData(data);
-            const result = await this.account.update(data, { where: { username: data.username } });
+            const result = await this.account.update(data, { where: { userId: data.userId } });
             if (result[0] === 0) {
                 throw new ApiError(404, "Không tìm thấy tài khoản");
             }
@@ -105,13 +99,38 @@ class accountRepository {
     async deleteAccount(username) {
         try {
             const result = await this.account.destroy({ where: { username: username } });
-            console.log("Delete account result:", result);
             return result;
         } catch (error) {
             console.log(error);
             throw new ApiError(500, "Internal Server Error");
         }
     }
-}
 
+    async getUserIdFromUsername(username) {
+        try {
+            console.log("getUserIdFromUsername: ", username);
+            const account = await this.account.findOne({ where: { username: username } });
+            if (!account) {
+                throw new ApiError(404, "Không tìm thấy tài khoản");
+            }
+            return account.userId;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
+
+    async getUsernameFromUserId(userId) {
+        try {
+            const account = await this.account.findOne({ where: { userId: userId } });
+            if (!account) {
+                throw new ApiError(404, "Không tìm thấy tài khoản");
+            }
+            return account.username;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
+}
 module.exports = accountRepository;

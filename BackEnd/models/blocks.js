@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      blocks.belongsTo(models.accounts, {
+      blocks.belongsTo(models.users, {
         as: 'blocker',
-        foreignKey: 'blocker_username',
-        targetKey: 'username'
+        foreignKey: 'blocker_id',
+        targetKey: 'userId'
       });
-      blocks.belongsTo(models.accounts, {
+      blocks.belongsTo(models.users, {
         as: 'blocked',
-        foreignKey: 'blocked_username',
-        targetKey: 'username'
+        foreignKey: 'blocked_id',
+        targetKey: 'userId'
       });
     }
   }
@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true
     },
-    blocker_username: DataTypes.STRING(30),
-    blocked_username: DataTypes.STRING(30)
+    blocker_id: DataTypes.UUID,
+    blocked_id: DataTypes.UUID
   }, {
     sequelize,
     modelName: 'blocks',

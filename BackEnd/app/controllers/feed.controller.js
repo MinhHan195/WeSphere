@@ -6,7 +6,7 @@ exports.createFeed = async (req, res, next) => {
         // console.log(data);
         data.listImageTmp = JSON.parse(data.listImageTmp);
         const mediaFiles = req.files;
-        data.username = req.user.UserName;
+        data.userId = req.user.UserId;
         const feedData = await feedService.createFeed(data, mediaFiles);
         if (feedData === true) {
             return res.send({
@@ -25,9 +25,8 @@ exports.createFeed = async (req, res, next) => {
 exports.likeHandler = async (req, res, next) => {
     try {
         const { mode, feedId } = req.params;
-        const username = req.user.UserName;
-        console.log(mode, feedId, username);
-        const result = await feedService.likeFeed(mode, feedId, username);
+        const userId = req.user.UserId;
+        const result = await feedService.likeFeed(mode, feedId, userId);
         if (result) {
             return res.send({
                 isError: false,
@@ -43,9 +42,9 @@ exports.likeHandler = async (req, res, next) => {
 
 exports.getListFeeds = async (req, res, next) => {
     try {
-        const username = req.user.UserName;
+        const userId = req.user.UserId;
         const index = req.query.index || 0;
-        const feeds = await feedService.getListFeeds(username, index);
+        const feeds = await feedService.getListFeeds(userId, index);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết thành công",
@@ -61,8 +60,8 @@ exports.rePost = async (req, res, next) => {
     try {
         const feedId = req.params.feed_id;
         const mode = req.params.mode;
-        const username = req.user.UserName;
-        const result = await feedService.rePostFeed(feedId, username, mode);
+        const userId = req.user.UserId;
+        const result = await feedService.rePostFeed(feedId, userId, mode);
         if (result) {
             return res.send({
                 isError: false,
@@ -94,8 +93,8 @@ exports.getSavedFeeds = async (req, res, next) => {
 exports.getFeedDetail = async (req, res, next) => {
     try {
         const feedId = req.params.feed_id;
-        const username = req.user.UserName;
-        const feedDetail = await feedService.getFeedDetail(feedId, username);
+        const userId = req.user.UserId;
+        const feedDetail = await feedService.getFeedDetail(feedId, userId);
         return res.send({
             isError: false,
             message: "Lấy thông tin bài viết thành công",
@@ -109,8 +108,8 @@ exports.getFeedDetail = async (req, res, next) => {
 
 exports.getListFeedsByUser = async (req, res, next) => {
     try {
-        const username = req.params.username;
-        const feeds = await feedService.getListFeedsByUser(username);
+        const userId = req.params.userId;
+        const feeds = await feedService.getListFeedsByUser(userId);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết của người dùng thành công",
@@ -124,10 +123,8 @@ exports.getListFeedsByUser = async (req, res, next) => {
 
 exports.getListMediasByUser = async (req, res, next) => {
     try {
-        const username = req.params.username;
-
-        console.log(username);
-        const medias = await feedService.getListMediasByUser(username);
+        const userId = req.params.userId;
+        const medias = await feedService.getListMediasByUser(userId);
         return res.send({
             isError: false,
             message: "Lấy danh sách media của người dùng thành công",
@@ -141,8 +138,8 @@ exports.getListMediasByUser = async (req, res, next) => {
 
 exports.getListRePostsByUser = async (req, res, next) => {
     try {
-        const username = req.params.username;
-        const rePosts = await feedService.getListRePostsByUser(username);
+        const userId = req.params.userId;
+        const rePosts = await feedService.getListRePostsByUser(userId);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết đã repost của người dùng thành công",
@@ -156,8 +153,8 @@ exports.getListRePostsByUser = async (req, res, next) => {
 
 exports.getListFavoritePost = async (req, res, next) => {
     try {
-        const username = req.user.UserName;
-        const favoritePosts = await feedService.getListFavoritePostsByUser(username);
+        const userId = req.user.UserId;
+        const favoritePosts = await feedService.getListFavoritePostsByUser(userId);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết yêu thích của người dùng thành công",
@@ -171,8 +168,8 @@ exports.getListFavoritePost = async (req, res, next) => {
 
 exports.getListSavePost = async (req, res, next) => {
     try {
-        const username = req.user.UserName;
-        const savedPosts = await feedService.getListSavedPostsByUser(username);
+        const userId = req.user.UserId;
+        const savedPosts = await feedService.getListSavedPostsByUser(userId);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết đã lưu của người dùng thành công",

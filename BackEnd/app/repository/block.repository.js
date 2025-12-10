@@ -5,7 +5,7 @@ class BlockRepository {
         this.blocks = db.blocks;
     }
 
-    async getListUserBlock(username) {
+    async getListUserBlock(userId) {
         try {
             const result = await this.blocks.findAll({
                 include: [{
@@ -19,7 +19,7 @@ class BlockRepository {
                 }],
                 attributes: [],
                 where: {
-                    blocker_username: username
+                    blocker_id: userId
                 }
             });
             console.log(result);
@@ -30,12 +30,12 @@ class BlockRepository {
         }
     }
 
-    async removeBlockedUser(blockedUsername, ownerUsername) {
+    async removeBlockedUser(blockedUserId, ownerUserId) {
         try {
             const result = await this.blocks.destroy({
                 where: {
-                    blocked_username: blockedUsername,
-                    blocker_username: ownerUsername
+                    blocked_id: blockedUserId,
+                    blocker_id: ownerUserId
                 }
             });
             return result;
@@ -45,9 +45,9 @@ class BlockRepository {
         }
     }
 
-    async deleteBlocksByOwnerUsername(username) {
+    async deleteBlocksByOwnerUserId(userId) {
         try {
-            const result = await this.blocks.destroy({ where: { blocker_username: username } });
+            const result = await this.blocks.destroy({ where: { blocker_id: userId } });
             return result;
         } catch (error) {
             console.log(error);

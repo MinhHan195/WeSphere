@@ -21,12 +21,12 @@ module.exports = {
         type: Sequelize.STRING(15),
         allowNull: false,
       },
-      username: {
-        type: Sequelize.STRING(30),
+      userId: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       },
       commentOfPost: {

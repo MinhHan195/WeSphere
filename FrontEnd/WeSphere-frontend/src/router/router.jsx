@@ -31,7 +31,7 @@ function AppRouter() {
                     path="/:username/post/:feedId"
                     element={<FeedDetail />}
                 />
-                <Route path="/:username" element={<Profile />}>
+                <Route path="/:userId" element={<Profile />}>
                     <Route path="media" element={<MyMedia />} />
                     <Route path="reposts" element={<Reposts />} />
                     <Route index element={<MyFeeds />} />

@@ -12,6 +12,10 @@ const UpdateProfileModal = (props) => {
     const dispatch = useDispatch();
     const { show, handleHide, user } = props;
 
+    useEffect(() => {
+        console.log("user update profile modal: ", user);
+    }, [user]);
+
     // Biến trạng thái show/hide modal
     const [showAddLink, setShowAddLink] = useState(false);
     const [showAddLinkFromMain, setShowAddLinkFromMain] = useState(false);
@@ -29,6 +33,8 @@ const UpdateProfileModal = (props) => {
     );
     const [listLinks, setlistLinks] = useState(user.listLinks || []);
     const [fileAvatar, setFileAvatar] = useState(null);
+    const [email, setEmail] = useState(user.email || "");
+    const [username, setUsername] = useState(user.username || "");
 
     // Biến tạm lưu thông tin tạm thời cho các thao tác cập nhật của người dùng
     const [tempBio, setTempBio] = useState(user.bio || "Tiểu sử");
@@ -148,6 +154,14 @@ const UpdateProfileModal = (props) => {
         handleShowMain();
     };
 
+    const updateUsername = (e) => {
+        setUsername(e.target.value);
+    };
+
+    const updateEmail = (e) => {
+        setEmail(e.target.value);
+    };
+
     const updatePhone = (e) => {
         setPhone(e.target.value);
     };
@@ -160,18 +174,48 @@ const UpdateProfileModal = (props) => {
     //     setPrivateMode(e.target.checked);
     // };
 
+    const saveUserInfo = async (data) => {
+        localStorage.setItem(_AUTH.TOKEN_NAME, data.token);
+        localStorage.setItem(_AUTH.USERNAME, data.UserName);
+        localStorage.setItem(_AUTH.ID, data.UserId);
+    };
+
     const update = async (e) => {
         e.stopPropagation();
         try {
             setLoading(true);
             const payload = new FormData();
-            tempBio.trim() === user.bio.trim()
-                ? null
-                : payload.append("bio", tempBio.trim());
+            payload.append("username", username.trim());
 
-            phone.trim() === user.phone.trim()
-                ? null
-                : payload.append("phone", phone);
+            if (user.bio === null || user.bio === "") {
+                if (bio) {
+                    payload.append("bio", tempBio.trim());
+                }
+            } else {
+                tempBio.trim() === user.bio.trim()
+                    ? null
+                    : payload.append("bio", tempBio.trim());
+            }
+
+            if (user.email === null || user.email === "") {
+                if (email) {
+                    payload.append("email", email.trim());
+                }
+            } else {
+                email.trim() === user.email.trim()
+                    ? null
+                    : payload.append("email", email.trim());
+            }
+
+            if (user.phone === null || user.phone === "") {
+                if (phone) {
+                    payload.append("phone", phone);
+                }
+            } else {
+                phone.trim() === user.phone.trim()
+                    ? null
+                    : payload.append("phone", phone);
+            }
 
             gender === user.gender ? null : payload.append("gender", gender);
 
@@ -188,7 +232,10 @@ const UpdateProfileModal = (props) => {
                 payload.append("file", fileAvatar);
             }
 
-            // console.log(Object.fromEntries(payload.entries()));
+            // console.log(
+            //     "Payload entries:",
+            //     Object.fromEntries(payload.entries())
+            // );
 
             const res = await $api.auth.updateUser(payload);
             if (!res.isError) {
@@ -197,6 +244,7 @@ const UpdateProfileModal = (props) => {
                         message: res.message,
                     })
                 );
+                saveUserInfo(res.result);
                 setLoading(false);
                 handleHide();
             }
@@ -273,15 +321,21 @@ const UpdateProfileModal = (props) => {
                                             <div
                                                 className={`${style.profile_label}`}
                                             >
-                                                Tên
+                                                Tên người dùng
                                             </div>
-                                            <div className="text-secondary">
-                                                <i className="bi bi-lock me-1"></i>
-                                                <span>
-                                                    {user.fullname} (
-                                                    {user.username})
-                                                </span>
-                                            </div>
+                                            {user.accessToken ? (
+                                                <div className="text-secondary">
+                                                    <i className="bi bi-lock me-1"></i>
+                                                    <span>{user.username}</span>
+                                                </div>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    className={`form-control ${style.form_control_custom} ${style.profile_input}`}
+                                                    defaultValue={username}
+                                                    onChange={updateUsername}
+                                                />
+                                            )}
                                         </div>
                                         <div className="col-2">
                                             <div className="dropdown">
@@ -359,10 +413,13 @@ const UpdateProfileModal = (props) => {
                                         >
                                             Email
                                         </div>
-                                        <div className="text-secondary">
-                                            <i className="bi bi-lock me-1"></i>
-                                            <span>{user.email}</span>
-                                        </div>
+                                        <input
+                                            type="text"
+                                            className={`form-control ${style.form_control_custom} ${style.profile_input}`}
+                                            defaultValue={email}
+                                            placeholder="Cập nhật Email"
+                                            onChange={updateEmail}
+                                        />
                                     </div>
 
                                     <div className={`${style.profile_section}`}>

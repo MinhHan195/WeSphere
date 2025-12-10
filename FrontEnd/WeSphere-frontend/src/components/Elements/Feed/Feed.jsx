@@ -116,7 +116,7 @@ const Feed = (props) => {
                     <div className={`mb-2 `}>
                         <div>
                             <NavLink
-                                to={`/${data.feedOwner.username}`}
+                                to={`/${data.feedOwner.id}`}
                                 className={style.link}
                             >
                                 <span className="me-2 fw-bold">

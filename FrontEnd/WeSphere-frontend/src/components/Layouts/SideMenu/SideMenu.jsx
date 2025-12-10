@@ -16,7 +16,7 @@ const SideMenu = () => {
     const showModal = () => {
         dispatch(setModal(true));
     };
-    const username = localStorage.getItem(_AUTH.USERNAME);
+    const userId = localStorage.getItem(_AUTH.ID);
 
     const [showReport, setShowReport] = useState(false);
 
@@ -98,7 +98,7 @@ const SideMenu = () => {
                         ></i>
                     )}
                 </NavLink>
-                <NavLink to={`/${username}`} className={style.menu_icon}>
+                <NavLink to={`/${userId}`} className={style.menu_icon}>
                     {({ isActive }) => (
                         <i
                             className={`bi  ${

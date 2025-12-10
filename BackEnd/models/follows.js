@@ -5,17 +5,17 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class follows extends Model {
     static associate(models) {
-      follows.belongsTo(models.accounts, { foreignKey: 'follower_username', targetKey: 'username' });
-      follows.belongsTo(models.accounts, { foreignKey: 'following_username', targetKey: 'username' });
+      follows.belongsTo(models.users, { as: 'follower', foreignKey: 'follower_userId', targetKey: 'userId' });
+      follows.belongsTo(models.users, { as: 'following', foreignKey: 'following_userId', targetKey: 'userId' });
     }
   }
   follows.init({
-    follower_username: {
-      type: DataTypes.STRING(30),
+    follower_userId: {
+      type: DataTypes.UUID,
       primaryKey: true
     },
-    following_username: {
-      type: DataTypes.STRING(30),
+    following_userId: {
+      type: DataTypes.UUID,
       primaryKey: true
     }
   }, {

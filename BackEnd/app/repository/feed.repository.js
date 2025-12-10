@@ -15,7 +15,7 @@ class FeedRepository {
             tag: payload.tag,
             privateMode: payload.privateMode,
             active: payload.active,
-            username: payload.username,
+            userId: payload.userId,
             commentOfPost: payload.commentOfPost,
             timeCreate: payload.timeCreate,
         };
@@ -35,10 +35,10 @@ class FeedRepository {
         }
     }
 
-    async getListFeeds(username, index) {
+    async getListFeeds(userId, index) {
         try {
             const result = await this.feed.findAll({
-                attributes: ["id", "username"],
+                attributes: ["id", "userId"],
                 where: { active: 1 },
                 order: [["timeCreate", "DESC"]],
                 limit: 10,
@@ -66,33 +66,33 @@ class FeedRepository {
     async getOwner(feed_id) {
         try {
             const result = await this.feed.findOne({
-                include: [
-                    {
-                        model: db.accounts,
-                        attributes: ["username", "isOnline", "avatar"],
-                        include: [
-                            {
-                                model: db.users,
-                                as: "user",
-                                attributes: ["userId"],
-                            },
-                        ],
-                    },
-                ],
                 attributes: [],
                 where: { id: feed_id },
+                include: [{
+                    model: db.users,
+                    as: 'user',
+                    attributes: ['userId'],
+                    required: true,
+                    include: [
+                        {
+                            model: db.accounts,
+                            attributes: ["username", "isOnline", "avatar"],
+                            required: true,
+                        },
+                    ],
+                }],
             });
-            return result;
+            return result.dataValues.user.dataValues;
         } catch (error) {
             console.error("Error getting feed owner:", error);
             throw new ApiError(500, "Error getting feed owner");
         }
     }
 
-    async getListSaveFeedsByUserName(username) {
+    async getListSaveFeedsByUserId(userId) {
         try {
             const result = await this.feed.findAll({
-                where: { username: username, active: 0 },
+                where: { userId: userId, active: 0 },
             });
             return result.map((item) => item.dataValues);
         } catch (error) {
@@ -137,11 +137,11 @@ class FeedRepository {
         }
     }
 
-    async getListFeedsByUsername(username) {
+    async getListFeedsByUserId(userId) {
         try {
             const result = await this.feed.findAll({
-                attributes: ["id", "username"],
-                where: { active: 1, username: username },
+                attributes: ["id", "userId"],
+                where: { active: 1, userId: userId },
             });
             return result.map((item) => item.dataValues);
         } catch (error) {
@@ -150,12 +150,11 @@ class FeedRepository {
         }
     }
 
-    async getListFavoritePostsByUserName(username) {
+    async getListFavoritePostsByUserId(userId) {
         try {
-            console.log(username);
             const result = await this.feed.findAll({
-                include: [{ model: db.likes, as: 'likes', attributes: [], where: { username: username } }],
-                attributes: ['id', 'username'],
+                include: [{ model: db.likes, as: 'likes', attributes: [], where: { userId: userId } }],
+                attributes: ['id', 'userId'],
                 where: { active: 1 },
             });
             return result.map((item) => item.dataValues);

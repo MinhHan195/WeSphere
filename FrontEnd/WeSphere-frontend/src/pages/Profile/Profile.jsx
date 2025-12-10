@@ -27,10 +27,10 @@ const Profile = () => {
         setShowListLinkModal(true);
     };
 
-    const fetchData = async (userName) => {
+    const fetchData = async (userId) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getUser(userName);
+            const res = await $api.auth.getUser(userId);
             if (!res.isError) {
                 setUser(res.data);
                 dispatch(setLoading(false));
@@ -46,9 +46,9 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        fetchData(param.username);
+        fetchData(param.userId);
         setKey(key + 1);
-    }, [param.username]);
+    }, [param.userId]);
 
     useEffect(() => {
         document.title = `${user.fullname} (${user.username}) • WeSphere`;
@@ -56,7 +56,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (showUpdateModal === false) {
-            fetchData(param.username);
+            fetchData(param.userId);
         }
     }, [showUpdateModal]);
     return (
@@ -82,11 +82,8 @@ const Profile = () => {
                             </div>
                             <div>
                                 <h5 className="mb-1 fw-bold">
-                                    {user.fullname}
-                                </h5>
-                                <small className={`${style.text_secondary}`}>
                                     {user.username}
-                                </small>
+                                </h5>
                                 <p
                                     className={`mt-1 mb-1 ${style.text_secondary}`}
                                 >
@@ -195,7 +192,7 @@ const Profile = () => {
                     user.id !== auth.id ? null : (
                         <div className="w-100">
                             <ProfileBar
-                                username={param.username}
+                                userId={param.userId}
                                 isUser={user.id === auth.id}
                                 key={key}
                             />

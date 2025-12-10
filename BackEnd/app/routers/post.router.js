@@ -16,11 +16,11 @@ router.route("/saves/:username").get(feedController.getSavedFeeds);
 
 router.route("/FeedDetail/:feed_id").get(verifyToken, feedController.getFeedDetail);
 
-router.route("/ListFeeds/:username").get(verifyToken, feedController.getListFeedsByUser);
+router.route("/ListFeeds/:userId").get(verifyToken, feedController.getListFeedsByUser);
 
-router.route("/ListMedias/:username").get(verifyToken, feedController.getListMediasByUser);
+router.route("/ListMedias/:userId").get(verifyToken, feedController.getListMediasByUser);
 
-router.route("/ListRePosts/:username").get(verifyToken, feedController.getListRePostsByUser);
+router.route("/ListRePosts/:userId").get(verifyToken, feedController.getListRePostsByUser);
 
 router.route("/ListFavoritePost").get(verifyToken, feedController.getListFavoritePost);
 

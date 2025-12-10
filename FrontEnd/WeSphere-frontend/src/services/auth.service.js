@@ -21,8 +21,9 @@ const authService = {
         return await axiosClient.put(_url + '/update', userData);
     },
 
-    getUser: async (userName) => {
-        return await axiosClient.get(_url + `/GetProfileData/${userName}`);
+    getUser: async (userId) => {
+        console.log("flag")
+        return await axiosClient.get(_url + `/GetProfileData/${userId}`);
     },
 
     updatePrivateMode: async (privateMode, username) => {

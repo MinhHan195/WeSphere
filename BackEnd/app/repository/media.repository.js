@@ -52,7 +52,7 @@ class MediaRepository {
         }
     }
 
-    async getListMediasByUserName(username) {
+    async getListMediasByUserId(userId) {
         try {
             // const query = `select DISTINCT feed_id from media m join feed f on m.feed_id = f.id where f.username = @username`;
             // const result = await this.db.request()
@@ -62,8 +62,8 @@ class MediaRepository {
             const result = await this.media.findAll({
                 distinct: true,
                 include: [{
-                    model: db.feed,
-                    where: { username: username }
+                    model: db.feeds,
+                    where: { userId: userId }
                 }]
             });
             return result.map(item => item.dataValues);

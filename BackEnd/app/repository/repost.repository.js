@@ -6,9 +6,9 @@ class RePostRepository {
         this.reposts = db.reposts;
     }
 
-    async rePostFeed(feedId, username, mode) {
+    async rePostFeed(feedId, userId, mode) {
         try {
-            const result = await this.reposts.create({ feedId: feedId, username: username });
+            const result = await this.reposts.create({ feedId: feedId, userId: userId });
             return result.dataValues ? true : false;
         } catch (error) {
             console.error("Error reposting feed:", error);
@@ -16,9 +16,9 @@ class RePostRepository {
         }
     }
 
-    async unRePostFeed(feedId, username) {
+    async unRePostFeed(feedId, userId) {
         try {
-            const result = await this.reposts.destroy({ where: { feedId: feedId, username: username } });
+            const result = await this.reposts.destroy({ where: { feedId: feedId, userId: userId } });
             return result[0] > 0;
         } catch (error) {
             console.error("Error unreposting feed:", error);
@@ -26,9 +26,9 @@ class RePostRepository {
         }
     }
 
-    async getListRePostsByUserName(username) {
+    async getListRePostsByUserId(userId) {
         try {
-            const result = await this.reposts.findAll({ where: { username: username } });
+            const result = await this.reposts.findAll({ where: { userId: userId } });
             return result;
         } catch (error) {
             console.error("Error getting media by username:", error);
@@ -36,9 +36,9 @@ class RePostRepository {
         }
     }
 
-    async isRePost(feedId, username) {
+    async isRePost(feedId, userId) {
         try {
-            const result = await this.reposts.count({ where: { feedId: feedId, username: username } });
+            const result = await this.reposts.count({ where: { feedId: feedId, userId: userId } });
             return result > 0;
         } catch (error) {
             console.error("Error checking if feed is reposted:", error);

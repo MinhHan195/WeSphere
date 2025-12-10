@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import style from "./ProfileBar.module.css";
 const ProfileBar = (props) => {
-    const { username, isUser } = props;
+    const { userId, isUser } = props;
     return (
         <div>
             <div className={style.profile_bar_header}>
@@ -13,7 +13,7 @@ const ProfileBar = (props) => {
                                 style.nav_link_custom
                             } ${isActive ? style.active : ""}`
                         }
-                        to={`/${username}`}
+                        to={`/${userId}`}
                     >
                         Tin của bạn
                     </NavLink>
@@ -23,7 +23,7 @@ const ProfileBar = (props) => {
                                 style.nav_link_custom
                             } ${isActive ? style.active : ""}`
                         }
-                        to={`/${username}/media`}
+                        to={`/${userId}/media`}
                     >
                         File phương tiện
                     </NavLink>
@@ -33,14 +33,14 @@ const ProfileBar = (props) => {
                                 style.nav_link_custom
                             } ${isActive ? style.active : ""}`
                         }
-                        to={`/${username}/reposts`}
+                        to={`/${userId}/reposts`}
                     >
                         Bài đăng lại
                     </NavLink>
                 </div>
             </div>
             <div className={`${style.profile_bar_bordy}`}>
-                <Outlet context={{ isUser, username }} />
+                <Outlet context={{ isUser, userId }} />
             </div>
         </div>
     );

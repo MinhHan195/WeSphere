@@ -1,14 +1,7 @@
 .home_main_container{
     width: 100%;
-    height: auto;
-}
-
-.home_main_dialog{
-    width: 777px;
-    max-width: 777px;
     height: 100vh;
     overflow-x: auto;
-    scrollbar-width: none;
 }
 
 .avatar{
@@ -19,6 +12,7 @@
 }
 
 .feed_card_item{
+    width: 777px;
     padding: 1rem;
     background-color: var(--primary-color) !important;
     color: var(--primary-text-color) !important;
@@ -26,6 +20,7 @@
 }
 
 .card{
+    width: 777px;
     background-color: var(--primary-color) !important;
     border-color: var(--primary-border-color) !important;
 }

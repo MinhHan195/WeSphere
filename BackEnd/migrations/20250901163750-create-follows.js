@@ -3,22 +3,22 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('follows', {
-      follower_username: {
+      follower_userId: {
         allowNull: false,
-        type: Sequelize.STRING(30),
+        type: Sequelize.UUID,
         primaryKey: true,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       },
-      following_username: {
+      following_userId: {
         allowNull: false,
-        type: Sequelize.STRING(30),
+        type: Sequelize.UUID,
         primaryKey: true,
         references: {
-          model: 'accounts',
-          key: 'username'
+          model: 'users',
+          key: 'userId'
         }
       }
     });

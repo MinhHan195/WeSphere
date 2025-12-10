@@ -8,13 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { $api } from "../../services/service";
 import style from "./DefaultLayout.module.css";
-import { setAlert, setLoading, setUser } from "../../redux/authSlide";
+import { setAlert, setLoading, setUser, logout } from "../../redux/authSlide";
 
 const DefaultLayout = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = localStorage.getItem(_AUTH.TOKEN_NAME);
-    const username = localStorage.getItem(_AUTH.USERNAME);
+    const userId = localStorage.getItem(_AUTH.ID);
     const alert = useSelector((state) => state.auth.alert);
     const show = useSelector((state) => state.create.show);
     const id = localStorage.getItem(_AUTH.ID);
@@ -42,13 +42,15 @@ const DefaultLayout = (props) => {
     const fetchUserData = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getUser(username);
+            const res = await $api.auth.getUser(userId);
             if (!res.isError) {
                 dispatch(setUser(res.data));
                 dispatch(setLoading(false));
             }
         } catch (error) {
             dispatch(setLoading(false));
+            // dispatch(logout());
+            // navigate("/auth");
             dispatch(
                 setAlert({
                     message: error?.errors?.exceptionMessage ?? error.message,
@@ -58,9 +60,9 @@ const DefaultLayout = (props) => {
     };
 
     useEffect(() => {
-        if (!username) return;
+        if (!userId) return;
         fetchUserData();
-    }, [username]);
+    }, [userId]);
 
     useEffect(() => {
         if (!id) return;

@@ -5,9 +5,9 @@ class LinkRepository {
         this.links = db.links;
     }
 
-    async getListLinks(username) {
+    async getListLinks(userId) {
         try {
-            const result = await this.links.findAll({ where: { username: username } });
+            const result = await this.links.findAll({ where: { userId: userId } });
             return result;
         } catch (error) {
             console.log(error);
@@ -15,10 +15,10 @@ class LinkRepository {
         }
     }
 
-    async createLink(link, username) {
+    async createLink(link, userId) {
         try {
             const result = await this.links.create({
-                username: username,
+                userId: userId,
                 title: link.title,
                 url: link.url
             });
@@ -40,7 +40,7 @@ class LinkRepository {
                 {
                     where: {
                         link_id: link.link_id,
-                        username: link.username
+                        userId: link.userId
                     }
                 }
             );
@@ -54,9 +54,9 @@ class LinkRepository {
         }
     }
 
-    async deleteLinksByUsername(username) {
+    async deleteLinksByUserId(userId) {
         try {
-            const result = await this.links.destroy({ where: { username: username } });
+            const result = await this.links.destroy({ where: { userId: userId } });
             return result;
         } catch (error) {
             console.log(error);

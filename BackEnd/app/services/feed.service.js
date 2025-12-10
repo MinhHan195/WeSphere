@@ -4,6 +4,8 @@ const feedRepository = require("../repository/feed.repository");
 const mediaRepository = require("../repository/media.repository");
 const rePostRepository = require("../repository/repost.repository");
 const likesRepository = require("../repository/likes.repository");
+const accountRepository = require("../repository/account.repository");
+const saveFeedRepository = require("../repository/save_feed.repository");
 const fs = require("fs").promises;
 
 exports.createFeed = async (data, mediaFiles) => {
@@ -42,25 +44,25 @@ exports.createFeed = async (data, mediaFiles) => {
     return true;
 };
 
-exports.likeFeed = async (mode, feedId, username) => {
+exports.likeFeed = async (mode, feedId, userId) => {
     const LikesRepository = new likesRepository();
-    const result = await LikesRepository.likeFeed(mode, feedId, username);
+    const result = await LikesRepository.likeFeed(mode, feedId, userId);
     return result;
 };
 
-exports.getListFeeds = async (username, index) => {
+exports.getListFeeds = async (userId, index) => {
     let listFeeds = [];
     let result = {};
     const FeedRepository = new feedRepository();
-    const feeds = await FeedRepository.getListFeeds(username, index);
+    const feeds = await FeedRepository.getListFeeds(userId, index);
     for (const feedItem of feeds) {
-        result = await this.getFeed(feedItem.id, feedItem.username);
+        result = await this.getFeed(feedItem.id, feedItem.userId);
         listFeeds.push(result);
     }
     return listFeeds;
 };
 
-exports.getFeed = async (feedId, username) => {
+exports.getFeed = async (feedId, userId) => {
     const FeedRepository = new feedRepository();
     const MediaRepository = new mediaRepository();
     const RePostRepository = new rePostRepository();
@@ -84,16 +86,16 @@ exports.getFeed = async (feedId, username) => {
         results.feed = mainFeed;
         const owner = await FeedRepository.getOwner(mainFeed.id);
         const dataOwner = {
-            username: owner.dataValues.account.dataValues.username,
-            id: owner.dataValues.account.dataValues.user.dataValues.userId,
+            username: owner.account.dataValues.username,
+            id: owner.userId,
             isOnline:
-                owner.dataValues.account.dataValues.isOnline === 1
+                owner.account.dataValues.isOnline === 1
                     ? true
                     : false,
-            avatar: owner.dataValues.account.dataValues.avatar,
+            avatar: owner.account.dataValues.avatar,
         };
-        const isLike = await LikesRepository.isLike(mainFeed.id, username);
-        const isRePost = await RePostRepository.isRePost(mainFeed.id, username);
+        const isLike = await LikesRepository.isLike(mainFeed.id, userId);
+        const isRePost = await RePostRepository.isRePost(mainFeed.id, userId);
         results.state = {
             isLike: isLike,
             isRePost: isRePost,
@@ -105,23 +107,25 @@ exports.getFeed = async (feedId, username) => {
     return results;
 };
 
-exports.rePostFeed = async (feedId, username, mode) => {
+exports.rePostFeed = async (feedId, userId, mode) => {
     const RePostRepository = new rePostRepository();
     let result;
     if (mode === "add") {
-        result = await RePostRepository.rePostFeed(feedId, username, mode);
+        result = await RePostRepository.rePostFeed(feedId, userId, mode);
     }
     else if (mode === "minus") {
-        result = await RePostRepository.unRePostFeed(feedId, username);
+        result = await RePostRepository.unRePostFeed(feedId, userId);
     }
     return result;
 };
 
 exports.getSavedFeeds = async (username) => {
     let listFeeds = [];
-    const FeedRepository = new feedRepository(SQL.client);
-    const MediaRepository = new mediaRepository(SQL.client);
-    const feeds = await FeedRepository.getListSaveFeedsByUserName(username);
+    const FeedRepository = new feedRepository();
+    const MediaRepository = new mediaRepository();
+    const AccountRepository = new accountRepository();
+    const userId = await AccountRepository.getUserIdFromUsername(username);
+    const feeds = await FeedRepository.getListSaveFeedsByUserId(userId);
     for (const feedItem of feeds) {
         feedItem.content = JSON.parse(feedItem.content);
         const media = await MediaRepository.getListMediasByFeedId(feedItem.id);
@@ -134,30 +138,27 @@ exports.getSavedFeeds = async (username) => {
     return listFeeds;
 };
 
-exports.getFeedDetail = async (feedId, username) => {
+exports.getFeedDetail = async (feedId, userId) => {
     const FeedRepository = new feedRepository(SQL.client);
-
-    const mainFeed = await this.getFeed(feedId, username);
-
+    const mainFeed = await this.getFeed(feedId, userId);
     const listCommentFeedId = await FeedRepository.getListCommentFeedId(feedId);
     let listComment = [];
     for (const item of listCommentFeedId) {
-        const comment = await this.getFeed(item.id, username);
-        if (comment) {
-            listComment.push(comment);
-        }
+        const comment = await this.getFeed(item.id, item.userId);
+        listComment.push(comment);
     }
     mainFeed.listComments = listComment;
-
     return mainFeed;
 };
 
-exports.getListFeedsByUser = async (username) => {
-    const FeedRepository = new feedRepository(SQL.client);
-    const feeds = await FeedRepository.getListFeedsByUsername(username);
+exports.getListFeedsByUser = async (userId) => {
+    const FeedRepository = new feedRepository();
+    const AccountRepository = new accountRepository();
+    // const userId = await AccountRepository.getUsernameFromUserId(userId);
+    const feeds = await FeedRepository.getListFeedsByUserId(userId);
     let listfeed = [];
     for (const item of feeds) {
-        const feed = await this.getFeed(item.id, item.username);
+        const feed = await this.getFeed(item.id, item.userId);
         if (feed) {
             listfeed.push(feed);
         }
@@ -165,12 +166,12 @@ exports.getListFeedsByUser = async (username) => {
     return listfeed;
 };
 
-exports.getListMediasByUser = async (username) => {
-    const MediaRepository = new mediaRepository(SQL.client);
-    const medias = await MediaRepository.getListMediasByUserName(username);
+exports.getListMediasByUser = async (userId) => {
+    const MediaRepository = new mediaRepository();
+    const medias = await MediaRepository.getListMediasByUserId(userId);
     let listFeeds = [];
     for (const item of medias) {
-        const feed = await this.getFeed(item.feed_id, username);
+        const feed = await this.getFeed(item.feed_id, item.userId);
         if (feed) {
             listFeeds.push(feed);
         }
@@ -178,16 +179,16 @@ exports.getListMediasByUser = async (username) => {
     return listFeeds;
 };
 
-exports.getListRePostsByUser = async (username) => {
-    const RePostRepository = new rePostRepository(SQL.client);
-    const repost = await RePostRepository.getListRePostsByUserName(username);
+exports.getListRePostsByUser = async (userId) => {
+    const RePostRepository = new rePostRepository();
+    const repost = await RePostRepository.getListRePostsByUserId(userId);
     let listFeeds = [];
     for (const item of repost) {
-        const feed = await this.getFeed(item.feedId, username);
+        const feed = await this.getFeed(item.feedId, item.userId);
         if (feed) {
             const data = {
                 userRepost: {
-                    username: item.username,
+                    userId: item.userId,
                     timeCreate: item.timeCreate,
                 },
                 ...feed,
@@ -198,28 +199,27 @@ exports.getListRePostsByUser = async (username) => {
     return listFeeds;
 };
 
-exports.getListFavoritePostsByUser = async (username) => {
+exports.getListFavoritePostsByUser = async (userId) => {
     const FeedRepository = new feedRepository();
-    const favoritePosts = await FeedRepository.getListFavoritePostsByUserName(
-        username
+    const favoritePosts = await FeedRepository.getListFavoritePostsByUserId(
+        userId
     );
     let listFeeds = [];
-    console.log(favoritePosts);
     for (const item of favoritePosts) {
-        const feed = await this.getFeed(item.id, item.username);
+        const feed = await this.getFeed(item.id, item.userId);
         listFeeds.push(feed);
     }
     return listFeeds;
 };
 
-exports.getListSavedPostsByUser = async (username) => {
-    const FeedRepository = new feedRepository(SQL.client);
-    const savedPosts = await FeedRepository.getListSavedPostsByUserName(
-        username
+exports.getListSavedPostsByUser = async (userId) => {
+    const SaveFeedRepository = new saveFeedRepository();
+    const savedPosts = await SaveFeedRepository.getListSavedPostsByUserName(
+        userId
     );
     let listFeeds = [];
     for (const item of savedPosts) {
-        const feed = await this.getFeed(item.feedId, username);
+        const feed = await this.getFeed(item.feedId, item.userId);
         listFeeds.push(feed);
     }
     return listFeeds;

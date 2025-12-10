@@ -67,9 +67,9 @@ exports.checkUsername = async (req, res, next) => {
 
 exports.getDetailUser = async (req, res, next) => {
     try {
-        const { username } = req.params;
+        const { userId } = req.params;
         const { user } = req;
-        const userDetails = await authService.getDetailUser(username, user);
+        const userDetails = await authService.getDetailUser(userId, user);
         return res.send({
             isError: false,
             message: "Lấy thông tin người dùng thành công",
@@ -137,6 +137,7 @@ exports.deleteAccount = async (req, res, next) => {
     try {
         const data = req.body;
         const AuthUsername = req.user.UserName;
+        data.userId = req.user.UserId;
         const result = await authService.deleteAccount(AuthUsername, data);
         return res.send({
             isError: !result,

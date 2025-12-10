@@ -8,8 +8,8 @@ class FollowRepository {
         try {
             const total = await this.follows.count({
                 where: {
-                    follower_username: followerId,
-                    following_username: followingId
+                    follower_userId: followerId,
+                    following_userId: followingId
                 }
             });
             return total > 0;
@@ -19,29 +19,22 @@ class FollowRepository {
         }
     }
 
-    async getFollowers(username) {
+    async getFollowers(userId) {
         try {
-            const result = await this.follows.findAll({ attributes: ['following_username'], where: { follower_username: username } });
-            return result.map(row => row.following_username);
-        } catch (error) {
-            console.log(error);
-            throw new ApiError(500, "Lỗi hệ thống");
-        }
-    }
-
-    async getFollowing(username) {
-        try {
-            const result = await this.follows.findAll({ attributes: ['follower_username'], where: { following_username: username } });
-            return result.map(row => row.follower_username);
-        } catch (error) {
-            console.log(error);
-            throw new ApiError(500, "Lỗi hệ thống");
-        }
-    }
-
-    async deleteFollowsByUsername(username) {
-        try {
-            const result = await this.follows.destroy({ where: { follower_username: username } });
+            const result = await this.follows.findAll({
+                include: [{
+                    model: db.users, as: 'follower',
+                    require: true,
+                    attributes: ['fullName'],
+                    include: [{
+                        model: db.accounts, as: 'account',
+                        attributes: ['username', 'avatar'],
+                        required: true
+                    }]
+                }],
+                attributes: ['following_userId'],
+                where: { follower_userId: userId }
+            });
             return result;
         } catch (error) {
             console.log(error);
@@ -49,25 +42,57 @@ class FollowRepository {
         }
     }
 
-    async followUser(username, user) {
+    async getFollowing(userId) {
+        try {
+            const result = await this.follows.findAll({
+                include: [{
+                    model: db.users, as: 'follower',
+                    require: true,
+                    attributes: ['fullName'],
+                    include: [{
+                        model: db.accounts, as: 'account',
+                        attributes: ['username', 'avatar'],
+                        required: true
+                    }]
+                }],
+                attributes: ['following_userId'],
+                where: { following_userId: userId }
+            });
+            return result;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Lỗi hệ thống");
+        }
+    }
+
+    async deleteFollowsByUserId(userId) {
+        try {
+            const result = await this.follows.destroy({ where: { follower_userId: userId } });
+            return result;
+        } catch (error) {
+            console.log(error);
+            throw new ApiError(500, "Lỗi hệ thống");
+        }
+    }
+
+    async followUser(userId, user) {
         try {
             const result = await this.follows.create({
-                follower_username: user.UserName,
-                following_username: username
+                follower_userId: user.UserId,
+                following_userId: userId
             });
-            console.log(result);
             return true;
         } catch (error) {
             console.log(error);
             throw new ApiError(500, "Internal Server Error");
         }
     }
-    async unfollowUser(username, user) {
+    async unfollowUser(userId, user) {
         try {
             const result = await this.follows.destroy({
                 where: {
-                    follower_username: user.UserName,
-                    following_username: username
+                    follower_userId: user.UserId,
+                    following_userId: userId
                 }
             });
             return result > 0;
