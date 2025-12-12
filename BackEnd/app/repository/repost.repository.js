@@ -28,7 +28,8 @@ class RePostRepository {
 
     async getListRePostsByUserId(userId) {
         try {
-            const result = await this.reposts.findAll({ where: { userId: userId } });
+            const result = await this.reposts.findAll({ where: { userId: userId }, order: [["timeCreate", "DESC"]], });
+            console.log(userId)
             return result;
         } catch (error) {
             console.error("Error getting media by username:", error);

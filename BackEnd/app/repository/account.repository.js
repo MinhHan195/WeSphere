@@ -39,9 +39,11 @@ class accountRepository {
     async getAccountByUserId(userId) {
         try {
             const account = await this.account.findOne({ where: { userId: userId } });
-            return account.dataValues;
+            if (account) {
+                return account.dataValues;
+            }
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             throw new ApiError(500, "Internal Server Error");
         }
     }

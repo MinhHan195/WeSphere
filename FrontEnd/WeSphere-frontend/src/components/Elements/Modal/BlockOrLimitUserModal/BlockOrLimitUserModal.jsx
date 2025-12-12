@@ -1,13 +1,8 @@
 import React from "react";
 import UserCard from "../../UserCard/UserCard";
 import style from "./BlockOrLimitUserModal.module.css";
-const BlockOrLimitUserModal = ({
-    show,
-    isBlock,
-    closeModal,
-    listUser,
-    removeHandle,
-}) => {
+const BlockOrLimitUserModal = (props) => {
+    const { show, isBlock, closeModal, listUser, removeHandle } = props;
     const handleClose = (e) => {
         e.stopPropagation();
         if (e.target.classList.contains(style.modal_background)) {

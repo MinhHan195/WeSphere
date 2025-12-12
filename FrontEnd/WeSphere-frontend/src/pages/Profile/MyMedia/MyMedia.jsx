@@ -4,17 +4,18 @@ import { setAlert, setLoading } from "../../../redux/authSlide";
 import { $api } from "../../../services/service";
 import Feed from "../../../components/Elements/Feed/Feed";
 import style from "./MyMedia.module.css";
-import { useOutletContext } from "react-router-dom";
+import { useParams } from "react-router-dom";
 const MyMedia = () => {
-    const { username } = useOutletContext();
     const dispatch = useDispatch();
+
+    const param = useParams();
 
     const [listMyMedias, setListMyMedias] = useState([]);
 
     const fectData = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.post.getListMediasByUserId(username);
+            const res = await $api.post.getListMediasByUserId(param.userId);
             if (!res.isError) {
                 setListMyMedias(res.data);
                 dispatch(setLoading(false));

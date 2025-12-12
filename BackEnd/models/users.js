@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     static associate(models) {
       users.belongsTo(models.accounts, { foreignKey: 'userId', targetKey: 'userId' })
+      users.belongsTo(models.blocks, { foreignKey: 'userId', as: 'blocker', targetKey: 'blocker_id' })
+      users.belongsTo(models.blocks, { foreignKey: 'userId', as: 'blocked', targetKey: 'blocked_id' })
     }
   }
   users.init({

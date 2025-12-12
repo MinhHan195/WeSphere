@@ -109,7 +109,8 @@ exports.getFeedDetail = async (req, res, next) => {
 exports.getListFeedsByUser = async (req, res, next) => {
     try {
         const userId = req.params.userId;
-        const feeds = await feedService.getListFeedsByUser(userId);
+        const ownerUserId = req.user.UserId;
+        const feeds = await feedService.getListFeedsByUser(userId, ownerUserId);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết của người dùng thành công",
@@ -124,7 +125,8 @@ exports.getListFeedsByUser = async (req, res, next) => {
 exports.getListMediasByUser = async (req, res, next) => {
     try {
         const userId = req.params.userId;
-        const medias = await feedService.getListMediasByUser(userId);
+        const ownerUserId = req.user.UserId;
+        const medias = await feedService.getListMediasByUser(userId, ownerUserId);
         return res.send({
             isError: false,
             message: "Lấy danh sách media của người dùng thành công",
@@ -139,7 +141,8 @@ exports.getListMediasByUser = async (req, res, next) => {
 exports.getListRePostsByUser = async (req, res, next) => {
     try {
         const userId = req.params.userId;
-        const rePosts = await feedService.getListRePostsByUser(userId);
+        const ownerUserId = req.user.UserId;
+        const rePosts = await feedService.getListRePostsByUser(userId, ownerUserId);
         return res.send({
             isError: false,
             message: "Lấy danh sách bài viết đã repost của người dùng thành công",
@@ -174,6 +177,51 @@ exports.getListSavePost = async (req, res, next) => {
             isError: false,
             message: "Lấy danh sách bài viết đã lưu của người dùng thành công",
             data: savedPosts
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.saveFeed = async (req, res, next) => {
+    try {
+        const userId = req.user.UserId;
+        const { feedId } = req.params;
+        const result = await feedService.saveFeed(feedId, userId);
+        return res.send({
+            isError: false,
+            message: "Luư trữ bài viết thành công",
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.unSaveFeed = async (req, res, next) => {
+    try {
+        const userId = req.user.UserId;
+        const { feedId } = req.params;
+        const result = await feedService.unSaveFeed(feedId, userId);
+        return res.send({
+            isError: false,
+            message: "Hủy lưu bài viết",
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
+exports.deleteFeed = async (req, res, next) => {
+    try {
+        const userId = req.user.UserId;
+        const { feedId } = req.params;
+        const result = await feedService.deleteFeed(feedId, userId);
+        return res.send({
+            isError: false,
+            message: "Xóa bài viết thành công",
         });
     } catch (error) {
         console.log(error);

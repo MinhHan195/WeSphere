@@ -12,6 +12,7 @@ const HomePage = () => {
     const [listFeeds, setListFeeds] = useState([]);
     const [lastIndex, setLastIndex] = useState(0);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [listBlock, setListBlock] = useState([]);
     const dispatch = useDispatch();
     const avatar = useSelector((state) => state.auth.user.avatar);
     const sentinelRef = useRef(null);
@@ -47,6 +48,24 @@ const HomePage = () => {
         }
     };
 
+    const addIdLock = async (id) => {
+        setListBlock((prev) => [...prev, id]);
+    };
+
+    useEffect(() => {
+        // console.log(listBlock);
+        const blockIds = new Set(listBlock.map((i) => i?.id));
+        setListFeeds((prev) => {
+            return prev.filter(
+                (item) =>
+                    !(
+                        blockIds.has(item?.feedOwner?.id) ||
+                        blockIds.has(item?.feed?.id)
+                    )
+            );
+        });
+    }, [listBlock]);
+
     useEffect(() => {
         document.title = "WeSphere • Trang chủ";
         fetchData(0);
@@ -57,7 +76,6 @@ const HomePage = () => {
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 setLastIndex(listFeeds.length);
-                console.log("Load more feeds...");
             }
         });
 
@@ -116,7 +134,12 @@ const HomePage = () => {
                                       ref={sentinelRef}
                                       id="sentinel"
                                   >
-                                      <Feed data={feed} key={idx} idx={idx} />
+                                      <Feed
+                                          data={feed}
+                                          key={idx}
+                                          idx={idx}
+                                          block={addIdLock}
+                                      />
                                   </div>
                               );
                           } else {
@@ -125,7 +148,12 @@ const HomePage = () => {
                                       className={`card mb-4 shadow-sm rounded-4 py-4  ${style.feed_card_item}`}
                                       key={feed.feed.id}
                                   >
-                                      <Feed data={feed} key={idx} idx={idx} />
+                                      <Feed
+                                          data={feed}
+                                          key={idx}
+                                          idx={idx}
+                                          block={addIdLock}
+                                      />
                                   </div>
                               );
                           }

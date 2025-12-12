@@ -75,7 +75,6 @@ const PrivacySettings = () => {
             dispatch(setLoading(true));
             const res = await $api.auth.getListUserBlock();
             if (!res.isError) {
-                console.log(res);
                 dispatch(setLoading(false));
                 return res.result;
             }
@@ -111,15 +110,11 @@ const PrivacySettings = () => {
         }
     };
 
-    const removeUserLimit = async (limitedUsername) => {
+    const removeUserLimit = async (limitedUserId) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.removeLimitedUser(
-                limitedUsername,
-                user.username
-            );
+            const res = await $api.auth.removeLimitedUser(limitedUserId);
             if (!res.isError) {
-                console.log(res);
                 dispatch(setLoading(false));
                 dispatch(setAlert({ message: res.message }));
                 setListUser(res.result);
@@ -133,13 +128,10 @@ const PrivacySettings = () => {
             );
         }
     };
-    const removeUserBlock = async (blockedUsername) => {
+    const removeUserBlock = async (blockedUserId) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.removeBlockedUser(
-                blockedUsername,
-                user.username
-            );
+            const res = await $api.auth.removeBlockedUser(blockedUserId);
             if (!res.isError) {
                 dispatch(setLoading(false));
                 setListUser(res.result);

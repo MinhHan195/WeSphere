@@ -23,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: DataTypes.UUID,
     feedId: DataTypes.UUID,
-    timeCreate: DataTypes.DATE
+    timeCreate: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     sequelize,
     modelName: 'save_feeds',

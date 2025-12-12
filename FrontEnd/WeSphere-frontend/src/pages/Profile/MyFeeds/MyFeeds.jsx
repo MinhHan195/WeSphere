@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { setModal } from "../../../redux/createSLide";
 import { setAlert, setLoading } from "../../../redux/authSlide";
 import { $api } from "../../../services/service";
 import Feed from "../../../components/Elements/Feed/Feed";
 import style from "./MyFeeds.module.css";
 const MyFeeds = () => {
-    const { isUser, username } = useOutletContext();
+    const { isUser } = useOutletContext();
     const dispatch = useDispatch();
+    const param = useParams();
 
     const [listMyFeeds, setListMyFeeds] = useState([]);
 
     const fectData = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.post.getListFeedsByUserId(username);
+            const res = await $api.post.getListFeedsByUserId(param.userId);
             if (!res.isError) {
                 setListMyFeeds(res.data);
                 dispatch(setLoading(false));

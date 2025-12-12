@@ -165,16 +165,34 @@ exports.followUser = async (req, res, next) => {
     }
 };
 
-exports.test = async (req, res, next) => {
+exports.blockUser = async (req, res, next) => {
     try {
-        const user = req.user;
-        const data = req.body;
-        const result = await authService.test(data, user);
+        const { userId } = req.params;
+        const { user } = req;
+        const result = await authService.blockUser(userId, user);
         return res.send({
-            result: result,
+            isError: result == null,
+            message: result
+
         });
     } catch (error) {
         console.log(error);
         return next(error);
     }
-};
+}
+
+exports.restricUser = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const { user } = req;
+        const result = await authService.restricUser(userId, user);
+        return res.send({
+            isError: result == null,
+            message: result
+
+        });
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}

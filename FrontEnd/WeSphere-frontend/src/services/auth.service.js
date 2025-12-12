@@ -22,7 +22,6 @@ const authService = {
     },
 
     getUser: async (userId) => {
-        console.log("flag")
         return await axiosClient.get(_url + `/GetProfileData/${userId}`);
     },
 
@@ -46,12 +45,12 @@ const authService = {
         return await axiosClient.get(_url + `/ListUserLimit`);
     },
 
-    removeBlockedUser: async (blockedUserId, ownerUserId) => {
-        return await axiosClient.patch(_url + `/removeBlockedUser/${blockedUserId}/${ownerUserId}`)
+    removeBlockedUser: async (blockedUserId) => {
+        return await axiosClient.patch(_url + `/removeBlockedUser/${blockedUserId}`)
     },
 
-    removeLimitedUser: async (limitedUserId, ownerUserId) => {
-        return await axiosClient.patch(_url + `/removeLimitedUser/${limitedUserId}/${ownerUserId}`)
+    removeLimitedUser: async (limitedUserId) => {
+        return await axiosClient.patch(_url + `/removeLimitedUser/${limitedUserId}`)
     },
 
     deleteAccount: async (payload) => {
@@ -72,7 +71,15 @@ const authService = {
 
     followUser: async (username, mode) => {
         return await axiosClient.post(_url + `/followUser/${username}/${mode}`);
-    }
+    },
+
+    blockUser: async (userId) => {
+        return await axiosClient.get(_url + `/block/${userId}`)
+    },
+
+    restricUser: async (userId) => {
+        return await axiosClient.get(_url + `/restric/${userId}`)
+    },
 };
 
 export default authService;

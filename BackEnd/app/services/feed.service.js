@@ -6,6 +6,8 @@ const rePostRepository = require("../repository/repost.repository");
 const likesRepository = require("../repository/likes.repository");
 const accountRepository = require("../repository/account.repository");
 const saveFeedRepository = require("../repository/save_feed.repository");
+const blockRepository = require("../repository/block.repository");
+const limitRepository = require("../repository/limit.repository");
 const fs = require("fs").promises;
 
 exports.createFeed = async (data, mediaFiles) => {
@@ -54,10 +56,19 @@ exports.getListFeeds = async (userId, index) => {
     let listFeeds = [];
     let result = {};
     const FeedRepository = new feedRepository();
+    const BlockRepository = new blockRepository();
+    const LimitRepository = new limitRepository();
+    let listBlock = await BlockRepository.getListUserIdBlock(userId);
+    const listRestric = await LimitRepository.getListUserIdLimit(userId);
+    listBlock = [...listBlock, ...listRestric];
     const feeds = await FeedRepository.getListFeeds(userId, index);
     for (const feedItem of feeds) {
-        result = await this.getFeed(feedItem.id, feedItem.userId);
-        listFeeds.push(result);
+        if (!listBlock.includes(feedItem.userId)
+        ) {
+            result = await this.getFeed(feedItem.id, userId);
+            listFeeds.push(result);
+        }
+
     }
     return listFeeds;
 };
@@ -67,6 +78,7 @@ exports.getFeed = async (feedId, userId) => {
     const MediaRepository = new mediaRepository();
     const RePostRepository = new rePostRepository();
     const LikesRepository = new likesRepository();
+    const SaveFeedRepository = new saveFeedRepository();
     let results = {};
     const mainFeed = await FeedRepository.getFeedById(feedId);
     if (mainFeed) {
@@ -96,14 +108,15 @@ exports.getFeed = async (feedId, userId) => {
         };
         const isLike = await LikesRepository.isLike(mainFeed.id, userId);
         const isRePost = await RePostRepository.isRePost(mainFeed.id, userId);
+        const isSave = await SaveFeedRepository.isSave(mainFeed.id, userId);
         results.state = {
             isLike: isLike,
             isRePost: isRePost,
+            isSave: isSave,
         };
 
         results.feedOwner = dataOwner;
     }
-
     return results;
 };
 
@@ -144,21 +157,21 @@ exports.getFeedDetail = async (feedId, userId) => {
     const listCommentFeedId = await FeedRepository.getListCommentFeedId(feedId);
     let listComment = [];
     for (const item of listCommentFeedId) {
-        const comment = await this.getFeed(item.id, item.userId);
+        const comment = await this.getFeed(item.id, userId);
         listComment.push(comment);
     }
     mainFeed.listComments = listComment;
     return mainFeed;
 };
 
-exports.getListFeedsByUser = async (userId) => {
+exports.getListFeedsByUser = async (userId, ownerUserId) => {
     const FeedRepository = new feedRepository();
     const AccountRepository = new accountRepository();
     // const userId = await AccountRepository.getUsernameFromUserId(userId);
     const feeds = await FeedRepository.getListFeedsByUserId(userId);
     let listfeed = [];
     for (const item of feeds) {
-        const feed = await this.getFeed(item.id, item.userId);
+        const feed = await this.getFeed(item.id, ownerUserId);
         if (feed) {
             listfeed.push(feed);
         }
@@ -166,12 +179,12 @@ exports.getListFeedsByUser = async (userId) => {
     return listfeed;
 };
 
-exports.getListMediasByUser = async (userId) => {
+exports.getListMediasByUser = async (userId, ownerUserId) => {
     const MediaRepository = new mediaRepository();
     const medias = await MediaRepository.getListMediasByUserId(userId);
     let listFeeds = [];
     for (const item of medias) {
-        const feed = await this.getFeed(item.feed_id, item.userId);
+        const feed = await this.getFeed(item.feed_id, ownerUserId);
         if (feed) {
             listFeeds.push(feed);
         }
@@ -179,12 +192,12 @@ exports.getListMediasByUser = async (userId) => {
     return listFeeds;
 };
 
-exports.getListRePostsByUser = async (userId) => {
+exports.getListRePostsByUser = async (userId, ownerUserId) => {
     const RePostRepository = new rePostRepository();
     const repost = await RePostRepository.getListRePostsByUserId(userId);
     let listFeeds = [];
     for (const item of repost) {
-        const feed = await this.getFeed(item.feedId, item.userId);
+        const feed = await this.getFeed(item.feedId, ownerUserId);
         if (feed) {
             const data = {
                 userRepost: {
@@ -206,7 +219,7 @@ exports.getListFavoritePostsByUser = async (userId) => {
     );
     let listFeeds = [];
     for (const item of favoritePosts) {
-        const feed = await this.getFeed(item.id, item.userId);
+        const feed = await this.getFeed(item.id, userId);
         listFeeds.push(feed);
     }
     return listFeeds;
@@ -219,8 +232,36 @@ exports.getListSavedPostsByUser = async (userId) => {
     );
     let listFeeds = [];
     for (const item of savedPosts) {
-        const feed = await this.getFeed(item.feedId, item.userId);
+        const feed = await this.getFeed(item.feedId, userId);
         listFeeds.push(feed);
     }
     return listFeeds;
 };
+
+exports.saveFeed = async (feedId, userId) => {
+    const SaveFeedRepository = new saveFeedRepository();
+    const res = await SaveFeedRepository.saveFeed(feedId, userId);
+    if (res) {
+        return;
+    }
+}
+
+exports.unSaveFeed = async (feedId, userId) => {
+    const SaveFeedRepository = new saveFeedRepository();
+    const res = await SaveFeedRepository.unSaveFeed(feedId, userId);
+    if (res) {
+        return;
+    }
+}
+
+exports.deleteFeed = async (feedId, userId) => {
+    const FeedRepository = new feedRepository();
+    const MediaRepository = new mediaRepository();
+    const LikesRepository = new likesRepository();
+    const SaveFeedRepository = new saveFeedRepository();
+    await MediaRepository.deleteMediaByFeedId(feedId);
+    await LikesRepository.deletelikeFeedByFeedId(feedId);
+    await SaveFeedRepository.deleteSaveFeedByFeedId(feedId);
+    await FeedRepository.deleteFeedById(feedId, userId);
+    return;
+}

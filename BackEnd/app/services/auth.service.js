@@ -172,33 +172,36 @@ exports.getDetailUser = async (userId, ownUser) => {
 
     let result = {};
     const account = await AccountRepository.getAccountByUserId(userId);
-    const user = await UserRepository.getUserById(account.userId);
-    const isFollowing = await FollowRepository.isFollowing(
-        ownUser.UserId,
-        account.userId
-    );
-    const listFollowers = await FollowRepository.getFollowers(account.userId);
-    const listFollowing = await FollowRepository.getFollowing(account.userId);
-    const listLinks = await LinkRepository.getListLinks(account.userId);
-    listLinks.username = account.username;
-    result = {
-        id: account.userId,
-        username: account.username,
-        accessToken: account.accessToken,
-        bio: account.bio,
-        privateMode: account.privateMode,
-        avatar: account.avatar,
-        publicId: account.publicId,
-        fullname: user.fullname,
-        phone: user.phone,
-        gender: user.gender,
-        email: user.email,
-        onlineMode: account.onlineMode,
-        listLinks: listLinks,
-        isFollowing: isFollowing,
-        followers: listFollowers.length,
-        following: listFollowing.length,
-    };
+    if (account) {
+        const user = await UserRepository.getUserById(account.userId);
+        const isFollowing = await FollowRepository.isFollowing(
+            ownUser.UserId,
+            account.userId
+        );
+        const listFollowers = await FollowRepository.getFollowers(account.userId);
+        const listFollowing = await FollowRepository.getFollowing(account.userId);
+        const listLinks = await LinkRepository.getListLinks(account.userId);
+        listLinks.username = account.username;
+        result = {
+            id: account.userId,
+            username: account.username,
+            accessToken: account.accessToken,
+            bio: account.bio,
+            privateMode: account.privateMode,
+            avatar: account.avatar,
+            publicId: account.publicId,
+            fullname: user.fullname,
+            phone: user.phone,
+            gender: user.gender,
+            email: user.email,
+            onlineMode: account.onlineMode,
+            listLinks: listLinks,
+            isFollowing: isFollowing,
+            followers: listFollowers.length,
+            following: listFollowing.length,
+        };
+    }
+
     // const userDetails = await UserRepository.getUserByUsername(username);
 
     return result;
@@ -281,21 +284,15 @@ exports.getListUserLimit = async (userId) => {
     return res;
 };
 
-exports.removeLimitedUser = async (limitedUsername, ownerUsername) => {
+exports.removeLimitedUser = async (limitedUserId, ownerUserId) => {
     const LimitRepository = new limitRepository();
-    const AccountRepository = new accountRepository();
-    const limitedUserId = await AccountRepository.getUserIdFromUsername(limitedUsername);
-    const ownerUserId = await AccountRepository.getUserIdFromUsername(ownerUsername);
     await LimitRepository.removeLimitedUser(limitedUserId, ownerUserId);
     const res = await LimitRepository.getListUserLimit(ownerUserId);
     return res;
 };
 
-exports.removeBlockedUser = async (blockedUsername, ownerUsername) => {
-    const AccountRepository = new accountRepository();
+exports.removeBlockedUser = async (blockedUserId, ownerUserId) => {
     const BlockRepository = new blockRepository();
-    const blockedUserId = await AccountRepository.getUserIdFromUsername(blockedUsername);
-    const ownerUserId = await AccountRepository.getUserIdFromUsername(ownerUsername);
     await BlockRepository.removeBlockedUser(blockedUserId, ownerUserId);
     const res = await BlockRepository.getListUserBlock(ownerUserId);
     return res;
@@ -357,3 +354,15 @@ exports.followUser = async (username, mode, user) => {
     }
     return res;
 };
+
+exports.blockUser = async (userId, user) => {
+    const BlockRepository = new blockRepository();
+    const res = BlockRepository.createBlock(userId, user.UserId);
+    return res;
+}
+
+exports.restricUser = async (userId, user) => {
+    const LimitRepository = new limitRepository();
+    const res = LimitRepository.createLimit(userId, user.UserId);
+    return res;
+}

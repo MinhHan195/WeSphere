@@ -40,10 +40,6 @@ class MediaRepository {
 
     async deleteMediaByFeedId(feedId) {
         try {
-            // const query = `DELETE FROM media WHERE feed_id = @feedId`;
-            // await this.db.request()
-            //     .input("feedId", sql.VarChar, feedId)
-            //     .query(query);
             const result = await this.media.destroy({ where: { feed_id: feedId } });
             return result[0];
         } catch (error) {
@@ -54,17 +50,18 @@ class MediaRepository {
 
     async getListMediasByUserId(userId) {
         try {
-            // const query = `select DISTINCT feed_id from media m join feed f on m.feed_id = f.id where f.username = @username`;
-            // const result = await this.db.request()
-            //     .input("username", sql.VarChar, username)
-            //     .query(query);
-            // return result.recordset;
             const result = await this.media.findAll({
                 distinct: true,
                 include: [{
                     model: db.feeds,
-                    where: { userId: userId }
-                }]
+                    where: { userId: userId },
+                    attributes: [],
+                    order: [["timeCreate", "DESC"]],
+
+                }],
+                attributes: ['feed_id'],
+                group: ['feed_id'],
+
             });
             return result.map(item => item.dataValues);
         } catch (error) {

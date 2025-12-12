@@ -1,5 +1,6 @@
 import style from "./VideoPreview.module.css";
 const VideoPreview = (props) => {
+    const { hasMany } = props;
     const url = props.preview
         ? URL.createObjectURL(props.file)
         : props.data.url;
@@ -9,6 +10,7 @@ const VideoPreview = (props) => {
             <div
                 className={`${style.video_preview_container} --container-${key}`}
                 key={key}
+                style={hasMany ? { height: "250px" } : { height: "auto" }}
             >
                 {props.preview ? (
                     <div
@@ -19,7 +21,12 @@ const VideoPreview = (props) => {
                     </div>
                 ) : null}
 
-                <video src={url} controls className={style.video} />
+                <video
+                    src={url}
+                    controls
+                    className={style.video}
+                    style={hasMany ? { height: "100%" } : { width: "100%" }}
+                />
             </div>
         </div>
     );

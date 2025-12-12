@@ -8,6 +8,7 @@ import style from "./Favorite.module.css";
 const Favorite = () => {
     const dispatch = useDispatch();
     const [listFeed, setListFeed] = useState([]);
+    const [listIdx, setListIdx] = useState([]);
 
     const fetchData = async () => {
         dispatch(setLoading(true));
@@ -27,6 +28,16 @@ const Favorite = () => {
             );
         }
     };
+    const changeListIdx = async (feedId) => {
+        setListIdx((prev) => [...prev, feedId]);
+    };
+
+    useEffect(() => {
+        const list = new Set(listIdx.map((i) => i?.id));
+        setListFeed((prev) => {
+            return prev.filter((item) => !list.has(item?.feed?.id));
+        });
+    }, [listIdx]);
 
     useEffect(() => {
         fetchData();
@@ -48,8 +59,12 @@ const Favorite = () => {
                                       <div
                                           className={style.feed_card}
                                           key={feed.feed.id}
+                                          idx={idx}
                                       >
-                                          <Feed data={feed} idx={idx} />
+                                          <Feed
+                                              data={feed}
+                                              block={changeListIdx}
+                                          />
                                       </div>
                                       {idx < listFeed.length - 1 ? (
                                           <hr className={style.line} />

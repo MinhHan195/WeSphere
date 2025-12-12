@@ -27,7 +27,6 @@ function Editor({ onExport, json, editable, emoji, placeholder }) {
         editorState: json
             ? JSON.stringify(json, null, 2)
             : (editor) => {
-                  console.log(json);
                   editor.update(() => {
                       const root = $getRoot();
                       const paragraph = $createParagraphNode();

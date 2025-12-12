@@ -27,16 +27,16 @@ const postService = {
         return await axiosClient.get(_url + '/ListFeeds?index=' + startIndex);
     },
 
-    getListFeedsByUserId: async (username) => {
-        return await axiosClient.get(_url + `/ListFeeds/${username}`);
+    getListFeedsByUserId: async (userId) => {
+        return await axiosClient.get(_url + `/ListFeeds/${userId}`);
     },
 
     getListMediasByUserId: async (username) => {
         return await axiosClient.get(_url + `/ListMedias/${username}`);
     },
 
-    getListRePostsByUserId: async (username) => {
-        return await axiosClient.get(_url + `/ListRePosts/${username}`);
+    getListRePostsByUserId: async (userId) => {
+        return await axiosClient.get(_url + `/ListRePosts/${userId}`);
     },
 
     getListFavoritePost: async () => {
@@ -45,7 +45,21 @@ const postService = {
 
     getListSavedPost: async () => {
         return await axiosClient.get(_url + '/ListSavedPost');
+    },
+
+    saveFeed: async (feedId) => {
+        return await axiosClient.get(_url + `/SaveFeed/${feedId}`)
+    },
+
+    unSaveFeed: async (feedId) => {
+        return await axiosClient.get(_url + `/UnSaveFeed/${feedId}`)
+    },
+
+    deleteFeed: async (feedId) => {
+        return await axiosClient.get(_url + `/DeleteFeed/${feedId}`)
     }
+
+
 }
 
 export default postService;

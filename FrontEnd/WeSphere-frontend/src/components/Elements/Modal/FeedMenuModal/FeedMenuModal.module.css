@@ -1,0 +1,13 @@
+.modal_container{
+    position: absolute;
+    border: 1px solid var(--primary-border-color);
+    background-color: var(--primary-color);
+    right: 0px;
+    top: 30px;
+    z-index: 1000;
+    width: 240px;
+}
+
+.btn:hover{
+    background-color: var(--secondary-icon-hover-color)
+}

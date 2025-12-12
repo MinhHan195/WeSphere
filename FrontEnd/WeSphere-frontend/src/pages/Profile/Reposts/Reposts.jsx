@@ -6,16 +6,17 @@ import { setAlert, setLoading } from "../../../redux/authSlide";
 import { $api } from "../../../services/service";
 import Feed from "../../../components/Elements/Feed/Feed";
 import style from "./Reposts.module.css";
-import { useOutletContext } from "react-router-dom";
+import { _AUTH } from "../../../constants/_auth";
+import { useParams } from "react-router-dom";
 const Reposts = () => {
     const dispatch = useDispatch();
-    const { username } = useOutletContext();
+    const param = useParams();
     const [listRePosts, setListRePosts] = useState([]);
 
     const fectData = async () => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.post.getListRePostsByUserId(username);
+            const res = await $api.post.getListRePostsByUserId(param.userId);
             if (!res.isError) {
                 setListRePosts(res.data);
                 dispatch(setLoading(false));

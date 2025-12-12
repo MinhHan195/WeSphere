@@ -33,6 +33,9 @@ const PreviewContainer = (props) => {
                                     file={file}
                                     idx={idx}
                                     key={file.name}
+                                    hasMany={
+                                        listImage.length > 1 ? true : false
+                                    }
                                 />
                             );
                         }
@@ -46,6 +49,9 @@ const PreviewContainer = (props) => {
                                     file={file}
                                     idx={idx}
                                     key={file.name}
+                                    hasMany={
+                                        listImage.length > 1 ? true : false
+                                    }
                                 />
                             );
                         }

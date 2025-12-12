@@ -49,6 +49,16 @@ class LikesRepository {
         }
     }
 
+    async deletelikeFeedByFeedId(feedId) {
+        try {
+            const result = await this.likes.destroy({ where: { feed_id: feedId } })
+            return result;
+        } catch (error) {
+            console.error("deletelikeFeedByFeedId:", error);
+            throw new ApiError(500, "Error checking if feed is liked");
+        }
+    }
+
 
 }
 

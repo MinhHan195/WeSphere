@@ -13,6 +13,7 @@ const TestElement = (props) => {
                 style={{
                     display: "flex",
                     width: "100%",
+                    borderRadius: "10px",
                 }}
             >
                 {listImage.map((data, idx) => {
@@ -25,6 +26,7 @@ const TestElement = (props) => {
                                 data={data}
                                 idx={idx}
                                 key={idx}
+                                hasMany={listImage.length > 1 ? true : false}
                             />
                         );
                     } else if (data.type === "video") {
@@ -36,6 +38,7 @@ const TestElement = (props) => {
                                 data={data}
                                 idx={idx}
                                 key={idx}
+                                hasMany={listImage.length > 1 ? true : false}
                             />
                         );
                     }

@@ -48,8 +48,9 @@ exports.getListUserLimit = async (req, res, next) => {
 
 exports.removeLimitedUser = async (req, res, next) => {
     try {
-        const { limitedUsername, ownerUsername } = req.params;
-        const data = await authService.removeLimitedUser(limitedUsername, ownerUsername);
+        const { limitedUserId } = req.params;
+        const ownerUserId = req.user.UserId;
+        const data = await authService.removeLimitedUser(limitedUserId, ownerUserId);
         return res.send({
             isError: false,
             message: "Xóa người dùng khỏi danh sách hạn chế thành công",
@@ -63,8 +64,9 @@ exports.removeLimitedUser = async (req, res, next) => {
 
 exports.removeBlockedUser = async (req, res, next) => {
     try {
-        const { blockedUsername, ownerUsername } = req.params;
-        const data = await authService.removeBlockedUser(blockedUsername, ownerUsername);
+        const { blockedUserId } = req.params;
+        const ownerUserId = req.user.UserId
+        const data = await authService.removeBlockedUser(blockedUserId, ownerUserId);
         return res.send({
             isError: false,
             message: "Xóa người dùng khỏi danh sách chặn thành công",

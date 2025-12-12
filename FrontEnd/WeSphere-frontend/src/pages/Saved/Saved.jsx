@@ -8,6 +8,7 @@ import style from "./Saved.module.css";
 const Saved = () => {
     const dispatch = useDispatch();
     const [listFeed, setListFeed] = useState([]);
+    const [listIdx, setListIdx] = useState([]);
 
     const fetchData = async () => {
         dispatch(setLoading(true));
@@ -28,6 +29,19 @@ const Saved = () => {
         }
     };
 
+    const changeListIdx = async (feedId) => {
+        setListIdx((prev) => [...prev, feedId]);
+    };
+
+    useEffect(() => {
+        const list = new Set(listIdx.map((i) => i?.id));
+        setListFeed((prev) => {
+            return prev.filter((item) => !list.has(item?.feed?.id));
+        });
+
+        console.log(listIdx);
+    }, [listIdx]);
+
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +61,11 @@ const Saved = () => {
                                           className={style.feed_card}
                                           key={feed.feed.id}
                                       >
-                                          <Feed data={feed} idx={idx} />
+                                          <Feed
+                                              data={feed}
+                                              idx={idx}
+                                              block={changeListIdx}
+                                          />
                                       </div>
                                       {idx < listFeed.length - 1 ? (
                                           <hr className={style.line} />

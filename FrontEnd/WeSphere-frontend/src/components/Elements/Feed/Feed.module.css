@@ -4,6 +4,7 @@
     border: none !important;
     cursor: pointer;
     color: var(--secondary-text-color) !important;
+    transition: background-color 0.1s ease 0.1s;
 }
 
 .btn_icon:hover {
@@ -18,6 +19,7 @@
 
 .feed_container {
     width: 100%;
+    padding-right: 10px;
     color: var(--primary-text-color);
 }
 
@@ -64,4 +66,13 @@
     position: relative;
     left: 27px;
     top: -17px
+}
+
+.more_btn{
+    color: var(--secondary-text-color) !important;
+    transition: background-color 0.1s ease 0.1s;
+}
+
+.more_btn:hover{
+    background-color: var(--secondary-icon-hover-color) !important;
 }

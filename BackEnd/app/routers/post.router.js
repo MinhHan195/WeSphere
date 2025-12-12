@@ -26,4 +26,10 @@ router.route("/ListFavoritePost").get(verifyToken, feedController.getListFavorit
 
 router.route("/ListSavedPost").get(verifyToken, feedController.getListSavePost);
 
+router.route("/SaveFeed/:feedId").get(verifyToken, feedController.saveFeed);
+
+router.route("/UnSaveFeed/:feedId").get(verifyToken, feedController.unSaveFeed);
+
+router.route("/DeleteFeed/:feedId").get(verifyToken, feedController.deleteFeed);
+
 module.exports = router;

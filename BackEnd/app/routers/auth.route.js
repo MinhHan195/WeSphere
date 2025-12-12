@@ -27,15 +27,19 @@ router.route("/ListUserBlock").get(verifyToken, userController.getListUserBlock)
 
 router.route("/ListUserLimit").get(verifyToken, userController.getListUserLimit);
 
-router.route("/removeLimitedUser/:limitedUsername/:ownerUsername").patch(userController.removeLimitedUser);
+router.route("/removeLimitedUser/:limitedUserId").patch(verifyToken, userController.removeLimitedUser);
 
-router.route("/removeBlockedUser/:blockedUsername/:ownerUsername").patch(userController.removeBlockedUser);
+router.route("/removeBlockedUser/:blockedUserId").patch(verifyToken, userController.removeBlockedUser);
 
 router.route("/deactivateAccount").patch(verifyToken, authController.deactivateAccount);
 
 router.route("/deleteAccount").delete(verifyToken, authController.deleteAccount);
 
 router.route("/followUser/:username/:mode").post(verifyToken, authController.followUser);
+
+router.route("/block/:userId").get(verifyToken, authController.blockUser);
+
+router.route("/restric/:userId").get(verifyToken, authController.restricUser);
 
 router.route("/isAlive").post((req, res) => {
     const { userId } = req.body;
@@ -51,10 +55,7 @@ router.route("/deleteImage").post(async (req, res) => {
     const result = await Cloudinary.deleteImage(req.body.publicId);
     console.log(result);
     res.send(result);
-})
-
-
-router.route("/test").post(verifyToken, authController.test);
+});
 
 
 module.exports = router;

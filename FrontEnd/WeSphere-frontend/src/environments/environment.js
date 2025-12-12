@@ -6,4 +6,5 @@ export const Environment = {
     INSTA_APP_SECRET: import.meta.env.VITE_INSTA_APP_SECRET,
     REDIRECT_URL: import.meta.env.VITE_REDIRECT_URL,
     OAUTH_URL: import.meta.env.VITE_OAUTH_URL,
+    APP_DOMAIN: import.meta.env.VITE_APP_DOMAIN
 }

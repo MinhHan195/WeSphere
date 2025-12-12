@@ -101,9 +101,9 @@ class FeedRepository {
         }
     }
 
-    async deleteFeedById(feedId) {
+    async deleteFeedById(feedId, userId) {
         try {
-            const result = await this.feed.destroy({ where: { id: feedId } });
+            const result = await this.feed.destroy({ where: { id: feedId, userId: userId } });
             if (result[0] === 0) {
                 throw new ApiError(404, "Feed not found");
             }
@@ -127,7 +127,7 @@ class FeedRepository {
     async getListCommentFeedId(feedId) {
         try {
             const result = await this.feed.findAll({
-                attributes: ["id", "username"],
+                attributes: ["id", "userId"],
                 where: { commentOfPost: feedId, active: 1 },
             });
             return result.map((item) => item.dataValues);
@@ -142,6 +142,7 @@ class FeedRepository {
             const result = await this.feed.findAll({
                 attributes: ["id", "userId"],
                 where: { active: 1, userId: userId },
+                order: [["timeCreate", "DESC"]],
             });
             return result.map((item) => item.dataValues);
         } catch (error) {
