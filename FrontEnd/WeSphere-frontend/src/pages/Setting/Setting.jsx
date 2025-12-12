@@ -11,10 +11,10 @@ const Setting = () => {
     const dispatch = useDispatch();
     const [user, setUser] = useState({});
 
-    const fetchData = async (userName) => {
+    const fetchData = async (userId) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.getUser(userName);
+            const res = await $api.auth.getUser(userId);
             if (!res.isError) {
                 setUser(res.data);
                 dispatch(setLoading(false));
@@ -30,9 +30,9 @@ const Setting = () => {
     };
     useEffect(() => {
         document.title = "Cài đặt • WeSphere";
-        const username = localStorage.getItem(_AUTH.USERNAME);
-        if (username) {
-            fetchData(username);
+        const userId = localStorage.getItem(_AUTH.ID);
+        if (userId) {
+            fetchData(userId);
         }
     }, []);
 

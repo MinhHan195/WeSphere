@@ -13,12 +13,26 @@ const FeedDetail = () => {
     const dispatch = useDispatch();
     const { feedId } = useParams();
     const [data, setData] = useState(null);
+    const [listComments, setListComments] = useState([]);
     const [close, setClose] = useState(0);
     const [key, setKey] = useState(0);
+    const [listBlock, setListBlock] = useState([]);
 
     useEffect(() => {
         document.title = "WeSphere • Bình luận";
     }, []);
+
+    const addIdLock = async (id) => {
+        setListBlock((prev) => [...prev, id]);
+    };
+
+    useEffect(() => {
+        // console.log(listBlock);
+        const blockIds = new Set(listBlock.map((i) => i?.id));
+        setListComments((prev) => {
+            return prev.filter((item) => !blockIds.has(item?.feed?.id));
+        });
+    }, [listBlock]);
 
     const fetchData = async () => {
         try {
@@ -26,6 +40,7 @@ const FeedDetail = () => {
             const res = await $api.post.getFeedDetail(feedId);
             if (!res.isError && res.data != null) {
                 setData(res.data);
+                setListComments(res.data.listComments);
                 dispatch(setLoading(false));
             }
         } catch (error) {
@@ -82,22 +97,21 @@ const FeedDetail = () => {
                                             />
                                         </div>
                                         <div className={style.list_comments}>
-                                            {data.listComments.map(
-                                                (feed, idx) => {
-                                                    return (
-                                                        <div
-                                                            className={`rounded-0 p-4 ps-5 ${style.comment_container}`}
-                                                            key={feed.feed.id}
-                                                        >
-                                                            <Feed
-                                                                data={feed}
-                                                                key={idx}
-                                                                idx={idx}
-                                                            />
-                                                        </div>
-                                                    );
-                                                }
-                                            )}
+                                            {listComments.map((feed, idx) => {
+                                                return (
+                                                    <div
+                                                        className={`rounded-0 p-4 ps-5 ${style.comment_container}`}
+                                                        key={feed.feed.id}
+                                                    >
+                                                        <Feed
+                                                            data={feed}
+                                                            key={idx}
+                                                            idx={idx}
+                                                            block={addIdLock}
+                                                        />
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 </Feed>

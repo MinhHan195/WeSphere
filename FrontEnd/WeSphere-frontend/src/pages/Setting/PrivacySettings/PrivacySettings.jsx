@@ -33,10 +33,11 @@ const PrivacySettings = () => {
     const updatePrivateMode = async (value) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.updatePrivateMode(value, user.username);
+            const res = await $api.auth.updatePrivateMode(value);
+            console.log(res);
             if (!res.isError) {
                 dispatch(setLoading(false));
-                setPrivacySettings(res.data.privateMode === "true");
+                setPrivacySettings(res.data.privateMode);
                 dispatch(setAlert({ message: res.message }));
                 return true;
             }

@@ -19,9 +19,9 @@ router.route("/GetProfileData/:userId").get(verifyToken, authController.getDetai
 
 router.route("/update").put(verifyToken, upload.single("file"), userController.updateUser);
 
-router.route("/updatePrivateMode/:username/:privateMode").patch(authController.updatePrivateMode);
+router.route("/updatePrivateMode/:privateMode").patch(verifyToken, authController.updatePrivateMode);
 
-router.route("/updateOnlineStatus/:username/:onlineStatus").patch(authController.updateOnlineStatus);
+router.route("/updateOnlineStatus/:onlineStatus").patch(verifyToken, authController.updateOnlineStatus);
 
 router.route("/ListUserBlock").get(verifyToken, userController.getListUserBlock);
 

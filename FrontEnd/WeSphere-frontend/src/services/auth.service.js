@@ -25,16 +25,16 @@ const authService = {
         return await axiosClient.get(_url + `/GetProfileData/${userId}`);
     },
 
-    updatePrivateMode: async (privateMode, username) => {
-        return await axiosClient.patch(_url + `/updatePrivateMode/${username}/${privateMode}`);
+    updatePrivateMode: async (privateMode) => {
+        return await axiosClient.patch(_url + `/updatePrivateMode/${privateMode}`);
     },
 
     sendHeartbeat: async (userId) => {
         return await axiosClient.post(_url + '/isAlive', { userId });
     },
 
-    updateOnlineStatus: async (username, onlineStatus) => {
-        return await axiosClient.patch(_url + `/updateOnlineStatus/${username}/${onlineStatus}`);
+    updateOnlineStatus: async (onlineStatus) => {
+        return await axiosClient.patch(_url + `/updateOnlineStatus/${onlineStatus}`);
     },
 
     getListUserBlock: async () => {

@@ -15,10 +15,7 @@ const OnlineStatusSetting = () => {
     const updateOnlineStatusMode = async (e) => {
         try {
             dispatch(setLoading(true));
-            const res = await $api.auth.updateOnlineStatus(
-                user.username,
-                e.target.value
-            );
+            const res = await $api.auth.updateOnlineStatus(e.target.value);
             if (!res.isError) {
                 dispatch(setLoading(false));
                 setOnlineStatusMode(res.data.onlineMode);

@@ -77,17 +77,18 @@ class accountRepository {
             if (result[0] === 0) {
                 throw new ApiError(404, "Không tìm thấy tài khoản");
             }
-            const newAccount = await this.getAccountByUsername(data.username);
-            return newAccount.dataValues;
+            const newAccount = await this.getAccountByUserId(data.userId);
+            console.log(newAccount);
+            return newAccount;
         } catch (error) {
             console.log(error);
             throw new ApiError(500, "Internal Server Error");
         }
     }
 
-    async deactivateAccount(username) {
+    async deactivateAccount(userId) {
         try {
-            const result = await this.account.update({ active: false }, { where: { username: username } });
+            const result = await this.account.update({ active: false }, { where: { userId: userId } });
             if (result[0] === 0) {
                 throw new ApiError(404, "Không tìm thấy tài khoản");
             }

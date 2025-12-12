@@ -254,20 +254,20 @@ exports.updateUser = async (data, file, username) => {
     return authData;
 };
 
-exports.updatePrivateMode = async (username, privateMode) => {
+exports.updatePrivateMode = async (userId, privateMode) => {
     const AccountRepository = new accountRepository();
     const res = await AccountRepository.updateAccount({
         privateMode: privateMode,
-        username: username,
+        userId: userId,
     });
     return res;
 };
 
-exports.updateOnlineStatus = async (username, onlineStatus) => {
+exports.updateOnlineStatus = async (userId, onlineStatus) => {
     const AccountRepository = new accountRepository();
     const res = await AccountRepository.updateAccount({
         onlineMode: onlineStatus,
-        username: username,
+        userId: userId,
     });
     return res;
 };
@@ -298,9 +298,9 @@ exports.removeBlockedUser = async (blockedUserId, ownerUserId) => {
     return res;
 };
 
-exports.deactivateAccount = async (username) => {
+exports.deactivateAccount = async (userId) => {
     const AccountRepository = new accountRepository();
-    const res = await AccountRepository.deactivateAccount(username);
+    const res = await AccountRepository.deactivateAccount(userId);
     if (res == 1) {
         return true;
     }

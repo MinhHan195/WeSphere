@@ -49,8 +49,8 @@ const DefaultLayout = (props) => {
             }
         } catch (error) {
             dispatch(setLoading(false));
-            // dispatch(logout());
-            // navigate("/auth");
+            dispatch(logout());
+            navigate("/auth");
             dispatch(
                 setAlert({
                     message: error?.errors?.exceptionMessage ?? error.message,

@@ -83,9 +83,10 @@ exports.getDetailUser = async (req, res, next) => {
 
 exports.updatePrivateMode = async (req, res, next) => {
     try {
-        const { username, privateMode } = req.params;
+        const { privateMode } = req.params;
+        const userId = req.user.UserId;
         const result = await authService.updatePrivateMode(
-            username,
+            userId,
             privateMode
         );
         return res.send({
@@ -101,9 +102,10 @@ exports.updatePrivateMode = async (req, res, next) => {
 
 exports.updateOnlineStatus = async (req, res, next) => {
     try {
-        const { username, onlineStatus } = req.params;
+        const { onlineStatus } = req.params;
+        const userId = req.user.UserId;
         const result = await authService.updateOnlineStatus(
-            username,
+            userId,
             onlineStatus
         );
         return res.send({
@@ -119,8 +121,8 @@ exports.updateOnlineStatus = async (req, res, next) => {
 
 exports.deactivateAccount = async (req, res, next) => {
     try {
-        const username = req.user.UserName;
-        const result = await authService.deactivateAccount(username);
+        const userId = req.user.UserId;
+        const result = await authService.deactivateAccount(userId);
         return res.send({
             isError: !result,
             message: result
