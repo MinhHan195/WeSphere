@@ -259,9 +259,9 @@ exports.deleteFeed = async (feedId, userId) => {
     const MediaRepository = new mediaRepository();
     const LikesRepository = new likesRepository();
     const SaveFeedRepository = new saveFeedRepository();
-    await MediaRepository.deleteMediaByFeedId(feedId);
-    await LikesRepository.deletelikeFeedByFeedId(feedId);
-    await SaveFeedRepository.deleteSaveFeedByFeedId(feedId);
+    // await MediaRepository.deleteMediaByFeedId(feedId);
+    // await LikesRepository.deletelikeFeedByFeedId(feedId);
+    // await SaveFeedRepository.deleteSaveFeedByFeedId(feedId);
     await FeedRepository.deleteFeedById(feedId, userId);
     return;
 }
