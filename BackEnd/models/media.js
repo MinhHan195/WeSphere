@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      media.belongsTo(models.feeds, { foreignKey: 'feed_id', targetKey: 'id' });
+      media.belongsTo(models.feeds, { foreignKey: 'feed_id', targetKey: 'id', onDelete: 'CASCADE' });
     }
   }
   media.init({
@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'media',
-    timestamps: false
+    timestamps: false,
+    onDelete: "CASCADE"
   });
   return media;
 };

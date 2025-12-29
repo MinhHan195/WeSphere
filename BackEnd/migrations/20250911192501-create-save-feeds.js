@@ -23,7 +23,8 @@ module.exports = {
         references: {
           model: 'feeds',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       timeCreate: {
         allowNull: false,

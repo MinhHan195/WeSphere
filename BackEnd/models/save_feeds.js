@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       save_feeds.belongsTo(models.users, { foreignKey: 'userId', targetKey: 'userId' });
-      save_feeds.belongsTo(models.feeds, { foreignKey: 'feedId', targetKey: 'id' });
+      save_feeds.belongsTo(models.feeds, { foreignKey: 'feedId', targetKey: 'id', onDelete: 'CASCADE' });
     }
   }
   save_feeds.init({

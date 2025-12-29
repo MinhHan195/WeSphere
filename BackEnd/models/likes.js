@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       likes.belongsTo(models.users, { foreignKey: 'userId', targetKey: 'userId' });
       likes.belongsTo(models.feeds, {
-        foreignKey: 'feed_id', targetKey: 'id'
+        foreignKey: 'feed_id', targetKey: 'id', onDelete: 'CASCADE'
       });
     }
   }

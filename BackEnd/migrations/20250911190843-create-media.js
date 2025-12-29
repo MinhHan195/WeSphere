@@ -15,7 +15,8 @@ module.exports = {
           model: 'feeds',
           key: 'id'
         },
-        allowNull: false
+        allowNull: false,
+        onDelete: 'CASCADE'
       },
       publicId: {
         type: Sequelize.STRING(50),
